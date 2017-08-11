@@ -44,6 +44,15 @@ namespace PoS.Infra
                 case SumResultOperator _:
                     _queryParts.SelectPart = string.Format($"SUM({_queryParts.SelectPart})");
                     break;
+                case AverageResultOperator _:
+                    _queryParts.SelectPart = string.Format($"AVG({_queryParts.SelectPart})");
+                    break;
+                case MinResultOperator _:
+                    _queryParts.SelectPart = string.Format($"Min({_queryParts.SelectPart})");
+                    break;
+                case MaxResultOperator _:
+                    _queryParts.SelectPart = string.Format($"Max({_queryParts.SelectPart})");
+                    break;
                 default:
                     throw new NotSupportedException();
             }

@@ -23,7 +23,8 @@ namespace PoS.Infra
 
         public void AddFromPart(IQuerySource querySource)
         {
-            FromParts.Add($"{GetEntityName(querySource)} {querySource.ItemName}");
+            var name = querySource.ItemName.Replace("<", "").Replace(">", "");
+            FromParts.Add($"{GetEntityName(querySource)} {name}");
         }
 
         public void AddWherePart(string formatString, params object[] args)

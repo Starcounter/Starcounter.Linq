@@ -30,7 +30,8 @@ namespace PoS.Infra
 
         protected override Expression VisitQuerySourceReference(QuerySourceReferenceExpression expression)
         {
-            _sqlExpression.Append(expression.ReferencedQuerySource.ItemName);
+            var name = expression.ReferencedQuerySource.ItemName.Replace("<", "").Replace(">", "");
+            _sqlExpression.Append(name);
             return expression;
         }
 
@@ -228,8 +229,8 @@ namespace PoS.Infra
         // Called when a LINQ expression type is not handled above.
         protected override Exception CreateUnhandledItemException<T>(T unhandledItem, string visitMethod)
         {
-            const string itemText = "Dunnoo";
-            var message = $"The expression '{itemText}' (type: {typeof(T)}) is not supported by this LINQ provider.";
+            string itemText = unhandledItem.ToString();
+            var message = $"The expression '{itemText}' via '{visitMethod}' (type: {typeof(T)}) is not supported by this LINQ provider.";
             return new NotSupportedException(message);
         }
     }

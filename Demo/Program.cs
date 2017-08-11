@@ -35,6 +35,10 @@ namespace Demo
                 Objects<Person>().FirstOrDefault(p => p.Age > 0 && p.Age < 100);
                 Objects<Person>().FirstOrDefault(p => p.Name == null);
                 Objects<Person>().Sum(p => p.Age);
+                Objects<Person>().Min(p => p.Age);
+                Objects<Person>().Max(p => p.Age);
+                Objects<Person>().Average(p => p.Age);
+                Objects<Person>().Count();
 
                 var ages = new[] {1, 2, 3, 4, 5};
                 Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));

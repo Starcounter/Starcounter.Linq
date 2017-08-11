@@ -21,6 +21,11 @@ namespace PoS.Infra
                 var res = ExecuteCollection<long>(queryModel).Single();
                 return (T)Convert.ChangeType(res,typeof(int));
             }
+            if (typeof(T) == typeof(double))
+            {
+                var res = ExecuteCollection<decimal>(queryModel).Single();
+                return (T)Convert.ChangeType(res, typeof(double));
+            }
             else
             {
                 var res = ExecuteCollection<T>(queryModel);
@@ -31,8 +36,21 @@ namespace PoS.Infra
         // Executes a query with a single result object, i.e. a query that ends with a result operator such as First, Last, Single, Min, or Max.
         public T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
         {
-            var res = ExecuteCollection<T>(queryModel);
-            return returnDefaultWhenEmpty ? res.SingleOrDefault() : res.Single();
+            if (typeof(T) == typeof(int))
+            {
+                var res = ExecuteCollection<long>(queryModel).Single();
+                return (T) Convert.ChangeType(res, typeof(int));
+            }
+            if (typeof(T) == typeof(double))
+            {
+                var res = ExecuteCollection<decimal>(queryModel).Single();
+                return (T)Convert.ChangeType(res, typeof(double));
+            }
+            else
+            {
+                var res = ExecuteCollection<T>(queryModel);
+                return returnDefaultWhenEmpty ? res.SingleOrDefault() : res.Single();
+            }
         }
 
         // Executes a query with a collection result.
