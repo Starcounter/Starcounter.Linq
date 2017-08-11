@@ -1,8 +1,8 @@
 namespace PoS.Infra
 {
-    public class NamedParameter
+    public class QueryVariable
     {
-        public NamedParameter(string name, object value)
+        public QueryVariable(string name, object value)
         {
             Name = name;
             Value = value;

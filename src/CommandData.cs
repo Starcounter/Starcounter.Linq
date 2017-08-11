@@ -2,13 +2,13 @@
 {
     public class CommandData
     {
-        public CommandData(string statement, NamedParameter[] namedParameters)
+        public CommandData(string statement, QueryVariable[] queryVariables)
         {
             Statement = statement;
-            NamedParameters = namedParameters;
+            QueryVariables = queryVariables;
         }
 
         public string Statement { get; }
-        public NamedParameter[] NamedParameters { get; }
+        public QueryVariable[] QueryVariables { get; }
     }
 }

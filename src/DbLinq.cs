@@ -6,7 +6,7 @@ namespace PoS.Infra
     {
         public static IQueryable<T> Objects<T>()
         {
-            return new SCQueryable<T>();
+            return new SqlQueryable<T>();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
 using Remotion.Linq.Clauses.Expressions;
 using Remotion.Linq.Parsing;
@@ -9,19 +8,19 @@ namespace PoS.Infra
 {
     public class SqlGeneratorExpressionTreeVisitor : ThrowingExpressionVisitor
     {
-        public static string GetSqlExpression(Expression linqExpression, ParameterAggregator parameterAggregator)
+        private readonly StringBuilder _sqlExpression = new StringBuilder();
+        private readonly QueryVariables _variables;
+
+        public static string GetSqlExpression(Expression linqExpression, QueryVariables variables)
         {
-            var visitor = new SqlGeneratorExpressionTreeVisitor(parameterAggregator);
+            var visitor = new SqlGeneratorExpressionTreeVisitor(variables);
             visitor.Visit(linqExpression);
             return visitor.GetSqlExpression();
         }
 
-        private readonly StringBuilder _sqlExpression = new StringBuilder();
-        private readonly ParameterAggregator _parameterAggregator;
-
-        private SqlGeneratorExpressionTreeVisitor(ParameterAggregator parameterAggregator)
+        private SqlGeneratorExpressionTreeVisitor(QueryVariables variables)
         {
-            _parameterAggregator = parameterAggregator;
+            _variables = variables;
         }
 
         public string GetSqlExpression() => _sqlExpression.ToString();
@@ -104,7 +103,7 @@ namespace PoS.Infra
 
         protected override Expression VisitConstant(ConstantExpression expression)
         {
-            var namedParameter = _parameterAggregator.AddParameter(expression.Value);
+            var namedParameter = _variables.AddVariable(expression.Value);
 
             //TODO: ordering or named arguments?
             _sqlExpression.Append($"{namedParameter.Name}");
@@ -112,20 +111,44 @@ namespace PoS.Infra
             return expression;
         }
 
-        private static readonly MethodInfo StringContains = typeof(string).GetMethod(nameof(string.Contains));
+
         protected override Expression VisitMethodCall(MethodCallExpression expression)
         {
-            // In production code, handle this via method lookup tables.
-
-            if (expression.Method.Equals(StringContains))
+            if (expression.Method.Equals(MethodTranslator.StringContains))
             {
                 _sqlExpression.Append("(");
                 Visit(expression.Object);
-                _sqlExpression.Append(" like '%'+");
+                _sqlExpression.Append(" like ?||");
+                _variables.AddVariable("%");
                 Visit(expression.Arguments[0]);
-                _sqlExpression.Append("+'%')");
+                _sqlExpression.Append("||?)");
+                _variables.AddVariable("%");
                 return expression;
             }
+
+            if (expression.Method.Equals(MethodTranslator.StringStartsWith))
+            {
+                _sqlExpression.Append("(");
+                Visit(expression.Object);
+                _sqlExpression.Append(" like ");
+                Visit(expression.Arguments[0]);
+                _sqlExpression.Append("||?)");
+                _variables.AddVariable("%");
+                return expression;
+            }
+
+            if (expression.Method.Equals(MethodTranslator.StringEndsWith))
+            {
+                _sqlExpression.Append("(");
+                Visit(expression.Object);
+                _sqlExpression.Append(" like ?||");
+                _variables.AddVariable("%");
+                Visit(expression.Arguments[0]);
+                _sqlExpression.Append(")");
+                return expression;
+            }
+
+
             return base.VisitMethodCall(expression); // throws
         }
 

@@ -18,9 +18,9 @@ namespace PoS.Infra
 
         // Instead of generating an HQL string, we could also use a NHibernate ASTFactory to generate IASTNodes.
         private readonly QueryPartsAggregator _queryParts = new QueryPartsAggregator();
-        private readonly ParameterAggregator _parameterAggregator = new ParameterAggregator();
+        private readonly QueryVariables _variables = new QueryVariables();
 
-        public CommandData GetHqlCommand() => new CommandData(_queryParts.BuildSqlString(), _parameterAggregator.GetParameters());
+        public CommandData GetHqlCommand() => new CommandData(_queryParts.BuildSqlString(), _variables.GetParameters());
 
         public override void VisitQueryModel(QueryModel queryModel)
         {
@@ -36,10 +36,13 @@ namespace PoS.Infra
             {
                 case FirstResultOperator _:
                     _queryParts.FetchPart = "FETCH ?";
-                    _parameterAggregator.AddParameter(1);
+                    _variables.AddVariable(1);
                     break;
                 case CountResultOperator _:
                     _queryParts.SelectPart = string.Format($"cast(count({_queryParts.SelectPart}) as int)");
+                    break;
+                case SumResultOperator sum:
+                    _queryParts.SelectPart = string.Format($"SUM({_queryParts.SelectPart})");
                     break;
                 default:
                     throw new NotSupportedException("Only Count() result operator is showcased in this sample. Adding Sum, Min, Max is left to the reader.");
@@ -100,6 +103,6 @@ namespace PoS.Infra
             throw new NotSupportedException("Adding a join ... into ... implementation to the query provider is left to the reader for extra points.");
         }
 
-        private string GetSqlExpression(Expression expression) => SqlGeneratorExpressionTreeVisitor.GetSqlExpression(expression, _parameterAggregator);
+        private string GetSqlExpression(Expression expression) => SqlGeneratorExpressionTreeVisitor.GetSqlExpression(expression, _variables);
     }
 }
