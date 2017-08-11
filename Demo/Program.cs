@@ -35,6 +35,9 @@ namespace Demo
                 Objects<Person>().FirstOrDefault(p => p.Age > 0 && p.Age < 100);
                 Objects<Person>().FirstOrDefault(p => p.Name == null);
                 Objects<Person>().Sum(p => p.Age);
+
+                var ages = new[] {1, 2, 3, 4, 5};
+                Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
             });
         }
     }

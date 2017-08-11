@@ -39,13 +39,13 @@ namespace PoS.Infra
                     _variables.AddVariable(1);
                     break;
                 case CountResultOperator _:
-                    _queryParts.SelectPart = string.Format($"cast(count({_queryParts.SelectPart}) as int)");
+                    _queryParts.SelectPart = string.Format($"COUNT({_queryParts.SelectPart})");
                     break;
-                case SumResultOperator sum:
+                case SumResultOperator _:
                     _queryParts.SelectPart = string.Format($"SUM({_queryParts.SelectPart})");
                     break;
                 default:
-                    throw new NotSupportedException("Only Count() result operator is showcased in this sample. Adding Sum, Min, Max is left to the reader.");
+                    throw new NotSupportedException();
             }
 
             base.VisitResultOperator(resultOperator, queryModel, index);

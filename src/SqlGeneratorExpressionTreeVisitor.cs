@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using Remotion.Linq.Clauses.Expressions;
+using Remotion.Linq.Clauses.ResultOperators;
 using Remotion.Linq.Parsing;
 
 namespace PoS.Infra
@@ -82,14 +85,14 @@ namespace PoS.Infra
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
                     Visit(expression.Left);
-                    Write(" and ");
+                    Write(" AND ");
                     Visit(expression.Right);
                     break;
 
                 case ExpressionType.OrElse:
                 case ExpressionType.Or:
                     Visit(expression.Left);
-                    Write(" or ");
+                    Write(" OR ");
                     Visit(expression.Right);
                     break;
 
@@ -190,6 +193,36 @@ namespace PoS.Infra
 
 
             return base.VisitMethodCall(expression); // throws
+        }
+
+        protected override Expression VisitSubQuery(SubQueryExpression expression)
+        {
+            var c = expression?.QueryModel?.MainFromClause?.FromExpression as ConstantExpression;
+            if (c != null)
+            {
+                Write("(");
+                var values = ((IEnumerable) c.Value).Cast<object>().ToList();
+                var o = expression?.QueryModel?.ResultOperators.First() as ContainsResultOperator;
+                bool first = true;
+                foreach (var v in values)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        Write(" OR ");
+                    }
+                    Visit(o.Item);
+                    Write(" = ?");
+                    _variables.AddVariable(v);
+                }
+                Write(")");
+                return expression;
+            }
+
+            return base.VisitSubQuery(expression);
         }
 
         // Called when a LINQ expression type is not handled above.

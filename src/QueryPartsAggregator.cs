@@ -47,7 +47,7 @@ namespace PoS.Infra
             stringBuilder.Append($" FROM {SeparatedStringBuilder.Build(", ", FromParts)}");
 
             if (WhereParts.Count > 0)
-                stringBuilder.Append($" WHERE {SeparatedStringBuilder.Build(" and ", WhereParts)}");
+                stringBuilder.Append($" WHERE {SeparatedStringBuilder.Build(" AND ", WhereParts)}");
 
             if (OrderByParts.Count > 0)
                 stringBuilder.Append($" ORDER BY {SeparatedStringBuilder.Build(", ", OrderByParts)}");
