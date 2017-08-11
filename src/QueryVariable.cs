@@ -1,4 +1,4 @@
-namespace PoS.Infra
+namespace Starcounter.Linq
 {
     public class QueryVariable
     {

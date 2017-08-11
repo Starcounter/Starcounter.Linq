@@ -5,10 +5,15 @@ using Remotion.Linq;
 using Remotion.Linq.Clauses;
 using Remotion.Linq.Clauses.ResultOperators;
 
-namespace PoS.Infra
+namespace Starcounter.Linq
 {
     public class SqlGeneratorQueryModelVisitor : QueryModelVisitorBase
     {
+        // Instead of generating an HQL string, we could also use a NHibernate ASTFactory to generate IASTNodes.
+        private readonly QueryPartsAggregator _queryParts = new QueryPartsAggregator();
+
+        private readonly QueryVariables _variables = new QueryVariables();
+
         public static CommandData GenerateHqlQuery(QueryModel queryModel)
         {
             var visitor = new SqlGeneratorQueryModelVisitor();
@@ -16,11 +21,10 @@ namespace PoS.Infra
             return visitor.GetHqlCommand();
         }
 
-        // Instead of generating an HQL string, we could also use a NHibernate ASTFactory to generate IASTNodes.
-        private readonly QueryPartsAggregator _queryParts = new QueryPartsAggregator();
-        private readonly QueryVariables _variables = new QueryVariables();
-
-        public CommandData GetHqlCommand() => new CommandData(_queryParts.BuildSqlString(), _variables.GetParameters());
+        public CommandData GetHqlCommand()
+        {
+            return new CommandData(_queryParts.BuildSqlString(), _variables.GetParameters());
+        }
 
         public override void VisitQueryModel(QueryModel queryModel)
         {
@@ -100,7 +104,8 @@ namespace PoS.Infra
             base.VisitJoinClause(joinClause, queryModel, index);
         }
 
-        public override void VisitAdditionalFromClause(AdditionalFromClause fromClause, QueryModel queryModel, int index)
+        public override void VisitAdditionalFromClause(AdditionalFromClause fromClause, QueryModel queryModel,
+            int index)
         {
             _queryParts.AddFromPart(fromClause);
 
@@ -109,9 +114,13 @@ namespace PoS.Infra
 
         public override void VisitGroupJoinClause(GroupJoinClause groupJoinClause, QueryModel queryModel, int index)
         {
-            throw new NotSupportedException("Adding a join ... into ... implementation to the query provider is left to the reader for extra points.");
+            throw new NotSupportedException(
+                "Adding a join ... into ... implementation to the query provider is left to the reader for extra points.");
         }
 
-        private string GetSqlExpression(Expression expression) => SqlGeneratorExpressionTreeVisitor.GetSqlExpression(expression, _variables);
+        private string GetSqlExpression(Expression expression)
+        {
+            return SqlGeneratorExpressionTreeVisitor.GetSqlExpression(expression, _variables);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace PoS.Infra
+namespace Starcounter.Linq
 {
     public static class DbLinq
     {

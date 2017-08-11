@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Remotion.Linq.Clauses;
 
-namespace PoS.Infra
+namespace Starcounter.Linq
 {
     public class QueryPartsAggregator
     {

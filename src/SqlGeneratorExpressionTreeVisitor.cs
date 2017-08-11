@@ -7,12 +7,17 @@ using Remotion.Linq.Clauses.Expressions;
 using Remotion.Linq.Clauses.ResultOperators;
 using Remotion.Linq.Parsing;
 
-namespace PoS.Infra
+namespace Starcounter.Linq
 {
     public class SqlGeneratorExpressionTreeVisitor : ThrowingExpressionVisitor
     {
         private readonly StringBuilder _sqlExpression = new StringBuilder();
         private readonly QueryVariables _variables;
+
+        private SqlGeneratorExpressionTreeVisitor(QueryVariables variables)
+        {
+            _variables = variables;
+        }
 
         public static string GetSqlExpression(Expression linqExpression, QueryVariables variables)
         {
@@ -21,12 +26,10 @@ namespace PoS.Infra
             return visitor.GetSqlExpression();
         }
 
-        private SqlGeneratorExpressionTreeVisitor(QueryVariables variables)
+        public string GetSqlExpression()
         {
-            _variables = variables;
+            return _sqlExpression.ToString();
         }
-
-        public string GetSqlExpression() => _sqlExpression.ToString();
 
         protected override Expression VisitQuerySourceReference(QuerySourceReferenceExpression expression)
         {
@@ -37,17 +40,26 @@ namespace PoS.Infra
 
         protected override Expression VisitUnary(UnaryExpression expression)
         {
-            Write("(");
-            Write("NOT ");
-            Visit(expression.Operand);
-            Write(")");
-            return expression;
+            if (expression.NodeType == ExpressionType.Not)
+            {
+                Write("(");
+                Write("NOT ");
+                Visit(expression.Operand);
+                Write(")");
+                return expression;
+            }
+            if (expression.NodeType == ExpressionType.Convert)
+            {
+                Visit(expression.Operand);
+                return expression;
+            }
+            return BaseVisitUnary(expression);
         }
 
         protected override Expression VisitBinary(BinaryExpression expression)
         {
             Write("(");
-            
+
             // In production code, handle this via lookup tables.
             switch (expression.NodeType)
             {
@@ -204,17 +216,13 @@ namespace PoS.Infra
                 Write("(");
                 var values = ((IEnumerable) c.Value).Cast<object>().ToList();
                 var o = expression?.QueryModel?.ResultOperators.First() as ContainsResultOperator;
-                bool first = true;
+                var first = true;
                 foreach (var v in values)
                 {
                     if (first)
-                    {
                         first = false;
-                    }
                     else
-                    {
                         Write(" OR ");
-                    }
                     Visit(o.Item);
                     Write(" = ?");
                     _variables.AddVariable(v);
@@ -229,8 +237,9 @@ namespace PoS.Infra
         // Called when a LINQ expression type is not handled above.
         protected override Exception CreateUnhandledItemException<T>(T unhandledItem, string visitMethod)
         {
-            string itemText = unhandledItem.ToString();
-            var message = $"The expression '{itemText}' via '{visitMethod}' (type: {typeof(T)}) is not supported by this LINQ provider.";
+            var itemText = unhandledItem.ToString();
+            var message =
+                $"The expression '{itemText}' via '{visitMethod}' (type: {typeof(T)}) is not supported by this LINQ provider.";
             return new NotSupportedException(message);
         }
     }

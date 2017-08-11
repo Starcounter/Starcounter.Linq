@@ -3,28 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Remotion.Linq;
-using Starcounter;
 
-namespace PoS.Infra
+namespace Starcounter.Linq
 {
     public class SqlQueryExecutor : IQueryExecutor
     {
-        public SqlQueryExecutor()
-        {
-        }
-
         // Executes a query with a scalar result, i.e. a query that ends with a result operator such as Count, Sum, or Average.
         public T ExecuteScalar<T>(QueryModel queryModel)
         {
             if (typeof(T) == typeof(int))
             {
                 var res = ExecuteCollection<long>(queryModel).Single();
-                return (T)Convert.ChangeType(res,typeof(int));
+                return (T) Convert.ChangeType(res, typeof(int));
             }
             if (typeof(T) == typeof(double))
             {
                 var res = ExecuteCollection<decimal>(queryModel).Single();
-                return (T)Convert.ChangeType(res, typeof(double));
+                return (T) Convert.ChangeType(res, typeof(double));
             }
             else
             {
@@ -44,7 +39,7 @@ namespace PoS.Infra
             if (typeof(T) == typeof(double))
             {
                 var res = ExecuteCollection<decimal>(queryModel).Single();
-                return (T)Convert.ChangeType(res, typeof(double));
+                return (T) Convert.ChangeType(res, typeof(double));
             }
             else
             {
