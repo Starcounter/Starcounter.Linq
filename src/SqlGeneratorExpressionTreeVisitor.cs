@@ -31,66 +31,106 @@ namespace PoS.Infra
             return expression;
         }
 
+        protected override Expression VisitUnary(UnaryExpression expression)
+        {
+            Write("(");
+            Write("NOT ");
+            Visit(expression.Operand);
+            Write(")");
+            return expression;
+        }
+
         protected override Expression VisitBinary(BinaryExpression expression)
         {
-            _sqlExpression.Append("(");
-
-            Visit(expression.Left);
-
+            Write("(");
+            
             // In production code, handle this via lookup tables.
             switch (expression.NodeType)
             {
                 case ExpressionType.GreaterThan:
-                    _sqlExpression.Append(" > ");
+                    Visit(expression.Left);
+                    Write(" > ");
+                    Visit(expression.Right);
                     break;
                 case ExpressionType.GreaterThanOrEqual:
-                    _sqlExpression.Append(" >= ");
+                    Visit(expression.Left);
+                    Write(" >= ");
+                    Visit(expression.Right);
                     break;
                 case ExpressionType.LessThan:
-                    _sqlExpression.Append(" < ");
+                    Visit(expression.Left);
+                    Write(" < ");
+                    Visit(expression.Right);
                     break;
                 case ExpressionType.LessThanOrEqual:
-                    _sqlExpression.Append(" <= ");
+                    Visit(expression.Left);
+                    Write(" <= ");
+                    Visit(expression.Right);
                     break;
                 case ExpressionType.Equal:
-                    _sqlExpression.Append(" = ");
+                    Visit(expression.Left);
+                    Write(" = ");
+                    Visit(expression.Right);
+                    break;
+                case ExpressionType.NotEqual:
+                    Write("NOT ");
+                    Visit(expression.Left);
+                    Write(" = ");
+                    Visit(expression.Right);
                     break;
 
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
-                    _sqlExpression.Append(" and ");
+                    Visit(expression.Left);
+                    Write(" and ");
+                    Visit(expression.Right);
                     break;
 
                 case ExpressionType.OrElse:
                 case ExpressionType.Or:
-                    _sqlExpression.Append(" or ");
+                    Visit(expression.Left);
+                    Write(" or ");
+                    Visit(expression.Right);
                     break;
 
                 case ExpressionType.Add:
-                    _sqlExpression.Append(" + ");
+                    Visit(expression.Left);
+                    Write(" + ");
+                    Visit(expression.Right);
                     break;
 
                 case ExpressionType.Subtract:
-                    _sqlExpression.Append(" - ");
+                    Visit(expression.Left);
+                    Write(" - ");
+                    Visit(expression.Right);
                     break;
 
                 case ExpressionType.Multiply:
-                    _sqlExpression.Append(" * ");
+                    Visit(expression.Left);
+                    Write(" * ");
+                    Visit(expression.Right);
                     break;
 
                 case ExpressionType.Divide:
-                    _sqlExpression.Append(" / ");
+                    Visit(expression.Left);
+                    Write(" / ");
+                    Visit(expression.Right);
                     break;
 
                 default:
+                    Visit(expression.Left);
                     base.VisitBinary(expression);
                     break;
             }
 
-            Visit(expression.Right);
             _sqlExpression.Append(")");
 
             return expression;
+        }
+
+        private void Write(string text)
+        {
+            _sqlExpression.Append(text);
         }
 
         protected override Expression VisitMember(MemberExpression expression)
@@ -116,35 +156,35 @@ namespace PoS.Infra
         {
             if (expression.Method.Equals(MethodTranslator.StringContains))
             {
-                _sqlExpression.Append("(");
+                Write("(");
                 Visit(expression.Object);
-                _sqlExpression.Append(" like ?||");
+                Write(" like ?||");
                 _variables.AddVariable("%");
                 Visit(expression.Arguments[0]);
-                _sqlExpression.Append("||?)");
+                Write("||?)");
                 _variables.AddVariable("%");
                 return expression;
             }
 
             if (expression.Method.Equals(MethodTranslator.StringStartsWith))
             {
-                _sqlExpression.Append("(");
+                Write("(");
                 Visit(expression.Object);
-                _sqlExpression.Append(" like ");
+                Write(" like ");
                 Visit(expression.Arguments[0]);
-                _sqlExpression.Append("||?)");
+                Write("||?)");
                 _variables.AddVariable("%");
                 return expression;
             }
 
             if (expression.Method.Equals(MethodTranslator.StringEndsWith))
             {
-                _sqlExpression.Append("(");
+                Write("(");
                 Visit(expression.Object);
-                _sqlExpression.Append(" like ?||");
+                Write(" like ?||");
                 _variables.AddVariable("%");
                 Visit(expression.Arguments[0]);
-                _sqlExpression.Append(")");
+                Write(")");
                 return expression;
             }
 

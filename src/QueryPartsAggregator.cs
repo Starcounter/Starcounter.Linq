@@ -43,14 +43,14 @@ namespace PoS.Infra
             if (string.IsNullOrEmpty(SelectPart) || FromParts.Count == 0)
                 throw new InvalidOperationException("A query must have a select part and at least one from part.");
 
-            stringBuilder.Append($"select {SelectPart}");
-            stringBuilder.Append($" from {SeparatedStringBuilder.Build(", ", FromParts)}");
+            stringBuilder.Append($"SELECT {SelectPart}");
+            stringBuilder.Append($" FROM {SeparatedStringBuilder.Build(", ", FromParts)}");
 
             if (WhereParts.Count > 0)
-                stringBuilder.Append($" where {SeparatedStringBuilder.Build(" and ", WhereParts)}");
+                stringBuilder.Append($" WHERE {SeparatedStringBuilder.Build(" and ", WhereParts)}");
 
             if (OrderByParts.Count > 0)
-                stringBuilder.Append($" order by {SeparatedStringBuilder.Build(", ", OrderByParts)}");
+                stringBuilder.Append($" ORDER BY {SeparatedStringBuilder.Build(", ", OrderByParts)}");
 
             if (FetchPart != null)
                 stringBuilder.Append($" {FetchPart}");

@@ -26,8 +26,10 @@ namespace Demo
                 };
 
                 Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
                 Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
                 Objects<Person>().FirstOrDefault(p => p.Name.Contains("oge"));
+                Objects<Person>().FirstOrDefault(p => !p.Name.Contains("oge"));
                 Objects<Person>().FirstOrDefault(p => p.Name.StartsWith("Ro"));
                 Objects<Person>().FirstOrDefault(p => p.Name.EndsWith("er"));
                 Objects<Person>().FirstOrDefault(p => p.Age > 0 && p.Age < 100);
