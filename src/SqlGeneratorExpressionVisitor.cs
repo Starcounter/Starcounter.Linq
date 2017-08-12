@@ -3,25 +3,34 @@ using System.Collections;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using Remotion.Linq.Clauses;
 using Remotion.Linq.Clauses.Expressions;
 using Remotion.Linq.Clauses.ResultOperators;
 using Remotion.Linq.Parsing;
 
 namespace Starcounter.Linq
 {
-    public class SqlGeneratorExpressionTreeVisitor : ThrowingExpressionVisitor
+    public static class Extensions
+    {
+        public static string ItemName(this IQuerySource self)
+        {
+            var name = self.ItemName.Replace("<", "").Replace(">", "");
+            return name;
+        }
+    }
+    public class SqlGeneratorExpressionVisitor : ThrowingExpressionVisitor
     {
         private readonly StringBuilder _sqlExpression = new StringBuilder();
         private readonly QueryVariables _variables;
 
-        private SqlGeneratorExpressionTreeVisitor(QueryVariables variables)
+        private SqlGeneratorExpressionVisitor(QueryVariables variables)
         {
             _variables = variables;
         }
 
         public static string GetSqlExpression(Expression linqExpression, QueryVariables variables)
         {
-            var visitor = new SqlGeneratorExpressionTreeVisitor(variables);
+            var visitor = new SqlGeneratorExpressionVisitor(variables);
             visitor.Visit(linqExpression);
             return visitor.GetSqlExpression();
         }
@@ -33,8 +42,7 @@ namespace Starcounter.Linq
 
         protected override Expression VisitQuerySourceReference(QuerySourceReferenceExpression expression)
         {
-            var name = expression.ReferencedQuerySource.ItemName.Replace("<", "").Replace(">", "");
-            _sqlExpression.Append(name);
+            _sqlExpression.Append(expression.ReferencedQuerySource.ItemName());
             return expression;
         }
 

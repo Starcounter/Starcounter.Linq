@@ -9,19 +9,17 @@ namespace Starcounter.Linq
 {
     public class SqlGeneratorQueryModelVisitor : QueryModelVisitorBase
     {
-        // Instead of generating an HQL string, we could also use a NHibernate ASTFactory to generate IASTNodes.
-        private readonly QueryPartsAggregator _queryParts = new QueryPartsAggregator();
-
+        private readonly QueryBuilder _queryParts = new QueryBuilder();
         private readonly QueryVariables _variables = new QueryVariables();
 
-        public static CommandData GenerateHqlQuery(QueryModel queryModel)
+        public static CommandData GenerateSqlQuery(QueryModel queryModel)
         {
             var visitor = new SqlGeneratorQueryModelVisitor();
             visitor.VisitQueryModel(queryModel);
-            return visitor.GetHqlCommand();
+            return visitor.GetSqlCommand();
         }
 
-        public CommandData GetHqlCommand()
+        public CommandData GetSqlCommand()
         {
             return new CommandData(_queryParts.BuildSqlString(), _variables.GetParameters());
         }
@@ -52,10 +50,10 @@ namespace Starcounter.Linq
                     _queryParts.SelectPart = string.Format($"AVG({_queryParts.SelectPart})");
                     break;
                 case MinResultOperator _:
-                    _queryParts.SelectPart = string.Format($"Min({_queryParts.SelectPart})");
+                    _queryParts.SelectPart = string.Format($"MIN({_queryParts.SelectPart})");
                     break;
                 case MaxResultOperator _:
-                    _queryParts.SelectPart = string.Format($"Max({_queryParts.SelectPart})");
+                    _queryParts.SelectPart = string.Format($"MAX({_queryParts.SelectPart})");
                     break;
                 default:
                     throw new NotSupportedException();
@@ -120,7 +118,7 @@ namespace Starcounter.Linq
 
         private string GetSqlExpression(Expression expression)
         {
-            return SqlGeneratorExpressionTreeVisitor.GetSqlExpression(expression, _variables);
+            return SqlGeneratorExpressionVisitor.GetSqlExpression(expression, _variables);
         }
     }
 }

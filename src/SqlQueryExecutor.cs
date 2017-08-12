@@ -6,10 +6,38 @@ using Remotion.Linq;
 
 namespace Starcounter.Linq
 {
+    public class EmptyQueryExecutor : SqlQueryExecutor
+    {
+        public override T ExecuteScalar<T>(QueryModel queryModel)
+        {
+            ExecuteCollection<T>(queryModel);
+            return default(T);
+        }
+
+        // Executes a query with a single result object, i.e. a query that ends with a result operator such as First, Last, Single, Min, or Max.
+        public override T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
+        {
+            ExecuteCollection<T>(queryModel);
+            return default(T);
+        }
+
+        public override IEnumerable<T1> ExecuteCollection<T1>(QueryModel queryModel)
+        {
+            var commandData = SqlGeneratorQueryModelVisitor.GenerateSqlQuery(queryModel);
+            var args = commandData.QueryVariables.Select(n => n.Value).ToArray();
+
+            return null;
+        }
+    }
+
     public class SqlQueryExecutor : IQueryExecutor
     {
+        public SqlQueryExecutor()
+        {
+            
+        }
         // Executes a query with a scalar result, i.e. a query that ends with a result operator such as Count, Sum, or Average.
-        public T ExecuteScalar<T>(QueryModel queryModel)
+        public virtual T ExecuteScalar<T>(QueryModel queryModel)
         {
             if (typeof(T) == typeof(int))
             {
@@ -29,7 +57,7 @@ namespace Starcounter.Linq
         }
 
         // Executes a query with a single result object, i.e. a query that ends with a result operator such as First, Last, Single, Min, or Max.
-        public T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
+        public virtual T ExecuteSingle<T>(QueryModel queryModel, bool returnDefaultWhenEmpty)
         {
             if (typeof(T) == typeof(int))
             {
@@ -49,11 +77,11 @@ namespace Starcounter.Linq
         }
 
         // Executes a query with a collection result.
-        public IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
+        public virtual IEnumerable<T> ExecuteCollection<T>(QueryModel queryModel)
         {
-            var commandData = SqlGeneratorQueryModelVisitor.GenerateHqlQuery(queryModel);
+            var commandData = SqlGeneratorQueryModelVisitor.GenerateSqlQuery(queryModel);
             var args = commandData.QueryVariables.Select(n => n.Value).ToArray();
-            Debug.WriteLine($"SQL: {commandData.Statement}");
+            //Debug.WriteLine($"SQL: {commandData.Statement}");
 
             var res = Db.SQL<T>(commandData.Statement, args);
             return res;

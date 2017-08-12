@@ -5,9 +5,9 @@ using Remotion.Linq.Clauses;
 
 namespace Starcounter.Linq
 {
-    public class QueryPartsAggregator
+    public class QueryBuilder
     {
-        public QueryPartsAggregator()
+        public QueryBuilder()
         {
             FromParts = new List<string>();
             WhereParts = new List<string>();
@@ -23,8 +23,7 @@ namespace Starcounter.Linq
 
         public void AddFromPart(IQuerySource querySource)
         {
-            var name = querySource.ItemName.Replace("<", "").Replace(">", "");
-            FromParts.Add($"{GetEntityName(querySource)} {name}");
+            FromParts.Add($"{GetEntityName(querySource)} {querySource.ItemName()}");
         }
 
         public void AddWherePart(string formatString, params object[] args)
