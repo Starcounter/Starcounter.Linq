@@ -1,29 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 using Starcounter;
-using static Starcounter.Linq.DbLinq;
+using Starcounter.Linq;
 
 namespace Sandbox
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static Expression<Func<Person, bool>> ToExpression(Expression<Func<Person, bool>> predicate)
         {
+            return predicate;
+        }
+
+        private static void Main(string[] args)
+        {
+            var q = DbLinq.CompileQuery((string name) => DummyLinq.Objects<Person>().FirstOrDefault(p => p.Name == name));
+            q("Roger");
+
             var sw = Stopwatch.StartNew();
-            for (int i = 0; i < 1000000; i++)
+            for (var i = 0; i < 1000000; i++)
             {
-                var res = EmptyObjects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                var res = DummyLinq.Objects<Person>().Where(p => p.Name == "Roger")?.ToList();  //EmptyObjects<Person>().FirstOrDefault(p => p.Name == "Roger");
             }
             sw.Stop();
             Console.WriteLine(sw.Elapsed);
-
         }
     }
-
 
 
     [Database]
@@ -48,7 +52,7 @@ namespace Sandbox
     public enum Gender
     {
         Male,
-        Female,
+        Female
     }
 
     [Database]
