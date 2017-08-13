@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Starcounter;
-using Starcounter.Linq;
 using static Starcounter.Linq.DbLinq;
 
 namespace Demo
@@ -66,7 +63,6 @@ namespace Demo
                     return sw.Elapsed.ToString();
                 });
 
-                var q = CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name == name));
 
                 Handle.GET("/linq", () =>
                 {
@@ -74,7 +70,7 @@ namespace Demo
                     var sw = Stopwatch.StartNew();
                     for (int i = 0; i < 1000000; i++)
                     {
-                        var res = q("Roger");
+                        var res = Person.FirstNamed("Roger");
                     }
                     sw.Stop();
                     return sw.Elapsed.ToString();
@@ -113,6 +109,8 @@ namespace Demo
     [Database]
     public class Person
     {
+        public static readonly Func<string, Person> FirstNamed = CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name == name));
+
         public Gender Gender { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
