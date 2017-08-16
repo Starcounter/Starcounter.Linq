@@ -1,6 +1,5 @@
 ﻿namespace Starcounter.Linq
 {
-
     public partial class DbLinq
     {
         private static class Cache<T>

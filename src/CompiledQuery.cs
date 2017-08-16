@@ -71,7 +71,7 @@ namespace Starcounter.Linq
             TParam4 param4,
             TParam5 param5) => ExecuteCore(param1, param2, param3, param4, param5);
 
-        private readonly string _sqlStatement;
+        public string SqlStatement { get; }
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -80,7 +80,7 @@ namespace Starcounter.Linq
         public CompiledQuery(LambdaExpression queryExpression)
         {
             var q = new DummyQueryContext<TResult>();
-            _sqlStatement = q.GetQuery(queryExpression.Body);
+            SqlStatement = q.GetQuery(queryExpression.Body);
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace Starcounter.Linq
         {
             if (typeof(TResult).IsGenericType)
             {
-                return (TResult)(object)Db.SQL<TResult>(_sqlStatement, parameters);
+                return (TResult)(object)Db.SQL<TResult>(SqlStatement, parameters);
             }
-            return Db.SQL<TResult>(_sqlStatement, parameters).First;
+            return Db.SQL<TResult>(SqlStatement, parameters).First;
         }
     }
 }

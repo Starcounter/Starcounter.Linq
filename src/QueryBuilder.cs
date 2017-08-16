@@ -7,18 +7,22 @@ namespace Starcounter.Linq
 {
     public class QueryBuilder<T>
     {
-        public static Type QueryType = UnwrapQueryType(typeof(T));
+        private static readonly Type QueryType = UnwrapQueryType(typeof(T));
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly string SourceName = QueryType.SourceName();
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly string QueryTypeName = QueryType.FullName;
+        // Precompute the from clause for this <T>
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly string From = $" FROM {QueryTypeName} {QueryType.SourceName()}";
+
+
 
         private static Type UnwrapQueryType(Type type)
         {
             if (!type.IsConstructedGenericType) return type;
             return type.GetGenericArguments().First();
         }
-
-        // ReSharper disable once StaticMemberInGenericType
-        public static string SourceName = QueryType.SourceName();
-        // ReSharper disable once StaticMemberInGenericType
-        public static string QueryTypeName = QueryType.FullName;
 
         private StringBuilder WhereParts { get; } = new StringBuilder();
         private List<string> OrderByParts { get; } = new List<string>();
@@ -66,10 +70,7 @@ namespace Starcounter.Linq
 
             stringBuilder.Append("SELECT ");
             stringBuilder.Append(SourceName);
-            stringBuilder.Append(" FROM ");
-            stringBuilder.Append(QueryTypeName);
-            stringBuilder.Append(" ");
-            stringBuilder.Append(SourceName);
+            stringBuilder.Append(From);
 
             if (WhereParts.Length > 0)
             {
