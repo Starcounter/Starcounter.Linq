@@ -43,7 +43,6 @@ namespace Starcounter.Linq
                     state.WriteWhere(" = ");
                     Visit(node.Right, state);
                     break;
-
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
                     Visit(node.Left, state);

@@ -8,6 +8,9 @@ namespace Starcounter.Linq
 {
     public class Queryable<T> : IOrderedQueryable<T>
     {
+        //Why an instance impl of FirstOrDefault instead of default extension method?
+        //The extension method creates a new expression based on the old expression + a call to first or default
+        //This costs a lot of cycles, we simply bypass this and translate the base expression here
         public T FirstOrDefault(Expression<Func<T, bool>> predicate)
         {
             var res =  Provider.Execute<IEnumerable<T>>(predicate);

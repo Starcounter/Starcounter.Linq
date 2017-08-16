@@ -125,7 +125,7 @@ namespace Demo
     [Database]
     public class Person
     {
-        public static readonly Func<string, Person> FirstNamed = CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name.StartsWith(name)));
+        public static readonly Func<string, Person> FirstNamed = CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name == name));
 
         public Gender Gender { get; set; }
         public string Name { get; set; }

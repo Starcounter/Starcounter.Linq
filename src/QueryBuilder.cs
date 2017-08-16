@@ -11,12 +11,8 @@ namespace Starcounter.Linq
 
         private static Type UnwrapQueryType(Type type)
         {
-            if (type.IsConstructedGenericType)
-            {
-                var t = type.GetGenericArguments().First();
-                return t;
-            }
-            return type;
+            if (!type.IsConstructedGenericType) return type;
+            return type.GetGenericArguments().First();
         }
 
         // ReSharper disable once StaticMemberInGenericType
@@ -28,7 +24,6 @@ namespace Starcounter.Linq
         private List<string> OrderByParts { get; } = new List<string>();
 
         private List<object> Variables { get; } = new List<object>();
-
 
         public string FetchPart { get; set; }
 

@@ -8,6 +8,11 @@ using System.Reflection;
 
 namespace Starcounter.Linq
 {
+    //What is this?
+    //This is a cache of known generic methods that the translator uses
+    //This way, we can have a zero cost cache of methods for each entity type
+    //public static fields in a generic class are often a bug, but not in this case
+    //we explicitly want to be able from one generic class get hold of the generic methods of the same type w/o lookups
     public static class KnownMethods<T>
     {
         private static readonly IQueryable<T> IQueryable = null;
@@ -19,6 +24,8 @@ namespace Starcounter.Linq
         public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
         public static readonly MethodInfo QueryableWhere = MethodFromExample(() => IQueryable.Where(i => true));
 
+        //This takes an expression lambda and extracts the contained method.
+        //This way, we can by example specify exactly what overload we want, instead of looking up by name and args
         private static MethodInfo MethodFromExample<TIgnore>(Expression<Func<TIgnore>> fun)
         {
             if (fun.Body is MethodCallExpression call)
@@ -31,7 +38,9 @@ namespace Starcounter.Linq
             throw new NotSupportedException();
         }
     }
-    public class KnownMethods
+
+    //These are all the non generic known methods
+    public static class KnownMethods
     {
         private static readonly int[] Enumerable = null;
 
@@ -40,7 +49,7 @@ namespace Starcounter.Linq
         public static readonly MethodInfo StringStartsWith = MethodFromExample(() => "".StartsWith(""));
         public static readonly MethodInfo StringEndsWith = MethodFromExample(() => "".EndsWith(""));
 
-        private static MethodInfo MethodFromExample<T>(Expression<Func<T>> fun)
+        private static MethodInfo MethodFromExample<TIgnore>(Expression<Func<TIgnore>> fun)
         {
             if (fun.Body is MethodCallExpression call)
             {
