@@ -50,22 +50,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache\CompiledQuery.cs" />
-    <Compile Include="Cache\CompiledQueryBase.cs" />
+    <Compile Include="CompiledQuery.cs" />
     <Compile Include="DB.cs" />
-    <Compile Include="Cache\ExpressionComparer.cs" />
     <Compile Include="DbLinq.cs" />
-    <Compile Include="MethodTranslator.cs" />
+    <Compile Include="KnownMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Raw\QueryBuilder.cs" />
-    <Compile Include="Raw\Extensions.cs" />
-    <Compile Include="Raw\Queryable.cs" />
-    <Compile Include="Raw\QueryContext.cs" />
-    <Compile Include="Raw\QueryProvider.cs" />
-    <Compile Include="Raw\RootVisitor.cs" />
-    <Compile Include="Raw\StatelessVisitor.cs" />
-    <Compile Include="Raw\TypeSystem.cs" />
-    <Compile Include="Raw\WhereVisitor.cs" />
+    <Compile Include="QueryBuilder.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Queryable.cs" />
+    <Compile Include="DummyQueryContext.cs" />
+    <Compile Include="QueryProvider.cs" />
+    <Compile Include="RootVisitor.cs" />
+    <Compile Include="StatelessVisitor.cs" />
+    <Compile Include="WhereVisitor.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

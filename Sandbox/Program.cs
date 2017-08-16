@@ -16,13 +16,13 @@ namespace Sandbox
 
         private static void Main(string[] args)
         {
-            var q = DbLinq.CompileQuery((string name) => DummyLinq.Objects<Person>().FirstOrDefault(p => p.Name == name));
-            q("Roger");
+            //var q = DbLinq.CompileQuery((string name) => DummyLinq.Objects<Person>().FirstOrDefault(p => p.Name == name));
+            //q("Roger");
 
             var sw = Stopwatch.StartNew();
-            for (var i = 0; i < 1000000; i++)
+            for (var i = 0; i < 3000000; i++)
             {
-                var res = DummyLinq.Objects<Person>().Where(p => p.Name == "Roger")?.ToList();  //EmptyObjects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                var res = DummyLinq.Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
             }
             sw.Stop();
             Console.WriteLine(sw.Elapsed);

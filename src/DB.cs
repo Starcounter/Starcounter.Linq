@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Starcounter.Linq.Cache;
 
 namespace Starcounter.Linq
 {
@@ -14,7 +11,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
@@ -27,7 +23,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
@@ -37,11 +32,9 @@ namespace Starcounter.Linq
             => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
 
 
-
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
@@ -53,7 +46,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
@@ -66,7 +58,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
@@ -79,7 +70,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TResult">The query result type.</typeparam>
@@ -95,7 +85,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TResult">The query result type.</typeparam>
@@ -110,7 +99,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TParam3">The type of the third query parameter.</typeparam>
@@ -126,7 +114,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TParam3">The type of the third query parameter.</typeparam>
@@ -142,7 +129,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TParam3">The type of the third query parameter.</typeparam>
@@ -159,7 +145,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TParam3">The type of the third query parameter.</typeparam>
@@ -176,7 +161,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TParam3">The type of the third query parameter.</typeparam>
@@ -194,7 +178,6 @@ namespace Starcounter.Linq
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// </summary>
-        /// <typeparam name="TContext">The target DbContext type.</typeparam>
         /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
         /// <typeparam name="TParam2">The type of the second query parameter.</typeparam>
         /// <typeparam name="TParam3">The type of the third query parameter.</typeparam>

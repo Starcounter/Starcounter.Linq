@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Starcounter.Linq.Raw
+namespace Starcounter.Linq
 {
     public class QueryBuilder<T>
     {
@@ -23,10 +23,6 @@ namespace Starcounter.Linq.Raw
         public static string SourceName = QueryType.SourceName();
         // ReSharper disable once StaticMemberInGenericType
         public static string QueryTypeName = QueryType.FullName;
-        public QueryBuilder()
-        {
-            
-        }
 
         private StringBuilder WhereParts { get; } = new StringBuilder();
         private List<string> OrderByParts { get; } = new List<string>();
@@ -36,27 +32,27 @@ namespace Starcounter.Linq.Raw
 
         public string FetchPart { get; set; }
 
-        public void Fetch(int count)
+        public void Fetch(int count) => FetchPart = $" FETCH {count}";
+
+        public void BeginWhereSection()
         {
-            FetchPart = $" FETCH {count}";
+            if (WhereParts.Length > 0)
+            {
+                WriteWhere("AND (");
+            }
+            else
+            {
+                WriteWhere("(");
+            }
         }
 
-
-
-        //public void AddFromPart(IQuerySource querySource)
-        //{
-        //    FromPart.Add($"{GetEntityName(querySource)} {querySource.ItemName()}");
-        //}
-
-        public void AddWherePart(string formatString)
+        public void EndWhereSection()
         {
-            WhereParts.Append(formatString);
+            WriteWhere(")");
         }
+        public void WriteWhere(string text) => WhereParts.Append(text);
 
-        public void AddWherePart(string formatString, params object[] args)
-        {
-            WhereParts.AppendFormat(formatString, args);
-        }
+        public void WriteWhere(string formatString, params object[] args) => WhereParts.AppendFormat(formatString, args);
 
 
         public void AddOrderByPart(IEnumerable<string> orderings)
@@ -66,11 +62,15 @@ namespace Starcounter.Linq.Raw
 
         public string BuildSqlString()
         {
+            //Why this structure?
+            //Formatting strings is slow, appending is fast.
+            //Avoid string.Format and string interpolation
+            //None of this matters much for compiled queries, but is highly relevant for standard ad-hoc linq
+
             var stringBuilder = new StringBuilder();
 
             stringBuilder.Append("SELECT ");
             stringBuilder.Append(SourceName);
-
             stringBuilder.Append(" FROM ");
             stringBuilder.Append(QueryTypeName);
             stringBuilder.Append(" ");
@@ -83,7 +83,9 @@ namespace Starcounter.Linq.Raw
             }
 
             if (OrderByParts.Count > 0)
+            {
                 stringBuilder.Append($" ORDER BY {SeparatedStringBuilder.Build(", ", OrderByParts)}");
+            }
 
             //if (FetchPart != null)
             //{
@@ -93,22 +95,13 @@ namespace Starcounter.Linq.Raw
             return stringBuilder.ToString();
         }
 
-        public void AddVariable(object value)
-        {
-            Variables.Add(value);
-        }
+        public void AddVariable(object value) => Variables.Add(value);
 
-        public object[] GetVariables()
-        {
-            return Variables.ToArray();
-        }
+        public object[] GetVariables() => Variables.ToArray();
     }
 
     public class SeparatedStringBuilder
     {
-        public static string Build(string s, IEnumerable<string> orderings)
-        {
-            return string.Join(s, orderings);
-        }
+        public static string Build(string s, IEnumerable<string> orderings) => string.Join(s, orderings);
     }
 }

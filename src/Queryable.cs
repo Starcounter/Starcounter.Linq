@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Starcounter.Linq.Raw
+namespace Starcounter.Linq
 {
     public class Queryable<T> : IOrderedQueryable<T>
     {
@@ -12,35 +12,24 @@ namespace Starcounter.Linq.Raw
         {
             var res =  Provider.Execute<IEnumerable<T>>(predicate);
             if (res == null)
+            {
                 return default(T);
+            }
             return res.FirstOrDefault();
         }
 
-        public Queryable(IQueryContext queryContext)
-        {
-            Initialize(new QueryProvider(queryContext), null);
-        }
+        public Queryable(IQueryContext queryContext) => Initialize(new QueryProvider(queryContext), null);
 
-        public Queryable(IQueryProvider provider)
-        {
-            Initialize(provider, null);
-        }
+        public Queryable(IQueryProvider provider) => Initialize(provider, null);
 
-        internal Queryable(IQueryProvider provider, Expression expression)
-        {
-            Initialize(provider, expression);
-        }
+        internal Queryable(IQueryProvider provider, Expression expression) => Initialize(provider, expression);
 
         public IEnumerator<T> GetEnumerator()
         {
-            return Provider.Execute<IEnumerable<T>>(Expression)?.GetEnumerator() ??
-                   Enumerable.Empty<T>().GetEnumerator();
+            return Provider.Execute<IEnumerable<T>>(Expression)?.GetEnumerator() ?? Enumerable.Empty<T>().GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Provider.Execute<IEnumerable>(Expression).GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => Provider.Execute<IEnumerable>(Expression).GetEnumerator();
 
         public Type ElementType => typeof(T);
 

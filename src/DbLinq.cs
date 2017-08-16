@@ -1,13 +1,11 @@
-﻿using Starcounter.Linq.Raw;
-
-namespace Starcounter.Linq
+﻿namespace Starcounter.Linq
 {
 
     public partial class DbLinq
     {
         private static class Cache<T>
         {
-            public static Queryable<T> Objects { get; } = new Queryable<T>(new QueryProvider(new ScQueryContext<T>()));
+            public static Queryable<T> Objects { get; } = new Queryable<T>(new QueryProvider(new QueryContext<T>()));
         }
         public static Queryable<T> Objects<T>() => Cache<T>.Objects;
     }
@@ -15,7 +13,7 @@ namespace Starcounter.Linq
     {
         private static class Cache<T>
         {
-            public static Queryable<T> Objects { get; } = new Queryable<T>(new QueryProvider(new QueryContext<T>()));
+            public static Queryable<T> Objects { get; } = new Queryable<T>(new QueryProvider(new DummyQueryContext<T>()));
         }
 
         public static Queryable<T> Objects<T>() => Cache<T>.Objects;

@@ -2,11 +2,13 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Starcounter.Linq.Raw;
+
+// ReSharper disable StaticMemberInGenericType
+// ReSharper disable InconsistentNaming
 
 namespace Starcounter.Linq
 {
-    public static class MethodTranslator<T>
+    public static class KnownMethods<T>
     {
         private static readonly IQueryable<T> IQueryable = null;
         private static readonly Queryable<T> Queryable = null;
@@ -17,17 +19,19 @@ namespace Starcounter.Linq
         public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
         public static readonly MethodInfo QueryableWhere = MethodFromExample(() => IQueryable.Where(i => true));
 
-        private static MethodInfo MethodFromExample<T>(Expression<Func<T>> fun)
+        private static MethodInfo MethodFromExample<TIgnore>(Expression<Func<TIgnore>> fun)
         {
-
-            var call = fun.Body as MethodCallExpression;
-            var method = call.Method;
-            if (method.IsGenericMethod)
-                method = method.GetGenericMethodDefinition();
-            return method;
+            if (fun.Body is MethodCallExpression call)
+            {
+                var method = call.Method;
+                if (method.IsGenericMethod)
+                    method = method.GetGenericMethodDefinition();
+                return method;
+            }
+            throw new NotSupportedException();
         }
     }
-    public class MethodTranslator
+    public class KnownMethods
     {
         private static readonly int[] Enumerable = null;
 
@@ -38,12 +42,14 @@ namespace Starcounter.Linq
 
         private static MethodInfo MethodFromExample<T>(Expression<Func<T>> fun)
         {
-            
-            var call = fun.Body as MethodCallExpression;
-            var method = call.Method;
-            if (method.IsGenericMethod)
-                method = method.GetGenericMethodDefinition();
-            return method;
+            if (fun.Body is MethodCallExpression call)
+            {
+                var method = call.Method;
+                if (method.IsGenericMethod)
+                    method = method.GetGenericMethodDefinition();
+                return method;
+            }
+            throw new NotSupportedException();
         }
     }
 }

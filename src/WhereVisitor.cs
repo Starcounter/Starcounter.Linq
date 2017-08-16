@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Starcounter.Linq.Raw
+namespace Starcounter.Linq
 {
     public class WhereVisitor<T> : StatelessVisitor<QueryBuilder<T>>
     {
@@ -9,76 +9,76 @@ namespace Starcounter.Linq.Raw
 
         public override void VisitBinary(BinaryExpression node, QueryBuilder<T> state)
         {
-            state.AddWherePart("(");
+            state.WriteWhere("(");
             switch (node.NodeType)
             {
                 case ExpressionType.GreaterThan:
                     Visit(node.Left, state);
-                    state.AddWherePart(" > ");
+                    state.WriteWhere(" > ");
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.GreaterThanOrEqual:
                     Visit(node.Left, state);
-                    state.AddWherePart(" >= ");
+                    state.WriteWhere(" >= ");
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.LessThan:
                     Visit(node.Left, state);
-                    state.AddWherePart(" < ");
+                    state.WriteWhere(" < ");
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.LessThanOrEqual:
                     Visit(node.Left, state);
-                    state.AddWherePart(" <= ");
+                    state.WriteWhere(" <= ");
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.Equal:
                     Visit(node.Left, state);
-                    state.AddWherePart(" = ");
+                    state.WriteWhere(" = ");
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.NotEqual:
-                    state.AddWherePart("NOT ");
+                    state.WriteWhere("NOT ");
                     Visit(node.Left, state);
-                    state.AddWherePart(" = ");
+                    state.WriteWhere(" = ");
                     Visit(node.Right, state);
                     break;
 
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
                     Visit(node.Left, state);
-                    state.AddWherePart(" AND ");
+                    state.WriteWhere(" AND ");
                     Visit(node.Right, state);
                     break;
 
                 case ExpressionType.OrElse:
                 case ExpressionType.Or:
                     Visit(node.Left, state);
-                    state.AddWherePart(" OR ");
+                    state.WriteWhere(" OR ");
                     Visit(node.Right, state);
                     break;
 
                 case ExpressionType.Add:
                     Visit(node.Left, state);
-                    state.AddWherePart(" + ");
+                    state.WriteWhere(" + ");
                     Visit(node.Right, state);
                     break;
 
                 case ExpressionType.Subtract:
                     Visit(node.Left, state);
-                    state.AddWherePart(" - ");
+                    state.WriteWhere(" - ");
                     Visit(node.Right, state);
                     break;
 
                 case ExpressionType.Multiply:
                     Visit(node.Left, state);
-                    state.AddWherePart(" * ");
+                    state.WriteWhere(" * ");
                     Visit(node.Right, state);
                     break;
 
                 case ExpressionType.Divide:
                     Visit(node.Left, state);
-                    state.AddWherePart(" / ");
+                    state.WriteWhere(" / ");
                     Visit(node.Right, state);
                     break;
 
@@ -86,7 +86,7 @@ namespace Starcounter.Linq.Raw
                     throw new NotSupportedException();
             }
 
-            state.AddWherePart(")");
+            state.WriteWhere(")");
         }
 
         public override void VisitBlock(BlockExpression node, QueryBuilder<T> state)
@@ -101,7 +101,7 @@ namespace Starcounter.Linq.Raw
 
         public override void VisitConstant(ConstantExpression node, QueryBuilder<T> state)
         {
-            state.AddWherePart("?");
+            state.WriteWhere("?");
             state.AddVariable(node.Value);
         }
 
@@ -134,13 +134,13 @@ namespace Starcounter.Linq.Raw
         {
             if (node.Expression is ParameterExpression param)
             {
-                state.AddWherePart(param.Type.SourceName());
+                state.WriteWhere(param.Type.SourceName());
             }
             else
             {
                 Visit(node.Expression, state);
             }
-            state.AddWherePart("." + node.Member.Name);
+            state.WriteWhere("." + node.Member.Name);
         }
 
         public override void VisitIndex(IndexExpression node, QueryBuilder<T> state)
@@ -165,7 +165,7 @@ namespace Starcounter.Linq.Raw
 
         public override void VisitParameter(ParameterExpression node, QueryBuilder<T> state)
         {
-            state.AddWherePart("?");
+            state.WriteWhere("?");
         }
 
         public override void VisitRuntimeVariables(RuntimeVariablesExpression node, QueryBuilder<T> state)

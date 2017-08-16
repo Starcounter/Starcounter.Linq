@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Starcounter.Linq.Raw
+namespace Starcounter.Linq
 {
     public interface IQueryContext
     {
@@ -8,7 +8,7 @@ namespace Starcounter.Linq.Raw
         string GetQuery(Expression expression);
     }
 
-    public class ScQueryContext<T> : IQueryContext
+    public class QueryContext<T> : IQueryContext
     {
         public object Execute(Expression expression)
         {
@@ -31,15 +31,15 @@ namespace Starcounter.Linq.Raw
         }
     }
 
-    public class QueryContext<T> : IQueryContext
+    public class DummyQueryContext<T> : IQueryContext
     {
         public object Execute(Expression expression)
         {
             var query = new QueryBuilder<T>();
 
             RootVisitor<T>.Instance.Visit(expression,query);
-            var sql = query.BuildSqlString();
-            var vars = query.GetVariables();
+            query.BuildSqlString();
+            query.GetVariables();
             return null;
         }
 

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Starcounter;
+using Starcounter.Linq;
+using Starcounter.Metadata;
 using static Starcounter.Linq.DbLinq;
 
 namespace Demo
@@ -64,13 +67,26 @@ namespace Demo
                 });
 
 
-                Handle.GET("/linq", () =>
+                Handle.GET("/compiled", () =>
                 {
 
                     var sw = Stopwatch.StartNew();
                     for (int i = 0; i < 1000000; i++)
                     {
                         var res = Person.FirstNamed("Roger");
+                    }
+                    sw.Stop();
+                    return sw.Elapsed.ToString();
+                });
+
+                Handle.GET("/linq", () =>
+                {
+
+                    var sw = Stopwatch.StartNew();
+                    for (int i = 0; i < 1000000; i++)
+                    {
+                        //this just traverses the linq expression tree, it doesnt touch the DB
+                        var res = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
                     }
                     sw.Stop();
                     return sw.Elapsed.ToString();
@@ -109,7 +125,7 @@ namespace Demo
     [Database]
     public class Person
     {
-        public static readonly Func<string, Person> FirstNamed = CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name == name));
+        public static readonly Func<string, Person> FirstNamed = CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name.StartsWith(name)));
 
         public Gender Gender { get; set; }
         public string Name { get; set; }

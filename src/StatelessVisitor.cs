@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Starcounter.Linq.Raw
+namespace Starcounter.Linq
 {
+    //It's cheaper to pass the state around in a stateless visitor than 
+    //to create a new visitor per query
     public abstract class StatelessVisitor<T>
     {
-
         public virtual void Visit(Expression node, T state)
         {
             switch (node)
@@ -37,7 +38,6 @@ namespace Starcounter.Linq.Raw
                 case MemberExpression mem:
                     VisitMember(mem,state);
                     break;
-
                 case IndexExpression ind:
                     VisitIndex(ind,state);
                     break;
@@ -65,7 +65,6 @@ namespace Starcounter.Linq.Raw
                 default:
                     throw new NotSupportedException();
             }
-            
         }
 
         public virtual void VisitBinary(BinaryExpression node, T state)

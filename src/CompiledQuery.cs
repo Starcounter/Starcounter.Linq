@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Threading;
 
-namespace Starcounter.Linq.Cache
+namespace Starcounter.Linq
 {
     // Copyright (c) .NET Foundation. All rights reserved.
     // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
@@ -11,35 +10,20 @@ namespace Starcounter.Linq.Cache
     ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
     ///     directly from your code. This API may change or be removed in future releases.
     /// </summary>
-    public class CompiledQuery<TResult> : CompiledQueryBase<TResult>
+    public class CompiledQuery<TResult>
     {
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public CompiledQuery(LambdaExpression queryExpression)
-            : base(queryExpression)
-        {
-        }
-
-        /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        public virtual TResult Execute()
-        {
-            return ExecuteCore();
-        }
+        public virtual TResult Execute() => ExecuteCore();
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult Execute<TParam1>(
-            TParam1 param1)
-        {
-            return ExecuteCore(param1);
-        }
+            TParam1 param1) => ExecuteCore(param1);
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -47,10 +31,7 @@ namespace Starcounter.Linq.Cache
         /// </summary>
         public virtual TResult ExecuteAsync<TParam1>(
             CancellationToken cancellationToken,
-            TParam1 param1)
-        {
-            return ExecuteCore(param1);
-        }
+            TParam1 param1) => ExecuteCore(param1);
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -58,10 +39,7 @@ namespace Starcounter.Linq.Cache
         /// </summary>
         public virtual TResult Execute<TParam1, TParam2>(
             TParam1 param1,
-            TParam2 param2)
-        {
-            return ExecuteCore(param1, param2);
-        }
+            TParam2 param2) => ExecuteCore(param1, param2);
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -70,10 +48,7 @@ namespace Starcounter.Linq.Cache
         public virtual TResult Execute<TParam1, TParam2, TParam3>(
             TParam1 param1,
             TParam2 param2,
-            TParam3 param3)
-        {
-            return ExecuteCore(param1, param2, param3);
-        }
+            TParam3 param3) => ExecuteCore(param1, param2, param3);
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -83,10 +58,7 @@ namespace Starcounter.Linq.Cache
             TParam1 param1,
             TParam2 param2,
             TParam3 param3,
-            TParam4 param4)
-        {
-            return ExecuteCore(param1, param2, param3, param4);
-        }
+            TParam4 param4) => ExecuteCore(param1, param2, param3, param4);
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -97,18 +69,37 @@ namespace Starcounter.Linq.Cache
             TParam2 param2,
             TParam3 param3,
             TParam4 param4,
-            TParam5 param5)
+            TParam5 param5) => ExecuteCore(param1, param2, param3, param4, param5);
+
+        private readonly string _sqlStatement;
+
+        /// <summary>
+        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public CompiledQuery(LambdaExpression queryExpression)
         {
-            return ExecuteCore(param1, param2, param3, param4, param5);
+            var q = new DummyQueryContext<TResult>();
+            _sqlStatement = q.GetQuery(queryExpression.Body);
         }
 
         /// <summary>
         ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        protected override Func<TResult> CreateCompiledQuery(Expression expression)
+        protected virtual TResult ExecuteCore(params object[] parameters) => ExecuteCore(CancellationToken.None, parameters);
+
+        /// <summary>
+        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        protected virtual TResult ExecuteCore(CancellationToken cancellationToken, params object[] parameters)
         {
-            return null;
+            if (typeof(TResult).IsGenericType)
+            {
+                return (TResult)(object)Db.SQL<TResult>(_sqlStatement, parameters);
+            }
+            return Db.SQL<TResult>(_sqlStatement, parameters).First;
         }
     }
 }
