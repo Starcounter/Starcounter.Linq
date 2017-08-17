@@ -149,7 +149,24 @@ namespace Starcounter.Linq
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<T> state)
         {
-            base.VisitMethodCall(node, state);
+            if (node.Method == KnownMethods.StringContains)
+            {
+                state.WriteWhere("(");
+                Visit(node.Object, state);
+                state.WriteWhere(" LIKE '%' || ? || '%')");
+            }
+            if (node.Method == KnownMethods.StringStartsWith)
+            {
+                state.WriteWhere("(");
+                Visit(node.Object, state);
+                state.WriteWhere(" LIKE ? || '%')");
+            }
+            if (node.Method == KnownMethods.StringEndsWith)
+            {
+                state.WriteWhere("(");
+                Visit(node.Object, state);
+                state.WriteWhere(" LIKE '%' || ?)");
+            }
         }
 
         public override void VisitNewArray(NewArrayExpression node, QueryBuilder<T> state)
