@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
 
@@ -20,7 +16,10 @@ namespace Starcounter.Linq.Tests
                 Sql(() => Objects<Person>().FirstOrDefault(p => p.Name == "XXX")));
 
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE (((P.Name = ?) AND (P.Age > ?)))",
-                Sql(() => Objects<Person>().FirstOrDefault(p => p.Name == "XXX" && p.Age > 7)));
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Name == "XXX" && p.Age > 123)));
+
+            Assert.Equal("SELECT E FROM Starcounter.Linq.Tests.Employee E WHERE (((E.Department.Company.Name = ?) AND (E.Age > ?)))",
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "XXX" && p.Age > 123)));
         }
     }
     public class Company
