@@ -19,15 +19,17 @@ namespace Starcounter.Linq
         private static readonly Queryable<T> Queryable = null;
 
         public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
-        public static readonly MethodInfo IQueryableOrderBy = MethodFromExample(() => IQueryable.OrderBy(i => i));
-        public static readonly MethodInfo IQueryableOrderByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i));
-        public static readonly MethodInfo IQueryableThenBy = MethodFromExample(() => IQueryable.OrderBy(i => i).ThenBy(i => i));
-        public static readonly MethodInfo IQueryableThenByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i).ThenByDescending(i => i));
+
+        public static readonly MethodInfo IQueryableOrderBy = MethodFromExample(() => IQueryable.OrderBy(i => i)).GetGenericMethodDefinition();
+        public static readonly MethodInfo IQueryableOrderByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i)).GetGenericMethodDefinition();
+        public static readonly MethodInfo IQueryableThenBy = MethodFromExample(() => IQueryable.OrderBy(i => i).ThenBy(i => i)).GetGenericMethodDefinition();
+        public static readonly MethodInfo IQueryableThenByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i).ThenByDescending(i => i)).GetGenericMethodDefinition();
+
         public static readonly MethodInfo QueryableFirstOrDefault = MethodFromExample(() => Queryable.FirstOrDefault());
         public static readonly MethodInfo QueryableFirstOrDefaultPred = MethodFromExample(() => Queryable.FirstOrDefault(i => true));
         public static readonly MethodInfo IQueryableFirstOrDefault = MethodFromExample(() => IQueryable.FirstOrDefault());
         public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
-        public static readonly MethodInfo QueryableWhere = MethodFromExample(() => IQueryable.Where(i => true));
+        public static readonly MethodInfo IQueryableWhere = MethodFromExample(() => IQueryable.Where(i => true),false);
 
         //This takes an expression lambda and extracts the contained method.
         //This way, we can by example specify exactly what overload we want, instead of looking up by name and args
@@ -36,8 +38,8 @@ namespace Starcounter.Linq
             if (fun.Body is MethodCallExpression call)
             {
                 var method = call.Method;
-                if (lift && method.IsGenericMethod)
-                    method = method.GetGenericMethodDefinition();
+                //if (lift && method.IsGenericMethod)
+                //    method = method.GetGenericMethodDefinition();
                 return method;
             }
             throw new NotSupportedException();

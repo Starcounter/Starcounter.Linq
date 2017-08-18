@@ -17,14 +17,23 @@ namespace Starcounter.Linq
             }
             else if (method == KnownMethods<T>.IQueryableFirstOrDefaultPred)
             {
+                var left = node.Arguments[0];
+                Visit(left, state);
                 state.Fetch(1);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
             }
-            else if (method == KnownMethods<T>.QueryableWhere)
+            else if (method == KnownMethods<T>.IQueryableWhere)
             {
+                var left = node.Arguments[0];
+                Visit(left,state);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
+            }
+            if (method == KnownMethods<T>.IQueryableTake)
+            {
+                var value = (int)(node.Arguments[1] as ConstantExpression).Value;
+                state.Fetch(value);
             }
             else if (method.IsGenericMethod)
             {
@@ -50,15 +59,10 @@ namespace Starcounter.Linq
                 {
                     VisitOrderBy(node, state, false);
                 }
-                else if (gen == KnownMethods<T>.IQueryableTake)
-                {
-                    var value = (int)(node.Arguments[1] as ConstantExpression).Value;
-                    state.Fetch(value);
-                }
             }
             else
             {
-                throw new NotSupportedException();
+             //   throw new NotSupportedException();
             }
         }
 

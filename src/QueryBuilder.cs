@@ -37,7 +37,7 @@ namespace Starcounter.Linq
         {
             if (WhereParts.Length > 0)
             {
-                WriteWhere("AND (");
+                WriteWhere(" AND (");
             }
             else
             {
