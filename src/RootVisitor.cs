@@ -26,7 +26,6 @@ namespace Starcounter.Linq
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
             }
-
             else if (method.IsGenericMethod)
             {
                 var gen = method.GetGenericMethodDefinition();
@@ -50,6 +49,11 @@ namespace Starcounter.Linq
                 else if (gen == KnownMethods<T>.IQueryableThenByDesc)
                 {
                     VisitOrderBy(node, state, false);
+                }
+                else if (gen == KnownMethods<T>.IQueryableTake)
+                {
+                    var value = (int)(node.Arguments[1] as ConstantExpression).Value;
+                    state.Fetch(value);
                 }
             }
             else

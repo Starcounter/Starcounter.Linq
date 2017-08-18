@@ -85,11 +85,10 @@ namespace Starcounter.Linq
                 stringBuilder.Append(" ORDER BY ");
                 stringBuilder.Append(OrderByParts);
             }
-
-            //if (FetchPart != null)
-            //{
-            //    stringBuilder.Append(FetchPart);
-            //}
+            if (FetchPart != null)
+            {
+                stringBuilder.Append(FetchPart);
+            }
 
             return stringBuilder.ToString();
         }

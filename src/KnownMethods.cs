@@ -18,6 +18,7 @@ namespace Starcounter.Linq
         private static readonly IQueryable<T> IQueryable = null;
         private static readonly Queryable<T> Queryable = null;
 
+        public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
         public static readonly MethodInfo IQueryableOrderBy = MethodFromExample(() => IQueryable.OrderBy(i => i));
         public static readonly MethodInfo IQueryableOrderByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i));
         public static readonly MethodInfo IQueryableThenBy = MethodFromExample(() => IQueryable.OrderBy(i => i).ThenBy(i => i));
@@ -30,12 +31,12 @@ namespace Starcounter.Linq
 
         //This takes an expression lambda and extracts the contained method.
         //This way, we can by example specify exactly what overload we want, instead of looking up by name and args
-        private static MethodInfo MethodFromExample<TIgnore>(Expression<Func<TIgnore>> fun)
+        private static MethodInfo MethodFromExample<TIgnore>(Expression<Func<TIgnore>> fun,bool lift=true)
         {
             if (fun.Body is MethodCallExpression call)
             {
                 var method = call.Method;
-                if (method.IsGenericMethod)
+                if (lift && method.IsGenericMethod)
                     method = method.GetGenericMethodDefinition();
                 return method;
             }
