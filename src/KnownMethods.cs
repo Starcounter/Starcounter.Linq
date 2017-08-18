@@ -18,6 +18,10 @@ namespace Starcounter.Linq
         private static readonly IQueryable<T> IQueryable = null;
         private static readonly Queryable<T> Queryable = null;
 
+        public static readonly MethodInfo IQueryableOrderBy = MethodFromExample(() => IQueryable.OrderBy(i => i));
+        public static readonly MethodInfo IQueryableOrderByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i));
+        public static readonly MethodInfo IQueryableThenBy = MethodFromExample(() => IQueryable.OrderBy(i => i).ThenBy(i => i));
+        public static readonly MethodInfo IQueryableThenByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i).ThenByDescending(i => i));
         public static readonly MethodInfo QueryableFirstOrDefault = MethodFromExample(() => Queryable.FirstOrDefault());
         public static readonly MethodInfo QueryableFirstOrDefaultPred = MethodFromExample(() => Queryable.FirstOrDefault(i => true));
         public static readonly MethodInfo IQueryableFirstOrDefault = MethodFromExample(() => IQueryable.FirstOrDefault());

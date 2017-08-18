@@ -46,8 +46,8 @@ namespace Demo
                 //Objects<Person>().Min(p => p.Age);
                 //Objects<Person>().Max(p => p.Age);
 
-                ////X6Decimal mumbo jumbo
-                ////Objects<Person>().Average(p => p.Age);
+                ////Objects<Person>().Ave
+                /// rage(p => p.Age);
 
                 //Objects<Person>().Count();
 

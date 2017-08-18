@@ -25,7 +25,7 @@ namespace Starcounter.Linq
         }
 
         private StringBuilder WhereParts { get; } = new StringBuilder();
-        private List<string> OrderByParts { get; } = new List<string>();
+        private StringBuilder OrderByParts { get; } = new StringBuilder();
 
         private List<object> Variables { get; } = new List<object>();
 
@@ -53,6 +53,8 @@ namespace Starcounter.Linq
 
         public void WriteWhere(string formatString, params object[] args) => WhereParts.AppendFormat(formatString, args);
 
+        public void WriteOrderBy(string text) => OrderByParts.Append(text);
+
 
         public void AddOrderByPart(IEnumerable<string> orderings)
         {
@@ -78,9 +80,10 @@ namespace Starcounter.Linq
                 stringBuilder.Append(WhereParts);
             }
 
-            if (OrderByParts.Count > 0)
+            if (OrderByParts.Length > 0)
             {
-                stringBuilder.Append($" ORDER BY {SeparatedStringBuilder.Build(", ", OrderByParts)}");
+                stringBuilder.Append(" ORDER BY ");
+                stringBuilder.Append(OrderByParts);
             }
 
             //if (FetchPart != null)
@@ -94,6 +97,16 @@ namespace Starcounter.Linq
         public void AddVariable(object value) => Variables.Add(value);
 
         public object[] GetVariables() => Variables.ToArray();
+
+        public void BeginOrderBySection()
+        {
+            if (OrderByParts.Length > 0)
+            {
+                WriteOrderBy(", ");
+            }
+        }
+
+        public void EndOrderBySection(bool asc) => WriteOrderBy(asc ? " ASC" : " DESC");
     }
 
     public class SeparatedStringBuilder
