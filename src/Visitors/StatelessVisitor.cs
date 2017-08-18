@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Starcounter.Linq
+namespace Starcounter.Linq.Visitors
 {
     //It's cheaper to pass the state around in a stateless visitor than 
     //to create a new visitor per query

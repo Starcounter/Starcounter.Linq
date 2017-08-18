@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+//String interpolation, string.Join, string.Format should be avoided due to performance overhead
 namespace Starcounter.Linq
 {
     public class QueryBuilder<TEntity>
@@ -30,7 +31,7 @@ namespace Starcounter.Linq
 
         public string FetchPart { get; set; }
 
-        public void Fetch(int count) => FetchPart = $" FETCH {count}";
+        public void Fetch(int count) => FetchPart = " FETCH " + count;
 
         public void BeginWhereSection()
         {
@@ -50,8 +51,6 @@ namespace Starcounter.Linq
         }
 
         public void WriteWhere(string text) => Where.Append(text);
-
-        public void WriteWhere(string formatString, params object[] args) => Where.AppendFormat(formatString, args);
 
         public void WriteOrderBy(string text) => OrderBy.Append(text);
 
@@ -90,9 +89,10 @@ namespace Starcounter.Linq
                 stringBuilder.Append(" ORDER BY ");
                 stringBuilder.Append(OrderBy);
             }
+
             if (FetchPart != null)
             {
-                stringBuilder.Append(FetchPart);
+          //      stringBuilder.Append(FetchPart);
             }
 
             return stringBuilder.ToString();

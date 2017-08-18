@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Starcounter.Linq
+namespace Starcounter.Linq.Visitors
 {
     public class OrderByVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
     {

@@ -54,16 +54,17 @@
     <Compile Include="DB.cs" />
     <Compile Include="DbLinq.cs" />
     <Compile Include="KnownMethods.cs" />
-    <Compile Include="OrderByVisitor.cs" />
+    <Compile Include="Visitors\OrderByVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Queryable.cs" />
     <Compile Include="DummyQueryContext.cs" />
     <Compile Include="QueryProvider.cs" />
-    <Compile Include="RootVisitor.cs" />
-    <Compile Include="StatelessVisitor.cs" />
-    <Compile Include="WhereVisitor.cs" />
+    <Compile Include="Visitors\RootVisitor.cs" />
+    <Compile Include="Visitors\SelectVisitor.cs" />
+    <Compile Include="Visitors\StatelessVisitor.cs" />
+    <Compile Include="Visitors\WhereVisitor.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

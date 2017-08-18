@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Starcounter.Linq
+namespace Starcounter.Linq.Visitors
 {
     public class WhereVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
     {
