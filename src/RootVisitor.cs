@@ -43,19 +43,19 @@ namespace Starcounter.Linq
                 //Why cannot this be done like the above?
                 //Because OrderBy use Func<T,TKeySelector> where TKeySelector is unknown to us here
                 //That is, it is the return type of the property
-                if (gen == KnownMethods<TEntity>.IQueryableOrderBy)
+                if (gen == KnownMethods.IQueryableOrderBy)
                 {
                     VisitOrderBy(node, state, true);
                 }
-                else if (gen == KnownMethods<TEntity>.IQueryableOrderByDesc)
+                else if (gen == KnownMethods.IQueryableOrderByDesc)
                 {
                     VisitOrderBy(node, state, false);
                 }
-                else if (gen == KnownMethods<TEntity>.IQueryableThenBy)
+                else if (gen == KnownMethods.IQueryableThenBy)
                 {
                     VisitOrderBy(node, state, true);
                 }
-                else if (gen == KnownMethods<TEntity>.IQueryableThenByDesc)
+                else if (gen == KnownMethods.IQueryableThenByDesc)
                 {
                     VisitOrderBy(node, state, false);
                 }

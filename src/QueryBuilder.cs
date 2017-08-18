@@ -16,16 +16,15 @@ namespace Starcounter.Linq
         // ReSharper disable once StaticMemberInGenericType
         private static readonly string From = $" FROM {QueryTypeName} {QueryType.SourceName()}";
 
-
-
         private static Type UnwrapQueryType(Type type)
         {
             if (!type.IsConstructedGenericType) return type;
             return type.GetGenericArguments().First();
         }
 
-        private StringBuilder WhereParts { get; } = new StringBuilder();
-        private StringBuilder OrderByParts { get; } = new StringBuilder();
+        private StringBuilder Select { get; } = new StringBuilder();
+        private StringBuilder Where { get; } = new StringBuilder();
+        private StringBuilder OrderBy { get; } = new StringBuilder();
 
         private List<object> Variables { get; } = new List<object>();
 
@@ -35,7 +34,7 @@ namespace Starcounter.Linq
 
         public void BeginWhereSection()
         {
-            if (WhereParts.Length > 0)
+            if (Where.Length > 0)
             {
                 WriteWhere(" AND (");
             }
@@ -49,17 +48,14 @@ namespace Starcounter.Linq
         {
             WriteWhere(")");
         }
-        public void WriteWhere(string text) => WhereParts.Append(text);
 
-        public void WriteWhere(string formatString, params object[] args) => WhereParts.AppendFormat(formatString, args);
+        public void WriteWhere(string text) => Where.Append(text);
 
-        public void WriteOrderBy(string text) => OrderByParts.Append(text);
+        public void WriteWhere(string formatString, params object[] args) => Where.AppendFormat(formatString, args);
 
+        public void WriteOrderBy(string text) => OrderBy.Append(text);
 
-        public void AddOrderByPart(IEnumerable<string> orderings)
-        {
-            OrderByParts.Insert(0, SeparatedStringBuilder.Build(", ", orderings));
-        }
+        public void WriteSelect(string text) => Select.Append(text);
 
         public string BuildSqlString()
         {
@@ -71,19 +67,28 @@ namespace Starcounter.Linq
             var stringBuilder = new StringBuilder();
 
             stringBuilder.Append("SELECT ");
-            stringBuilder.Append(SourceName);
-            stringBuilder.Append(From);
 
-            if (WhereParts.Length > 0)
+            if (Select.Length == 0)
             {
-                stringBuilder.Append(" WHERE ");
-                stringBuilder.Append(WhereParts);
+                stringBuilder.Append(SourceName); //SELECT TEntity
+            }
+            else
+            {
+                stringBuilder.Append(Select); //SELECT AVG(a.b.c)
             }
 
-            if (OrderByParts.Length > 0)
+            stringBuilder.Append(From);
+
+            if (Where.Length > 0)
+            {
+                stringBuilder.Append(" WHERE ");
+                stringBuilder.Append(Where);
+            }
+
+            if (OrderBy.Length > 0)
             {
                 stringBuilder.Append(" ORDER BY ");
-                stringBuilder.Append(OrderByParts);
+                stringBuilder.Append(OrderBy);
             }
             if (FetchPart != null)
             {
@@ -99,17 +104,12 @@ namespace Starcounter.Linq
 
         public void BeginOrderBySection()
         {
-            if (OrderByParts.Length > 0)
+            if (OrderBy.Length > 0)
             {
                 WriteOrderBy(", ");
             }
         }
 
         public void EndOrderBySection(bool asc) => WriteOrderBy(asc ? " ASC" : " DESC");
-    }
-
-    public class SeparatedStringBuilder
-    {
-        public static string Build(string s, IEnumerable<string> orderings) => string.Join(s, orderings);
     }
 }
