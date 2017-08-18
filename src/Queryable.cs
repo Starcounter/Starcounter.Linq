@@ -21,12 +21,9 @@ namespace Starcounter.Linq
             return res.FirstOrDefault();
         }
 
-        public Queryable(IQueryContext queryContext) => Initialize(new QueryProvider(queryContext), null);
+     //   public Queryable(IQueryContext queryContext) => Initialize(new QueryProvider(queryContext), Expression.Empty());
 
-        public Queryable(IQueryProvider provider) => Initialize(provider, null);
-
-        internal Queryable(IQueryProvider provider, Expression expression) => Initialize(provider, expression);
-
+        
         public IEnumerator<T> GetEnumerator()
         {
             return Provider.Execute<IEnumerable<T>>(Expression)?.GetEnumerator() ?? Enumerable.Empty<T>().GetEnumerator();
@@ -36,10 +33,12 @@ namespace Starcounter.Linq
 
         public Type ElementType => typeof(T);
 
-        public Expression Expression { get; private set; }
-        public IQueryProvider Provider { get; private set; }
+        public Expression Expression { get; }
+        public IQueryProvider Provider { get; }
 
-        private void Initialize(IQueryProvider provider, Expression expression)
+        public Queryable(IQueryProvider provider) : this(provider, Expression.Empty()) { }
+
+        public Queryable(IQueryProvider provider, Expression expression)
         {
             if (expression != null && !typeof(IQueryable<T>).IsAssignableFrom(expression.Type))
                 throw new ArgumentException(

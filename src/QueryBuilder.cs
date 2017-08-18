@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Starcounter.Linq
 {
-    public class QueryBuilder<T>
+    public class QueryBuilder<TEntity>
     {
-        private static readonly Type QueryType = UnwrapQueryType(typeof(T));
+        private static readonly Type QueryType = UnwrapQueryType(typeof(TEntity));
         // ReSharper disable once StaticMemberInGenericType
         private static readonly string SourceName = QueryType.SourceName();
         // ReSharper disable once StaticMemberInGenericType

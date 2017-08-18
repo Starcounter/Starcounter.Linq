@@ -13,13 +13,16 @@ namespace Starcounter.Linq
     //This way, we can have a zero cost cache of methods for each entity type
     //public static fields in a generic class are often a bug, but not in this case
     //we explicitly want to be able from one generic class get hold of the generic methods of the same type w/o lookups
-    public static class KnownMethods<T>
+    public static class KnownMethods<TEntity>
     {
-        private static readonly IQueryable<T> IQueryable = null;
-        private static readonly Queryable<T> Queryable = null;
+        private static readonly IQueryable<TEntity> IQueryable = null;
+        private static readonly Queryable<TEntity> Queryable = null;
 
         public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
 
+        //Because these methods have an at compiletime unknow return type
+        //we are forced to use the generic definition instead.
+        //TLDR; OrderBy and siblngs have two generic args TEntity, TSortValue, we only know TEntity at this point
         public static readonly MethodInfo IQueryableOrderBy = MethodFromExample(() => IQueryable.OrderBy(i => i)).GetGenericMethodDefinition();
         public static readonly MethodInfo IQueryableOrderByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i)).GetGenericMethodDefinition();
         public static readonly MethodInfo IQueryableThenBy = MethodFromExample(() => IQueryable.OrderBy(i => i).ThenBy(i => i)).GetGenericMethodDefinition();

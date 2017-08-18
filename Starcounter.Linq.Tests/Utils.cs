@@ -7,21 +7,8 @@ namespace Starcounter.Linq.Tests
 {
     public static class Utils
     {
-        public static string Sql<T>(Expression<Func<IEnumerable<T>>> exp) 
-        {
-            return new CompiledQuery<T>(exp).SqlStatement;
-        }
-        public static string Sql<T>(Expression<Func<IQueryable<T>>> exp)
-        {
-            return new CompiledQuery<T>(exp).SqlStatement;
-        }
-        public static string Sql<T>(Expression<Func<IOrderedQueryable<T>>> exp)
-        {
-            return new CompiledQuery<T>(exp).SqlStatement;
-        }
-        public static string Sql<T>(Expression<Func<T>> exp) 
-        {
-            return new CompiledQuery<T>(exp).SqlStatement;
-        }
+        public static string Sql<T>(Expression<Func<IQueryable<T>>> exp) => new CompiledQuery<T>(exp).SqlStatement;
+
+        public static string Sql<T>(Expression<Func<T>> exp) => new CompiledQuery<T>(exp).SqlStatement;
     }
 }
