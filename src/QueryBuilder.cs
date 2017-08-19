@@ -92,7 +92,7 @@ namespace Starcounter.Linq
 
             if (FetchPart != null)
             {
-          //      stringBuilder.Append(FetchPart);
+                stringBuilder.Append(FetchPart);
             }
 
             return stringBuilder.ToString();

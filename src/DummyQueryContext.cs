@@ -18,7 +18,7 @@ namespace Starcounter.Linq
             RootVisitor<T>.Instance.Visit(expression, query);
             var sql = query.BuildSqlString();
             var variables = query.GetVariables();
-            return Db.SQL<T>(sql, variables); ;
+            return Db.SlowSQL<T>(sql, variables); ;
         }
 
 

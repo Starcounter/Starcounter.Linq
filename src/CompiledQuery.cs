@@ -99,7 +99,7 @@ namespace Starcounter.Linq
             {
                 return (TResult)(object)Db.SQL<TResult>(SqlStatement, parameters);
             }
-            return Db.SQL<TResult>(SqlStatement, parameters).First;
+            return Db.SlowSQL<TResult>(SqlStatement, parameters).First;
         }
     }
 }

@@ -32,10 +32,7 @@ namespace Starcounter.Linq
         {
             if (fun.Body is MethodCallExpression call)
             {
-                var method = call.Method;
-                //if (lift && method.IsGenericMethod)
-                //    method = method.GetGenericMethodDefinition();
-                return method;
+                return call.Method;
             }
             throw new NotSupportedException();
         }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Starcounter;
-using Starcounter.Linq;
-using Starcounter.Metadata;
 using static Starcounter.Linq.DbLinq;
 
 namespace Demo
@@ -46,8 +45,7 @@ namespace Demo
                 //Objects<Person>().Min(p => p.Age);
                 //Objects<Person>().Max(p => p.Age);
 
-                ////Objects<Person>().Ave
-                /// rage(p => p.Age);
+                ////Objects<Person>().Ave rage(p => p.Age);
 
                 //Objects<Person>().Count();
 
@@ -100,14 +98,26 @@ namespace Demo
     [Database]
     public class Company
     {
+        private static readonly Func<Company, IEnumerable<Department>> DepartmentsByCompany =
+            CompileQuery((Company com) =>
+                Objects<Department>().Where(e => e.Company == com));
+
         public string Name { get; set; }
+
+        public IEnumerable<Department> Departments => DepartmentsByCompany(this);
     }
 
     [Database]
     public class Department
     {
+        private static readonly Func<Department, IEnumerable<Employee>> EmployeesByDepartment =
+            CompileQuery((Department dep) =>
+                Objects<Employee>().Where(e => e.Department == dep));
+
         public Company Company { get; set; }
         public string Name { get; set; }
+
+        public IEnumerable<Employee> Employees => EmployeesByDepartment(this);
     }
 
     [Database]
@@ -125,7 +135,18 @@ namespace Demo
     [Database]
     public class Person
     {
-        public static readonly Func<string, Person> FirstNamed = CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name == name));
+        public static readonly Func<string, Person> FirstNamed =
+            CompileQuery((string name) =>
+                Objects<Person>().FirstOrDefault(p => p.Name == name));
+
+        //linq linq support
+        public static readonly Func<int, int, IEnumerable<Person>> WithinAgeRange =
+            CompileQuery((int min, int max) =>
+                from p in Objects<Person>()
+                where p.Age <= max
+                where p.Age >= min
+                select p
+            );
 
         public Gender Gender { get; set; }
         public string Name { get; set; }
