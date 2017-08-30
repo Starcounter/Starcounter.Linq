@@ -4,7 +4,7 @@ namespace Starcounter.Linq.Visitors
 {
     public class SelectVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
     {
-        public static OrderByVisitor<TEntity> Instance = new OrderByVisitor<TEntity>();
+        public static SelectVisitor<TEntity> Instance = new SelectVisitor<TEntity>();
 
         public override void VisitMember(MemberExpression node, QueryBuilder<TEntity> state)
         {

@@ -68,6 +68,48 @@ namespace Starcounter.Linq.Visitors
                 {
                     VisitOrderBy(node, state, false);
                 }
+                else if (gen == KnownMethods.IQueryableCount)
+                {
+                    var left = node.Arguments[0];
+                    Visit(left, state);
+                    state.WriteSelect("COUNT(*)");
+                }
+                else if (gen == KnownMethods.IQueryableAverage)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("AVG(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
+                else if (gen == KnownMethods.IQueryableMin)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("MIN(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
+                else if (gen == KnownMethods.IQueryableMax)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("MAX(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
+                else if (gen == KnownMethods.IQueryableSum)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("SUM(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
             }
             else
             {
