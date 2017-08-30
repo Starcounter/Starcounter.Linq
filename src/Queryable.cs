@@ -36,7 +36,7 @@ namespace Starcounter.Linq
         public Expression Expression { get; }
         public IQueryProvider Provider { get; }
 
-        public Queryable(IQueryProvider provider) : this(provider, Expression.Empty()) { }
+        public Queryable(IQueryProvider provider) : this(provider, null) { }
 
         public Queryable(IQueryProvider provider, Expression expression)
         {

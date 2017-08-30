@@ -29,7 +29,7 @@ namespace Starcounter.Linq.Visitors
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
             }
-            if (method == KnownMethods<TEntity>.IQueryableTake)
+            else if (method == KnownMethods<TEntity>.IQueryableTake)
             {
                 //TODO: hack'ish, this assumes the Take argument is a constant int
                 // ReSharper disable once PossibleNullReferenceException
@@ -75,7 +75,6 @@ namespace Starcounter.Linq.Visitors
             OrderByVisitor<TEntity>.Instance.Visit(arg, state);
             state.EndOrderBySection(asc);
         }
-
 
         private static void VisitWhere(Expression expression, QueryBuilder<TEntity> state)
         {
