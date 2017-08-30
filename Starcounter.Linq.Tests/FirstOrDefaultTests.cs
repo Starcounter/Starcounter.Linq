@@ -21,6 +21,13 @@ namespace Starcounter.Linq.Tests
         }
 
         [Fact]
+        public void ValueNotEquals()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((NOT P.Name = ?)) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Name != "XXX")));
+        }
+
+        [Fact]
         public void ValueGreaterThan()
         {
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.Age > ?)) FETCH 1",
@@ -32,6 +39,20 @@ namespace Starcounter.Linq.Tests
         {
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.Age >= ?)) FETCH 1",
                 Sql(() => Objects<Person>().FirstOrDefault(p => p.Age >= 123)));
+        }
+
+        [Fact]
+        public void ValueLessThan()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.Age < ?)) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Age < 123)));
+        }
+
+        [Fact]
+        public void ValueLessOrEqualTo()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.Age <= ?)) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Age <= 123)));
         }
 
         [Fact]
