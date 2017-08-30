@@ -29,9 +29,11 @@ namespace Starcounter.Linq
 
         private List<object> Variables { get; } = new List<object>();
 
-        public string FetchPart { get; set; }
+        public string FetchPart { get; private set; }
+        public string OffsetPart { get; private set; }
 
         public void Fetch(int count) => FetchPart = " FETCH " + count;
+        public void Offset(int count) => OffsetPart = " OFFSET " + count;
 
         public void BeginWhereSection()
         {
@@ -93,6 +95,11 @@ namespace Starcounter.Linq
             if (FetchPart != null)
             {
                 stringBuilder.Append(FetchPart);
+            }
+
+            if (OffsetPart != null)
+            {
+                stringBuilder.Append(OffsetPart);
             }
 
             return stringBuilder.ToString();

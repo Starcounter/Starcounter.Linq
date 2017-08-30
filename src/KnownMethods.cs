@@ -19,6 +19,7 @@ namespace Starcounter.Linq
         private static readonly Queryable<TEntity> Queryable = null;
 
         public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
+        public static readonly MethodInfo IQueryableSkip = MethodFromExample(() => IQueryable.Skip(0));
 
         public static readonly MethodInfo QueryableFirstOrDefault = MethodFromExample(() => Queryable.FirstOrDefault());
         public static readonly MethodInfo QueryableFirstOrDefaultPred = MethodFromExample(() => Queryable.FirstOrDefault(i => true));

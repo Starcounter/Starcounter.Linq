@@ -35,6 +35,15 @@ namespace Starcounter.Linq.Visitors
                 // ReSharper disable once PossibleNullReferenceException
                 var value = (int)(node.Arguments[1] as ConstantExpression).Value;
                 state.Fetch(value);
+                Visit(node.Arguments[0], state);
+            }
+            else if (method == KnownMethods<TEntity>.IQueryableSkip)
+            {
+                //TODO: hack'ish, this assumes the Skip argument is a constant int
+                // ReSharper disable once PossibleNullReferenceException
+                var value = (int)(node.Arguments[1] as ConstantExpression).Value;
+                state.Offset(value);
+                Visit(node.Arguments[0], state);
             }
             else if (method.IsGenericMethod)
             {
