@@ -58,6 +58,11 @@ namespace Starcounter.Linq
 
         public void WriteSelect(string text) => Select.Append(text);
 
+        public string GetSourceName()
+        {
+            return SourceName;
+        }
+
         public string BuildSqlString()
         {
             //Why this structure?

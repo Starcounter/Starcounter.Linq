@@ -62,6 +62,9 @@ namespace Starcounter.Linq.Visitors
                 case LambdaExpression lam:
                     VisitLambda(lam,state);
                     break;
+                case TypeBinaryExpression typ:
+                    VisitTypeBinary(typ, state);
+                    break;
                 default:
                     throw new NotSupportedException();
             }
@@ -71,6 +74,11 @@ namespace Starcounter.Linq.Visitors
         {
             Visit(node.Left, state);
             Visit(node.Right, state);
+        }
+
+        public virtual void VisitTypeBinary(TypeBinaryExpression node, T state)
+        {
+            throw new NotSupportedException();
         }
 
         public virtual void VisitBlock(BlockExpression node, T state)

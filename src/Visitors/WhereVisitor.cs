@@ -191,9 +191,28 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitUnary(UnaryExpression node, QueryBuilder<TEntity> state)
         {
-            var body = (node.Operand as LambdaExpression).Body;
-            Visit(body,state);
+            if (node.NodeType == ExpressionType.Not)
+            {
+                state.WriteWhere("NOT ");
+                Visit(node.Operand, state);
+            }
+            else if (node.Operand is LambdaExpression lambda)
+            {
+                Visit(lambda.Body, state);
+            }
          //   base.VisitUnary(node, state);
+        }
+
+        public override void VisitTypeBinary(TypeBinaryExpression node, QueryBuilder<TEntity> state)
+        {
+            if (node.Expression is ParameterExpression parm)
+            {
+                state.WriteWhere($"({state.GetSourceName()} IS {node.TypeOperand.FullName})");
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
         }
     }
 }
