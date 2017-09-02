@@ -25,9 +25,17 @@ namespace Starcounter.Linq.Visitors
             else if (method == KnownMethods<TEntity>.IQueryableWhere)
             {
                 var left = node.Arguments[0];
-                Visit(left,state);
+                Visit(left, state);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
+            }
+            else if (method == KnownMethods<TEntity>.IQueryableCountPredicate)
+            {
+                var left = node.Arguments[0];
+                Visit(left, state);
+                var expression = node.Arguments[1];
+                VisitWhere(expression, state);
+                state.WriteSelect("COUNT(*)");
             }
             else if (method == KnownMethods<TEntity>.IQueryableTake)
             {

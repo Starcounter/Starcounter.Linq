@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 using Starcounter.Linq.Visitors;
 
 namespace Starcounter.Linq
@@ -6,19 +7,74 @@ namespace Starcounter.Linq
     public interface IQueryContext
     {
         object Execute(Expression expression);
+        object Execute<TResult>(Expression expression);
         string GetQuery(Expression expression);
     }
 
     public class QueryContext<T> : IQueryContext
     {
-        public object Execute(Expression expression)
+        public object Execute(Expression expression) => Execute<T>(expression);
+
+        public object Execute<TResult>(Expression expression)
         {
             var query = new QueryBuilder<T>();
 
             RootVisitor<T>.Instance.Visit(expression, query);
             var sql = query.BuildSqlString();
             var variables = query.GetVariables();
-            return Db.SlowSQL<T>(sql, variables); ;
+
+            if (typeof(TResult).IsGenericType)
+            {
+                return Db.SQL<T>(sql, variables);
+            }
+            else if (typeof(TResult).IsClass)
+            {
+                return Db.SlowSQL<TResult>(sql, variables);
+            }
+
+            var result = Db.SlowSQL(sql, variables).First;
+
+            if (result.GetType() != typeof(TResult))
+            {
+                var expectedType = typeof(TResult);
+                if (expectedType == typeof(int))
+                {
+                    return Convert.ToInt32(result);
+                }
+                if (expectedType == typeof(long))
+                {
+                    return Convert.ToInt64(result);
+                }
+                if (expectedType == typeof(decimal))
+                {
+                    return Convert.ToDecimal(result);
+                }
+                if (expectedType == typeof(double))
+                {
+                    return Convert.ToDouble(result);
+                }
+                if (expectedType == typeof(uint))
+                {
+                    return Convert.ToUInt32(result);
+                }
+                if (expectedType == typeof(ulong))
+                {
+                    return Convert.ToUInt64(result);
+                }
+                if (expectedType == typeof(bool))
+                {
+                    return Convert.ToBoolean(result);
+                }
+                if (expectedType == typeof(string))
+                {
+                    return Convert.ToString(result);
+                }
+                if (expectedType == typeof(float))
+                {
+                    return Convert.ToSingle(result);
+                }
+            }
+            return (TResult) result;
         }
 
 
@@ -34,7 +90,9 @@ namespace Starcounter.Linq
 
     public class DummyQueryContext<T> : IQueryContext
     {
-        public object Execute(Expression expression)
+        public object Execute(Expression expression) => Execute<T>(expression);
+
+        public object Execute<TResult>(Expression expression)
         {
             var query = new QueryBuilder<T>();
 

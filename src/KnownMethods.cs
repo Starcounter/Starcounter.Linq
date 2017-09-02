@@ -26,6 +26,7 @@ namespace Starcounter.Linq
         public static readonly MethodInfo IQueryableFirstOrDefault = MethodFromExample(() => IQueryable.FirstOrDefault());
         public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
         public static readonly MethodInfo IQueryableWhere = MethodFromExample(() => IQueryable.Where(i => true));
+        public static readonly MethodInfo IQueryableCountPredicate = MethodFromExample(() => IQueryable.Count(i => true));
 
         //This takes an expression lambda and extracts the contained method.
         //This way, we can by example specify exactly what overload we want, instead of looking up by name and args
