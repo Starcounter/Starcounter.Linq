@@ -38,9 +38,8 @@ namespace Starcounter.Linq.Visitors
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.NotEqual:
-                    state.WriteWhere("NOT ");
                     Visit(node.Left, state);
-                    state.WriteWhere(" = ");
+                    state.WriteWhere(" <> ");
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.AndAlso:

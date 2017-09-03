@@ -23,7 +23,7 @@ namespace Starcounter.Linq.Tests
         [Fact]
         public void ValueNotEquals()
         {
-            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((NOT P.Name = ?)) FETCH 1",
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.Name <> ?)) FETCH 1",
                 Sql(() => Objects<Person>().FirstOrDefault(p => p.Name != "XXX")));
         }
 
