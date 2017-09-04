@@ -93,8 +93,8 @@ namespace Demo
                     for (int i = 0; i < 1000000; i++)
                     {
                         //this just traverses the linq expression tree, it doesnt touch the DB
-                        //var res = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
-                        var taken10 = Objects<Person>().Take(10).ToList();
+                        var res = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                        //var taken10 = Objects<Person>().Take(10).ToList();
                     }
                     sw.Stop();
                     return sw.Elapsed.ToString();
