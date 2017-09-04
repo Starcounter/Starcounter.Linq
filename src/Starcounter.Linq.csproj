@@ -59,7 +59,7 @@
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Queryable.cs" />
-    <Compile Include="DummyQueryContext.cs" />
+    <Compile Include="QueryContext.cs" />
     <Compile Include="QueryProvider.cs" />
     <Compile Include="Visitors\RootVisitor.cs" />
     <Compile Include="Visitors\SelectVisitor.cs" />

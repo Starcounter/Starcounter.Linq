@@ -35,7 +35,7 @@ namespace Starcounter.Linq.Visitors
                 Visit(left, state);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
-                state.WriteSelect("COUNT(*)");
+                state.WriteSelect($"COUNT({state.GetSourceName()})");
             }
             else if (method == KnownMethods<TEntity>.IQueryableTake)
             {
@@ -80,7 +80,7 @@ namespace Starcounter.Linq.Visitors
                 {
                     var left = node.Arguments[0];
                     Visit(left, state);
-                    state.WriteSelect("COUNT(*)");
+                    state.WriteSelect($"COUNT({state.GetSourceName()})");
                 }
                 else if (gen == KnownMethods.IQueryableAverage)
                 {

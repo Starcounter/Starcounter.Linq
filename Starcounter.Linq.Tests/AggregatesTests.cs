@@ -10,14 +10,14 @@ namespace Starcounter.Linq.Tests
         [Fact]
         public void Count()
         {
-            Assert.Equal("SELECT COUNT(*) FROM Starcounter.Linq.Tests.Person P",
+            Assert.Equal("SELECT COUNT(P) FROM Starcounter.Linq.Tests.Person P",
                 Sql<Person, int>(() => Objects<Person>().Count()));
         }
 
         [Fact]
         public void CountFiltering()
         {
-            Assert.Equal("SELECT COUNT(*) FROM Starcounter.Linq.Tests.Person P WHERE ((P.Name = ?))",
+            Assert.Equal("SELECT COUNT(P) FROM Starcounter.Linq.Tests.Person P WHERE ((P.Name = ?))",
                 Sql<Person, int>(() => Objects<Person>().Count(x => x.Name == "XXX")));
         }
 
