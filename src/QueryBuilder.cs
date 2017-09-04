@@ -29,11 +29,11 @@ namespace Starcounter.Linq
 
         private List<object> Variables { get; } = new List<object>();
 
-        public string FetchPart { get; private set; }
-        public string OffsetPart { get; private set; }
+        public int FetchValue { get; private set; } = -1;
+        public int OffsetValue { get; private set; } = -1;
 
-        public void Fetch(int count) => FetchPart = " FETCH " + count;
-        public void Offset(int count) => OffsetPart = " OFFSET " + count;
+        public void Fetch(int count) => FetchValue = count;
+        public void Offset(int count) => OffsetValue = count;
 
         public void BeginWhereSection()
         {
@@ -97,14 +97,16 @@ namespace Starcounter.Linq
                 stringBuilder.Append(OrderBy);
             }
 
-            if (FetchPart != null)
+            if (FetchValue >= 0)
             {
-                stringBuilder.Append(FetchPart);
+                stringBuilder.Append(" FETCH ?");
+                Variables.Add(FetchValue);
             }
 
-            if (OffsetPart != null)
+            if (OffsetValue >= 0)
             {
-                stringBuilder.Append(OffsetPart);
+                stringBuilder.Append(" OFFSET ?");
+                Variables.Add(OffsetValue);
             }
 
             return stringBuilder.ToString();

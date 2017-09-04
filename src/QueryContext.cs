@@ -27,7 +27,7 @@ namespace Starcounter.Linq
             {
                 return Db.SQL<T>(sql, variables);
             }
-            else if (typeof(TResult).IsClass)
+            if (typeof(TResult).IsClass)
             {
                 return Db.SQL<TResult>(sql, variables);
             }
