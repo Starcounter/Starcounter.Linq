@@ -29,8 +29,9 @@ namespace Demo
                 };
 
 
-                //Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
-                //Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
+                var persons = Objects<Person>().Where(p => p.Name == "Roger").ToList();
+                var person = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                var person2 = Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
                 //Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
                 //Objects<Person>().FirstOrDefault(p => p.Name.Contains("oge"));
                 //Objects<Person>().FirstOrDefault(p => !p.Name.Contains("oge"));
@@ -52,6 +53,12 @@ namespace Demo
                 //var ages = new[] {1, 2, 3, 4, 5};
                 //Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
 
+                var cnt = Objects<Person>().Count();
+                var avg = Objects<Person>().Average(x => x.Age);
+                var min = Objects<Person>().Min(x => x.Age);
+                var max = Objects<Person>().Max(x => x.Age);
+                var sum = Objects<Person>().Sum(x => x.Age);
+                var cnt2 = Objects<Person>().Count(x => x is Employee);
 
                 Handle.GET("/sql", () =>
                 {

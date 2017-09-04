@@ -19,6 +19,6 @@ namespace Starcounter.Linq
 
         object IQueryProvider.Execute(Expression expression) => _queryContext.Execute(expression);
 
-        T IQueryProvider.Execute<T>(Expression expression) => (T) _queryContext.Execute(expression);
+        T IQueryProvider.Execute<T>(Expression expression) => (T) _queryContext.Execute<T>(expression);
     }
 }

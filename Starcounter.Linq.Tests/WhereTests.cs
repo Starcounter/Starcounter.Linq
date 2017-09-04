@@ -22,5 +22,19 @@ namespace Starcounter.Linq.Tests
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.Name = ?)) AND ((P.Age = ?))",
                 Sql(() => Objects<Person>().Where(p => p.Name == "XXX").Where(p => p.Age == 1)));
         }
+
+        [Fact]
+        public void WhereOrEquals()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE (((P.Name = ?) OR (P.Age = ?)))",
+                Sql(() => Objects<Person>().Where(p => p.Name == "XXX" || p.Age == 1)));
+        }
+
+        [Fact]
+        public void WhereAndEquals()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE (((P.Name = ?) AND (P.Age = ?)))",
+                Sql(() => Objects<Person>().Where(p => p.Name == "XXX" && p.Age == 1)));
+        }
     }
 }

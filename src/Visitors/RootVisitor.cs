@@ -25,16 +25,33 @@ namespace Starcounter.Linq.Visitors
             else if (method == KnownMethods<TEntity>.IQueryableWhere)
             {
                 var left = node.Arguments[0];
-                Visit(left,state);
+                Visit(left, state);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
             }
-            if (method == KnownMethods<TEntity>.IQueryableTake)
+            else if (method == KnownMethods<TEntity>.IQueryableCountPredicate)
+            {
+                var left = node.Arguments[0];
+                Visit(left, state);
+                var expression = node.Arguments[1];
+                VisitWhere(expression, state);
+                state.WriteSelect($"COUNT({state.GetSourceName()})");
+            }
+            else if (method == KnownMethods<TEntity>.IQueryableTake)
             {
                 //TODO: hack'ish, this assumes the Take argument is a constant int
                 // ReSharper disable once PossibleNullReferenceException
                 var value = (int)(node.Arguments[1] as ConstantExpression).Value;
                 state.Fetch(value);
+                Visit(node.Arguments[0], state);
+            }
+            else if (method == KnownMethods<TEntity>.IQueryableSkip)
+            {
+                //TODO: hack'ish, this assumes the Skip argument is a constant int
+                // ReSharper disable once PossibleNullReferenceException
+                var value = (int)(node.Arguments[1] as ConstantExpression).Value;
+                state.Offset(value);
+                Visit(node.Arguments[0], state);
             }
             else if (method.IsGenericMethod)
             {
@@ -59,6 +76,48 @@ namespace Starcounter.Linq.Visitors
                 {
                     VisitOrderBy(node, state, false);
                 }
+                else if (gen == KnownMethods.IQueryableCount)
+                {
+                    var left = node.Arguments[0];
+                    Visit(left, state);
+                    state.WriteSelect($"COUNT({state.GetSourceName()})");
+                }
+                else if (gen == KnownMethods.IQueryableAverage)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("AVG(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
+                else if (gen == KnownMethods.IQueryableMin)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("MIN(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
+                else if (gen == KnownMethods.IQueryableMax)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("MAX(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
+                else if (gen == KnownMethods.IQueryableSum)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    state.WriteSelect("SUM(");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                    state.WriteSelect(")");
+                }
             }
             else
             {
@@ -75,7 +134,6 @@ namespace Starcounter.Linq.Visitors
             OrderByVisitor<TEntity>.Instance.Visit(arg, state);
             state.EndOrderBySection(asc);
         }
-
 
         private static void VisitWhere(Expression expression, QueryBuilder<TEntity> state)
         {

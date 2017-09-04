@@ -10,5 +10,10 @@ namespace Starcounter.Linq.Tests
         public static string Sql<T>(Expression<Func<IQueryable<T>>> exp) => new CompiledQuery<T>(exp).SqlStatement;
 
         public static string Sql<T>(Expression<Func<T>> exp) => new CompiledQuery<T>(exp).SqlStatement;
+
+        // TODO temporary
+        public static string Sql<T, TResult>(Expression<Func<TResult>> exp)
+            where TResult : struct
+            => new CompiledQuery<T>(exp).SqlStatement;
     }
 }
