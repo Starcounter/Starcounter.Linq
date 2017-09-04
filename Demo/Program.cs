@@ -30,6 +30,8 @@ namespace Demo
 
 
                 var persons = Objects<Person>().Where(p => p.Name == "Roger").ToList();
+                var persons1 = Objects<Person>().Take(1).ToList();
+                var persons2 = Objects<Person>().Skip(1).ToList();
                 var person = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
                 var person2 = Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
                 //Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
@@ -91,7 +93,8 @@ namespace Demo
                     for (int i = 0; i < 1000000; i++)
                     {
                         //this just traverses the linq expression tree, it doesnt touch the DB
-                        var res = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                        //var res = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                        var taken10 = Objects<Person>().Take(10).ToList();
                     }
                     sw.Stop();
                     return sw.Elapsed.ToString();
