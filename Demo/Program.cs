@@ -30,6 +30,8 @@ namespace Demo
 
 
                 var persons = Objects<Person>().Where(p => p.Name == "Roger").ToList();
+                //var persons1 = Objects<Person>().Take(1).ToList();
+                //var persons2 = Objects<Person>().Skip(1).ToList();
                 var person = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
                 var person2 = Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
                 //Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
@@ -65,7 +67,7 @@ namespace Demo
                     var sw = Stopwatch.StartNew();
                     for (int i = 0; i < 1000000; i++)
                     {
-                        var res = Db.SQL<Person>("SELECT p from Demo.Person p WHERE p.Name = ?", "Roger").First;
+                        var res = Db.SQL<Person>("SELECT p from Demo.Person p WHERE p.Name = ?", "Roger").FirstOrDefault();
                     }
                     sw.Stop();
                     return sw.Elapsed.ToString();

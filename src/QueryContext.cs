@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Starcounter.Linq.Visitors;
 
@@ -32,7 +33,7 @@ namespace Starcounter.Linq
                 return Db.SQL<TResult>(sql, variables);
             }
 
-            var result = Db.SlowSQL(sql, variables).First;
+            var result = Db.SlowSQL(sql, variables).FirstOrDefault();
 
             // SC lifts underlying types to a bigger ones in some cases.
             // Look at the issue https://github.com/Starcounter/Home/issues/209 for getting more info.
