@@ -148,23 +148,32 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
+            ConstantExpression constNode = null;
             if (node.Method == KnownMethods.StringContains)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
+                constNode = node.Arguments[0] as ConstantExpression;
                 state.WriteWhere(" LIKE '%' || ? || '%')");
             }
             if (node.Method == KnownMethods.StringStartsWith)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
+                constNode = node.Arguments[0] as ConstantExpression;
                 state.WriteWhere(" LIKE ? || '%')");
             }
             if (node.Method == KnownMethods.StringEndsWith)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
+                constNode = node.Arguments[0] as ConstantExpression;
                 state.WriteWhere(" LIKE '%' || ?)");
+            }
+
+            if (constNode != null)
+            {
+                state.AddVariable(constNode.Value);
             }
         }
 
@@ -198,6 +207,10 @@ namespace Starcounter.Linq.Visitors
             else if (node.Operand is LambdaExpression lambda)
             {
                 Visit(lambda.Body, state);
+            }
+            else
+            {
+                Visit(node.Operand, state);
             }
          //   base.VisitUnary(node, state);
         }

@@ -26,11 +26,11 @@ namespace Starcounter.Linq
 
             if (typeof(TResult).IsGenericType)
             {
-                return Db.SQL<T>(sql, variables);
+                return Db.SlowSQL<T>(sql, variables);
             }
-            else if (typeof(TResult).IsClass)
+            if (typeof(TResult).IsClass)
             {
-                return Db.SQL<TResult>(sql, variables);
+                return Db.SlowSQL<TResult>(sql, variables);
             }
 
             var result = Db.SlowSQL(sql, variables).FirstOrDefault();
