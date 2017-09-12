@@ -28,16 +28,12 @@ namespace Starcounter.Linq
             {
                 return Db.SlowSQL<T>(sql, variables);
             }
-            if (typeof(TResult).IsClass)
-            {
-                return Db.SlowSQL<TResult>(sql, variables);
-            }
-
             var result = Db.SlowSQL(sql, variables).FirstOrDefault();
-
+            var resultType = result.GetType();
+            
             // SC lifts underlying types to a bigger ones in some cases.
             // Look at the issue https://github.com/Starcounter/Home/issues/209 for getting more info.
-            if (result.GetType() != typeof(TResult))
+            if (resultType != typeof(TResult) && !resultType.IsSubclassOf(typeof(TResult)))
             {
                 var expectedType = typeof(TResult);
                 if (expectedType == typeof(int))

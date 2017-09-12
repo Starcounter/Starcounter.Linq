@@ -33,6 +33,7 @@ namespace Demo
                 persons = Objects<Person>().Take(1).ToList();
                 persons = Objects<Person>().Skip(1).ToList();
                 var person = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                person = Objects<Person>().Where(x => x.Name == "Roger").Take(10).FirstOrDefault(x => x.Gender == Gender.Male);
                 person = Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
                 person = Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
                 person = Objects<Person>().FirstOrDefault(p => p.Name.Contains("oge"));
