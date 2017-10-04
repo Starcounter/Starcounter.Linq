@@ -44,7 +44,7 @@ namespace Demo
                 person = Objects<Person>().FirstOrDefault(p => p.Name == null);
                 person = Objects<Person>().FirstOrDefault(p => p.Gender == Gender.Male);
                 
-                //person = Objects<Employee>().FirstOrDefault(p => p.Department == roger.Department);
+                person = Objects<Employee>().FirstOrDefault(p => p.Department == roger.Department);
 
                 //var ages = new[] { 1, 2, 3, 4, 5 };
                 //Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));

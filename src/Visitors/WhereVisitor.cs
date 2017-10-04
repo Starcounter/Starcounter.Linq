@@ -133,12 +133,34 @@ namespace Starcounter.Linq.Visitors
             if (node.Expression is ParameterExpression param)
             {
                 state.WriteWhere(param.Type.SourceName());
+                state.WriteWhere("." + node.Member.Name);
             }
             else
             {
-                Visit(node.Expression, state);
+                var subNode = node;
+                while (subNode.Expression is MemberExpression memberNode)
+                {
+                    subNode = memberNode;
+                }
+                if (subNode.Expression is ConstantExpression)
+                {
+                    var objectMember = Expression.Convert(node, typeof(object));
+                    var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+                    var getter = getterLambda.Compile();
+
+                    state.WriteWhere("?");
+                    state.AddVariable(getter);
+                }
+                else if (subNode.Expression is ParameterExpression)
+                {
+                    Visit(node.Expression, state);
+                    state.WriteWhere("." + node.Member.Name);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
             }
-            state.WriteWhere("." + node.Member.Name);
         }
 
         public override void VisitIndex(IndexExpression node, QueryBuilder<TEntity> state)
