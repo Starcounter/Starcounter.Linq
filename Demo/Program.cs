@@ -46,8 +46,12 @@ namespace Demo
                 
                 person = Objects<Employee>().FirstOrDefault(p => p.Department == roger.Department);
 
-                //var ages = new[] { 1, 2, 3, 4, 5 };
-                //Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
+                var ages = new[] { 1, 2, 3, 4, 5 };
+                person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
+                person = Objects<Person>().FirstOrDefault(p => !ages.Contains(p.Age));
+
+                ages = new[] { 41, 42, 43 };
+                person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
 
                 var cnt = Objects<Person>().Count();
                 var avg = Objects<Person>().Average(x => x.Age);
