@@ -1,15 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq", "src\Starcounter.Linq.csproj", "{DF08E065-AAF1-42DB-A92E-D288154F5663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{471F5BC5-FB1F-4D76-9D06-DE76D943BE44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "test\Sandbox\Sandbox.csproj", "{471F5BC5-FB1F-4D76-9D06-DE76D943BE44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{3F282C79-FC3D-482C-8287-7471594A060E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "test\Demo\Demo.csproj", "{3F282C79-FC3D-482C-8287-7471594A060E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq.Tests", "Starcounter.Linq.Tests\Starcounter.Linq.Tests.csproj", "{F39F0151-A278-47BB-8D5F-4A627590E487}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq.Tests", "test\Starcounter.Linq.Tests\Starcounter.Linq.Tests.csproj", "{F39F0151-A278-47BB-8D5F-4A627590E487}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69E68944-6806-48BD-A48D-9390EC5CC663}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
