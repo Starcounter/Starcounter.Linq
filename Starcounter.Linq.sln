@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{62519F4C-D4CE-4C59-A594-378E06AEFDEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{471F5BC5-FB1F-4D76-9D06-DE76D943BE44} = {62519F4C-D4CE-4C59-A594-378E06AEFDEA}
+		{3F282C79-FC3D-482C-8287-7471594A060E} = {62519F4C-D4CE-4C59-A594-378E06AEFDEA}
+		{F39F0151-A278-47BB-8D5F-4A627590E487} = {62519F4C-D4CE-4C59-A594-378E06AEFDEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46FDB161-53B6-48A2-BD88-C77AF0B37EF6}
