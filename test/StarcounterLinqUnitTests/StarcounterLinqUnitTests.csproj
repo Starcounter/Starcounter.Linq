@@ -92,7 +92,10 @@
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\WhereTests.cs" />
+    <Compile Include="Tests\AggregationTests.cs" />
+    <Compile Include="Tests\BaseTestsFixture.cs" />
+    <Compile Include="Tests\FilteringTests.cs" />
+    <Compile Include="Tests\PagingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

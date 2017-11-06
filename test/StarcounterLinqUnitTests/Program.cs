@@ -6,8 +6,8 @@ namespace StarcounterLinqUnitTests
     {
         static void Main()
         {
-            StarcounterXunitRunner runner = new StarcounterXunitRunner();
-            runner.Start();
+            var testRunner = new StarcounterXunitRunner();
+            testRunner.Start();
         }
     }
 }

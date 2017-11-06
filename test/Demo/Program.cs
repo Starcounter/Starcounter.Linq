@@ -13,93 +13,59 @@ namespace Demo
         {
             Db.Transact(() =>
             {
-                var roger = new Employee()
+                new Employee
                 {
                     Gender = Gender.Male,
                     Name = "Roger",
                     Age = 41,
-                    Department = new Department()
+                    Department = new Department
                     {
                         Name = "Solution Architecture",
-                        Company = new Company()
+                        Company = new Company
                         {
                             Name = "Starcounter"
                         }
                     }
                 };
+            });
 
-
-                var persons = Objects<Person>().Where(p => p.Name == "Roger").ToList();
-                persons = Objects<Person>().Take(1).ToList();
-                persons = Objects<Person>().Skip(1).ToList();
-                var person = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
-                person = Objects<Person>().Where(x => x.Name == "Roger").Take(10).FirstOrDefault(x => x.Gender == Gender.Male);
-                person = Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
-                person = Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
-                person = Objects<Person>().FirstOrDefault(p => p.Name.Contains("oge"));
-                person = Objects<Person>().FirstOrDefault(p => !p.Name.Contains("oge"));
-                person = Objects<Person>().FirstOrDefault(p => p.Name.StartsWith("Ro"));
-                person = Objects<Person>().FirstOrDefault(p => p.Name.EndsWith("er"));
-                person = Objects<Person>().FirstOrDefault(p => p.Age > 0 && p.Age < 100);
-                person = Objects<Person>().FirstOrDefault(p => p.Name == null);
-                person = Objects<Person>().FirstOrDefault(p => p.Gender == Gender.Male);
-                
-                person = Objects<Employee>().FirstOrDefault(p => p.Department == roger.Department);
-
-                var ages = new[] { 1, 2, 3, 4, 5 };
-                person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
-                person = Objects<Person>().FirstOrDefault(p => !ages.Contains(p.Age));
-
-                ages = new[] { 41, 42, 43 };
-                person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
-
-                var cnt = Objects<Person>().Count();
-                var avg = Objects<Person>().Average(x => x.Age);
-                var min = Objects<Person>().Min(x => x.Age);
-                var max = Objects<Person>().Max(x => x.Age);
-                var sum = Objects<Person>().Sum(x => x.Age);
-                cnt = Objects<Person>().Count(x => x is Employee);
-
-                Handle.GET("/sql", () =>
+            Handle.GET("/sql", () =>
+            {
+                var sw = Stopwatch.StartNew();
+                for (int i = 0; i < 1000000; i++)
                 {
-                    var sw = Stopwatch.StartNew();
-                    for (int i = 0; i < 1000000; i++)
-                    {
-                        var res = Db.SQL<Person>("SELECT p from Demo.Person p WHERE p.Name = ?", "Roger").FirstOrDefault();
-                    }
-                    sw.Stop();
-                    return sw.Elapsed.ToString();
-                });
+                    var res = Db.SQL<Person>("SELECT p from Demo.Person p WHERE p.Name = ?", "Roger").FirstOrDefault();
+                }
+                sw.Stop();
+                return sw.Elapsed.ToString();
+            });
 
+            Handle.GET("/compiled", () =>
+            {
 
-                Handle.GET("/compiled", () =>
+                var sw = Stopwatch.StartNew();
+                for (int i = 0; i < 1000000; i++)
                 {
+                    var res = Person.FirstNamed("Roger");
+                }
+                sw.Stop();
+                return sw.Elapsed.ToString();
+            });
 
-                    var sw = Stopwatch.StartNew();
-                    for (int i = 0; i < 1000000; i++)
-                    {
-                        var res = Person.FirstNamed("Roger");
-                    }
-                    sw.Stop();
-                    return sw.Elapsed.ToString();
-                });
+            Handle.GET("/linq", () =>
+            {
 
-                Handle.GET("/linq", () =>
+                var sw = Stopwatch.StartNew();
+                for (int i = 0; i < 1000000; i++)
                 {
-
-                    var sw = Stopwatch.StartNew();
-                    for (int i = 0; i < 1000000; i++)
-                    {
-                        //this just traverses the linq expression tree, it doesnt touch the DB
-                        var res = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
-                    }
-                    sw.Stop();
-                    return sw.Elapsed.ToString();
-                });
+                    //this just traverses the linq expression tree, it doesnt touch the DB
+                    var res = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
+                }
+                sw.Stop();
+                return sw.Elapsed.ToString();
             });
         }
     }
-
 
 
     [Database]
@@ -136,7 +102,7 @@ namespace Demo
     public enum Gender
     {
         Male,
-        Female,
+        Female
     }
 
     [Database]
