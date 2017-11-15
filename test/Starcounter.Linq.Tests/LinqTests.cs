@@ -7,19 +7,32 @@ namespace Starcounter.Linq.Tests
 {
     public class LinqTests
     {
-
-        //[Fact]
-        //public void Run()
-        //{
-        //    Assert.Equal("SELECT E FROM Starcounter.Linq.Tests.Employee E WHERE (((E.Department.Company.Name = ?) AND (E.Age > ?))) FETCH 1",
-        //        Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "XXX" && p.Age > 123)));
-        //}
+        [Fact]
+        public void NestedValueEquals_Complex()
+        {
+            Assert.Equal("SELECT E FROM Starcounter.Linq.Tests.Employee E WHERE (((E.Department.Company.Name = ?) AND (E.Age > ?))) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "XXX" && p.Age > 123)));
+        }
 
         [Fact]
         public void ValueEquals()
         {
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.Name = ?)) FETCH 1",
                 Sql(() => Objects<Person>().FirstOrDefault(p => p.Name == "XXX")));
+        }
+
+        [Fact]
+        public void ValueEquals_ReservedWordField()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P.\"Limit\" = ?)) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Limit == 5)));
+        }
+
+        [Fact]
+        public void NestedValueEquals_Complex_ReservedWordField()
+        {
+            Assert.Equal("SELECT E FROM Starcounter.Linq.Tests.Employee E WHERE ((E.Department.Company.\"Index\" = ?)) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Index == 0)));
         }
 
         [Fact]
@@ -97,6 +110,13 @@ namespace Starcounter.Linq.Tests
         {
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE (NOT (P IS Starcounter.Linq.Tests.Employee)) FETCH 1",
                 Sql(() => Objects<Person>().FirstOrDefault(p => !(p is Employee))));
+        }
+
+        [Fact]
+        public void TypeIs_ReservedWordType()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE ((P IS Starcounter.Linq.Tests.\"Unknown\")) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p is Unknown)));
         }
 
         [Fact]

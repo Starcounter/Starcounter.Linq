@@ -19,5 +19,13 @@ namespace Starcounter.Linq.Tests
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P ORDER BY P.Age ASC, P.Name DESC",
                 Sql(() => Objects<Person>().OrderBy(p => p.Age).ThenByDescending(p => p.Name)));
         }
+
+        [Fact]
+        public void OrderBy_ReservedWordField()
+        {
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P ORDER BY P.\"Limit\" ASC",
+                Sql(() => Objects<Person>().OrderBy(p => p.Limit)));
+        }
+
     }
 }

@@ -48,5 +48,12 @@ namespace Starcounter.Linq.Tests
             Assert.Equal("SELECT SUM(P.Age) FROM Starcounter.Linq.Tests.Person P",
                 Sql<Person, int>(() => Objects<Person>().Sum(p => p.Age)));
         }
+
+        [Fact]
+        public void Sum_ReservedWordField()
+        {
+            Assert.Equal("SELECT SUM(P.\"Limit\") FROM Starcounter.Linq.Tests.Person P",
+                Sql<Person, int>(() => Objects<Person>().Sum(p => p.Limit)));
+        }
     }
 }
