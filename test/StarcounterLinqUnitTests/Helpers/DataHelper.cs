@@ -8,9 +8,9 @@ namespace StarcounterLinqUnitTests.Helpers
         {
             Db.Transact(() =>
             {
-                Db.SlowSQL("DELETE FROM StarcounterLinqUnitTests.Person");
-                Db.SlowSQL("DELETE FROM StarcounterLinqUnitTests.Department");
-                Db.SlowSQL("DELETE FROM StarcounterLinqUnitTests.Company");
+                Db.SlowSQL($"DELETE FROM {typeof(Person).FullName}");
+                Db.SlowSQL($"DELETE FROM {typeof(Department).FullName}");
+                Db.SlowSQL($"DELETE FROM {typeof(Company).FullName}");
             });
         }
 
