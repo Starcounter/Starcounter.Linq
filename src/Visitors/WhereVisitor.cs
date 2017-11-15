@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace Starcounter.Linq.Visitors
@@ -133,12 +134,31 @@ namespace Starcounter.Linq.Visitors
             if (node.Expression is ParameterExpression param)
             {
                 state.WriteWhere(param.Type.SourceName());
+                state.WriteWhere("." + node.Member.Name);
             }
             else
             {
-                Visit(node.Expression, state);
+                var subNode = node;
+                while (subNode.Expression is MemberExpression memberNode)
+                {
+                    subNode = memberNode;
+                }
+                if (subNode.Expression is ConstantExpression)
+                {
+                    var memberValue = this.RetrieveValue(node);
+                    state.WriteWhere("?");
+                    state.AddVariable(memberValue);
+                }
+                else if (subNode.Expression is ParameterExpression)
+                {
+                    Visit(node.Expression, state);
+                    state.WriteWhere("." + node.Member.Name);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
             }
-            state.WriteWhere("." + node.Member.Name);
         }
 
         public override void VisitIndex(IndexExpression node, QueryBuilder<TEntity> state)
@@ -148,23 +168,56 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
+            ConstantExpression constNode = null;
             if (node.Method == KnownMethods.StringContains)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
+                constNode = node.Arguments[0] as ConstantExpression;
                 state.WriteWhere(" LIKE '%' || ? || '%')");
             }
-            if (node.Method == KnownMethods.StringStartsWith)
+            else if (node.Method == KnownMethods.StringStartsWith)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
+                constNode = node.Arguments[0] as ConstantExpression;
                 state.WriteWhere(" LIKE ? || '%')");
             }
-            if (node.Method == KnownMethods.StringEndsWith)
+            else if (node.Method == KnownMethods.StringEndsWith)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
+                constNode = node.Arguments[0] as ConstantExpression;
                 state.WriteWhere(" LIKE '%' || ?)");
+            }
+            else if (node.Method.IsGenericMethod && node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains)
+            {
+                state.WriteWhere("(");
+                var items = (IEnumerable) this.RetrieveValue(node.Arguments[0] as MemberExpression);
+                int i = 0;
+
+                foreach (var item in items)
+                {
+                    if (i++ > 0)
+                    {
+                        state.WriteWhere(" OR ");
+                    }
+                    state.WriteWhere("(");
+                    Visit(node.Arguments[1], state);
+                    state.WriteWhere(" = ?");
+                    state.AddVariable(item);
+                    state.WriteWhere(")");
+                }
+                state.WriteWhere(")");
+            }
+            else
+            {
+                throw new NotSupportedException("Method call is not supported");
+            }
+
+            if (constNode != null)
+            {
+                state.AddVariable(constNode.Value);
             }
         }
 
@@ -199,6 +252,10 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(lambda.Body, state);
             }
+            else
+            {
+                Visit(node.Operand, state);
+            }
          //   base.VisitUnary(node, state);
         }
 
@@ -212,6 +269,14 @@ namespace Starcounter.Linq.Visitors
             {
                 throw new NotSupportedException();
             }
+        }
+
+        private object RetrieveValue(MemberExpression node)
+        {
+            var objectMember = Expression.Convert(node, typeof(object));
+            var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+            var getter = getterLambda.Compile();
+            return getter();
         }
     }
 }

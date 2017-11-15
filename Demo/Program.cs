@@ -30,42 +30,42 @@ namespace Demo
 
 
                 var persons = Objects<Person>().Where(p => p.Name == "Roger").ToList();
+                persons = Objects<Person>().Take(1).ToList();
+                persons = Objects<Person>().Skip(1).ToList();
                 var person = Objects<Person>().FirstOrDefault(p => p.Name == "Roger");
-                var person2 = Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
-                //Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
-                //Objects<Person>().FirstOrDefault(p => p.Name.Contains("oge"));
-                //Objects<Person>().FirstOrDefault(p => !p.Name.Contains("oge"));
-                //Objects<Person>().FirstOrDefault(p => p.Name.StartsWith("Ro"));
-                //Objects<Person>().FirstOrDefault(p => p.Name.EndsWith("er"));
-                //Objects<Person>().FirstOrDefault(p => p.Age > 0 && p.Age < 100);
-                //Objects<Person>().FirstOrDefault(p => p.Name == null);
-                //Objects<Person>().FirstOrDefault(p => p.Gender == Gender.Male);
-                //Objects<Employee>().FirstOrDefault(p => p.Department == roger.Department);
+                person = Objects<Person>().Where(x => x.Name == "Roger").Take(10).FirstOrDefault(x => x.Gender == Gender.Male);
+                person = Objects<Person>().FirstOrDefault(p => p.Name != "Roger");
+                person = Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "Starcounter");
+                person = Objects<Person>().FirstOrDefault(p => p.Name.Contains("oge"));
+                person = Objects<Person>().FirstOrDefault(p => !p.Name.Contains("oge"));
+                person = Objects<Person>().FirstOrDefault(p => p.Name.StartsWith("Ro"));
+                person = Objects<Person>().FirstOrDefault(p => p.Name.EndsWith("er"));
+                person = Objects<Person>().FirstOrDefault(p => p.Age > 0 && p.Age < 100);
+                person = Objects<Person>().FirstOrDefault(p => p.Name == null);
+                person = Objects<Person>().FirstOrDefault(p => p.Gender == Gender.Male);
+                
+                person = Objects<Employee>().FirstOrDefault(p => p.Department == roger.Department);
 
-                //Objects<Person>().Sum(p => p.Age);
-                //Objects<Person>().Min(p => p.Age);
-                //Objects<Person>().Max(p => p.Age);
+                var ages = new[] { 1, 2, 3, 4, 5 };
+                person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
+                person = Objects<Person>().FirstOrDefault(p => !ages.Contains(p.Age));
 
-                ////Objects<Person>().Ave rage(p => p.Age);
-
-                //Objects<Person>().Count();
-
-                //var ages = new[] {1, 2, 3, 4, 5};
-                //Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
+                ages = new[] { 41, 42, 43 };
+                person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
 
                 var cnt = Objects<Person>().Count();
                 var avg = Objects<Person>().Average(x => x.Age);
                 var min = Objects<Person>().Min(x => x.Age);
                 var max = Objects<Person>().Max(x => x.Age);
                 var sum = Objects<Person>().Sum(x => x.Age);
-                var cnt2 = Objects<Person>().Count(x => x is Employee);
+                cnt = Objects<Person>().Count(x => x is Employee);
 
                 Handle.GET("/sql", () =>
                 {
                     var sw = Stopwatch.StartNew();
                     for (int i = 0; i < 1000000; i++)
                     {
-                        var res = Db.SQL<Person>("SELECT p from Demo.Person p WHERE p.Name = ?", "Roger").First;
+                        var res = Db.SQL<Person>("SELECT p from Demo.Person p WHERE p.Name = ?", "Roger").FirstOrDefault();
                     }
                     sw.Stop();
                     return sw.Elapsed.ToString();

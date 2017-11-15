@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Starcounter.Linq.Visitors;
 
@@ -25,18 +26,14 @@ namespace Starcounter.Linq
 
             if (typeof(TResult).IsGenericType)
             {
-                return Db.SQL<T>(sql, variables);
+                return Db.SlowSQL<T>(sql, variables);
             }
-            else if (typeof(TResult).IsClass)
-            {
-                return Db.SQL<TResult>(sql, variables);
-            }
-
-            var result = Db.SlowSQL(sql, variables).First;
-
+            var result = Db.SlowSQL(sql, variables).FirstOrDefault();
+            var resultType = result.GetType();
+            
             // SC lifts underlying types to a bigger ones in some cases.
             // Look at the issue https://github.com/Starcounter/Home/issues/209 for getting more info.
-            if (result.GetType() != typeof(TResult))
+            if (resultType != typeof(TResult) && !resultType.IsSubclassOf(typeof(TResult)))
             {
                 var expectedType = typeof(TResult);
                 if (expectedType == typeof(int))

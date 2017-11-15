@@ -1,6 +1,8 @@
-﻿using Xunit;
+﻿using System.Linq;
+using Xunit;
 using static Starcounter.Linq.DbLinq;
 using static Starcounter.Linq.Tests.Utils;
+
 namespace Starcounter.Linq.Tests
 {
     public class LinqTests
@@ -95,6 +97,22 @@ namespace Starcounter.Linq.Tests
         {
             Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE (NOT (P IS Starcounter.Linq.Tests.Employee)) FETCH 1",
                 Sql(() => Objects<Person>().FirstOrDefault(p => !(p is Employee))));
+        }
+
+        [Fact]
+        public void EnumerableContains()
+        {
+            var ages = new[] { 41, 42, 43 };
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE (((P.Age = ?) OR (P.Age = ?) OR (P.Age = ?))) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age))));
+        }
+
+        [Fact]
+        public void EnumerableNotContains()
+        {
+            var ages = new[] { 41, 42, 43 };
+            Assert.Equal("SELECT P FROM Starcounter.Linq.Tests.Person P WHERE (NOT ((P.Age = ?) OR (P.Age = ?) OR (P.Age = ?))) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => !ages.Contains(p.Age))));
         }
     }
 }

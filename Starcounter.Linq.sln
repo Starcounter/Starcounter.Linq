@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq", "src\Starcounter.Linq.csproj", "{DF08E065-AAF1-42DB-A92E-D288154F5663}"
 EndProject
@@ -36,9 +36,11 @@ Global
 		{471F5BC5-FB1F-4D76-9D06-DE76D943BE44}.Release|x64.ActiveCfg = Release|Any CPU
 		{471F5BC5-FB1F-4D76-9D06-DE76D943BE44}.Release|x64.Build.0 = Release|Any CPU
 		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|Any CPU.Build.0 = Debug|x64
 		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|x64.ActiveCfg = Debug|x64
 		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|x64.Build.0 = Debug|x64
 		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|Any CPU.ActiveCfg = Release|x64
+		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|Any CPU.Build.0 = Release|x64
 		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|x64.ActiveCfg = Release|x64
 		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|x64.Build.0 = Release|x64
 		{F39F0151-A278-47BB-8D5F-4A627590E487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -52,6 +54,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {46FDB161-53B6-48A2-BD88-C77AF0B37EF6}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

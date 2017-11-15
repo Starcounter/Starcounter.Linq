@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 
 namespace Starcounter.Linq
@@ -99,7 +100,7 @@ namespace Starcounter.Linq
             {
                 return (TResult)(object)Db.SQL<TResult>(SqlStatement, parameters);
             }
-            return Db.SlowSQL<TResult>(SqlStatement, parameters).First;
+            return Db.SlowSQL<TResult>(SqlStatement, parameters).FirstOrDefault();
         }
     }
 }
