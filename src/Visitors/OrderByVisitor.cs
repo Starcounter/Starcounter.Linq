@@ -13,7 +13,7 @@ namespace Starcounter.Linq.Visitors
                 state.WriteOrderBy(param.Type.SourceName());
             else
                 Visit(node.Expression, state);
-            state.WriteOrderBy("." + SqlHelper.EscapeIfReservedWord(node.Member.Name));
+            state.WriteOrderBy("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
         }
     }
 }

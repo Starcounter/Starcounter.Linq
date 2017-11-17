@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Starcounter.Linq.Helpers;
 
 //String interpolation, string.Join, string.Format should be avoided due to performance overhead
 namespace Starcounter.Linq
@@ -12,7 +13,7 @@ namespace Starcounter.Linq
         // ReSharper disable once StaticMemberInGenericType
         private static readonly string SourceName = QueryType.SourceName();
         // ReSharper disable once StaticMemberInGenericType
-        private static readonly string QueryTypeName = QueryType.FullName;
+        private static readonly string QueryTypeName = SqlHelper.EscapeIdentifiers(QueryType.FullName);
         // Precompute the from clause for this <T>
         // ReSharper disable once StaticMemberInGenericType
         private static readonly string From = $" FROM {QueryTypeName} {QueryType.SourceName()}";

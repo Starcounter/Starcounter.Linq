@@ -13,7 +13,7 @@ namespace Starcounter.Linq.Visitors
                 state.WriteSelect(param.Type.SourceName());
             else
                 Visit(node.Expression, state);
-            state.WriteSelect("." + SqlHelper.EscapeIfReservedWord(node.Member.Name));
+            state.WriteSelect("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
         }
     }
 }
