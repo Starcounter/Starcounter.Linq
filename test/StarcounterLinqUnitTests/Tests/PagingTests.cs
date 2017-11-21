@@ -1,34 +1,41 @@
 ﻿using System.Linq;
-using Starcounter;
-using Starcounter.Linq;
 using Xunit;
+using static Starcounter.Linq.DbLinq;
 
 namespace StarcounterLinqUnitTests.Tests
 {
-    public class PagingTests : IClassFixture<BaseTestsFixture>
+    public class PagingTests : BaseTest, IClassFixture<BaseTestsFixture>
     {
         public PagingTests(BaseTestsFixture fixture)
         {
         }
 
-        [Fact]
-        public void Take()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Take(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Run(() =>
             {
-                var persons = DbLinq.Objects<Person>().Take(1).ToList();
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Take(1))().ToList()
+                    : Objects<Person>().Take(1).ToList();
                 Assert.Equal(1, persons.Count);
-            }, waitForCompletion: true);
+            });
         }
 
-        [Fact]
-        public void Skip()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Skip(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Run(() =>
             {
-                var persons = DbLinq.Objects<Person>().Skip(1).ToList();
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Skip(1))().ToList()
+                    : Objects<Person>().Skip(1).ToList();
                 Assert.Equal(1, persons.Count);
-            }, waitForCompletion: true);
+            });
         }
     }
 }

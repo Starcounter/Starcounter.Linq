@@ -125,8 +125,13 @@ namespace Starcounter.Linq
             {
                 return (TResult)(object)Db.SlowSQL<T>(SqlStatement, parameters);
             }
+
             var result = Db.SlowSQL(SqlStatement, parameters).FirstOrDefault();
-            var resultType = result?.GetType();
+            if (result == null)
+            {
+                return default(TResult);
+            }
+            var resultType = result.GetType();
 
             // SC lifts underlying types to a bigger ones in some cases.
             // Look at the issue https://github.com/Starcounter/Home/issues/209 for getting more info.

@@ -191,10 +191,12 @@ namespace Starcounter.Linq.Visitors
                 constNode = node.Arguments[0] as ConstantExpression;
                 state.WriteWhere(" LIKE '%' || ?)");
             }
-            else if (node.Method.IsGenericMethod && node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains)
+            else if (node.Method.IsGenericMethod &&
+                node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains &&
+                node.Arguments[0] is MemberExpression memberExpression)
             {
                 state.WriteWhere("(");
-                var items = (IEnumerable) this.RetrieveValue(node.Arguments[0] as MemberExpression);
+                var items = (IEnumerable) this.RetrieveValue(memberExpression);
                 int i = 0;
 
                 foreach (var item in items)
