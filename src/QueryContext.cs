@@ -29,7 +29,7 @@ namespace Starcounter.Linq
                 return Db.SlowSQL<T>(sql, variables);
             }
             var result = Db.SlowSQL(sql, variables).FirstOrDefault();
-            var resultType = result.GetType();
+            var resultType = result?.GetType();
             
             // SC lifts underlying types to a bigger ones in some cases.
             // Look at the issue https://github.com/Starcounter/Home/issues/209 for getting more info.
