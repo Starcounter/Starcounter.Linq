@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Visitors
 {
@@ -12,7 +13,7 @@ namespace Starcounter.Linq.Visitors
                 state.WriteOrderBy(param.Type.SourceName());
             else
                 Visit(node.Expression, state);
-            state.WriteOrderBy("." + node.Member.Name);
+            state.WriteOrderBy("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
         }
     }
 }
