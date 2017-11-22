@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using Starcounter;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
 
 namespace StarcounterLinqUnitTests.Tests
 {
-    public class PagingTests : BaseTest, IClassFixture<BaseTestsFixture>
+    public class PagingTests : IClassFixture<BaseTestsFixture>
     {
         public PagingTests(BaseTestsFixture fixture)
         {
@@ -15,13 +16,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void Take(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var persons = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Take(1))().ToList()
                     : Objects<Person>().Take(1).ToList();
                 Assert.Equal(1, persons.Count);
-            });
+            }).Wait();
         }
 
         [Theory]
@@ -29,13 +30,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void Skip(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var persons = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Skip(1))().ToList()
                     : Objects<Person>().Skip(1).ToList();
                 Assert.Equal(1, persons.Count);
-            });
+            }).Wait();
         }
     }
 }

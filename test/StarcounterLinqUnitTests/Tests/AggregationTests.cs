@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using Starcounter;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
 
 namespace StarcounterLinqUnitTests.Tests
 {
-    public class AggregationTests : BaseTest, IClassFixture<BaseTestsFixture>
+    public class AggregationTests : IClassFixture<BaseTestsFixture>
     {
         public AggregationTests(BaseTestsFixture fixture)
         {
@@ -15,14 +16,14 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void AverageInteger(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var avg = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Average(x => x.Age))()
                     : Objects<Person>().Average(x => x.Age);
 
                 Assert.Equal(36, avg);
-            });
+            }).Wait();
         }
 
         [Theory]
@@ -30,13 +31,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void MinInteger(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var min = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Min(x => x.Age))()
                     : Objects<Person>().Min(x => x.Age);
                 Assert.Equal(31, min);
-            });
+            }).Wait();
         }
 
         [Theory]
@@ -44,13 +45,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void MaxInteger(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var max = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Max(x => x.Age))()
                     : Objects<Person>().Max(x => x.Age);
                 Assert.Equal(41, max);
-            });
+            }).Wait();
         }
 
         [Theory]
@@ -58,13 +59,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void SumInteger(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var sum = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Sum(x => x.Age))()
                     : Objects<Person>().Sum(x => x.Age);
                 Assert.Equal(72, sum);
-            });
+            }).Wait();
         }
 
         [Theory]
@@ -72,13 +73,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void Count(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var cnt = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Count())()
                     : Objects<Person>().Count();
                 Assert.Equal(2, cnt);
-            });
+            }).Wait();
         }
 
         [Theory]
@@ -86,13 +87,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void CountWithPredicate(Mode mode)
         {
-            Run(() =>
+            Scheduling.RunTask(() =>
             {
                 var cnt = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Count(x => x is Employee))()
                     : Objects<Person>().Count(x => x is Employee);
                 Assert.Equal(2, cnt);
-            });
+            }).Wait();
         }
     }
 }
