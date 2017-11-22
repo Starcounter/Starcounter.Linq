@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 
 namespace Starcounter.Linq.Visitors
 {
@@ -39,19 +40,29 @@ namespace Starcounter.Linq.Visitors
             }
             else if (method == KnownMethods<TEntity>.IQueryableTake)
             {
-                //TODO: hack'ish, this assumes the Take argument is a constant int
-                // ReSharper disable once PossibleNullReferenceException
-                var value = (int)(node.Arguments[1] as ConstantExpression).Value;
-                state.Fetch(value);
-                Visit(node.Arguments[0], state);
+                if (node.Arguments[1] is ConstantExpression takeExpression)
+                {
+                    var value = (int)takeExpression.Value;
+                    state.Fetch(value);
+                    Visit(node.Arguments[0], state);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
             }
             else if (method == KnownMethods<TEntity>.IQueryableSkip)
             {
-                //TODO: hack'ish, this assumes the Skip argument is a constant int
-                // ReSharper disable once PossibleNullReferenceException
-                var value = (int)(node.Arguments[1] as ConstantExpression).Value;
-                state.Offset(value);
-                Visit(node.Arguments[0], state);
+                if (node.Arguments[1] is ConstantExpression skipExpression)
+                {
+                    var value = (int)skipExpression.Value;
+                    state.Offset(value);
+                    Visit(node.Arguments[0], state);
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
             }
             else if (method.IsGenericMethod)
             {

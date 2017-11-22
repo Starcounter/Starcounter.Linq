@@ -14,11 +14,10 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< IEnumerable<TResult>> CompileQuery< TResult>(
-             Expression<Func< IEnumerable<TResult>>> queryExpression)
-            
+        public static Func<IEnumerable<TResult>> CompileQuery<TResult>(
+            Expression<Func<IEnumerable<TResult>>> queryExpression)
             where TResult : class
-            => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
+            => new CompiledQuery<TResult>(queryExpression).Execute<IEnumerable<TResult>>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -26,10 +25,9 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< IEnumerable<TResult>> CompileQuery< TResult>(
-             Expression<Func< IQueryable<TResult>>> queryExpression)
-            
-            => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
+        public static Func<IEnumerable<TResult>> CompileQuery<TResult>(
+            Expression<Func<IQueryable<TResult>>> queryExpression)
+            => new CompiledQuery<TResult>(queryExpression).Execute<IEnumerable<TResult>>;
 
 
         /// <summary>
@@ -38,22 +36,9 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TResult> CompileQuery< TResult>(
-             Expression<Func< TResult>> queryExpression)
-            
-            => new CompiledQuery< TResult>(queryExpression).Execute;
-
-        /// <summary>
-        ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
-        /// </summary>
-        /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
-        /// <typeparam name="TResult">The query result type.</typeparam>
-        /// <param name="queryExpression">The LINQ query expression.</param>
-        /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, IEnumerable<TResult>> CompileQuery< TParam1, TResult>(
-             Expression<Func< TParam1, IQueryable<TResult>>> queryExpression)
-            
-            => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
+        public static Func<TResult> CompileQuery<TResult>(
+            Expression<Func<TResult>> queryExpression)
+            => new CompiledQuery<TResult>(queryExpression).Execute<TResult>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -62,10 +47,20 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TResult> CompileQuery< TParam1, TResult>(
-             Expression<Func< TParam1, TResult>> queryExpression)
-            
-            => new CompiledQuery< TResult>(queryExpression).Execute;
+        public static Func<TParam1, IEnumerable<TResult>> CompileQuery<TParam1, TResult>(
+            Expression<Func<TParam1, IQueryable<TResult>>> queryExpression)
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, IEnumerable<TResult>>;
+
+        /// <summary>
+        ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
+        /// </summary>
+        /// <typeparam name="TParam1">The type of the first query parameter.</typeparam>
+        /// <typeparam name="TResult">The query result type.</typeparam>
+        /// <param name="queryExpression">The LINQ query expression.</param>
+        /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
+        public static Func<TParam1, TResult> CompileQuery<TParam1, TResult>(
+             Expression<Func<TParam1, TResult>> queryExpression)
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TResult>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -75,11 +70,11 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, IEnumerable<TResult>> CompileQuery<
+        public static Func<TParam1, TParam2, IEnumerable<TResult>> CompileQuery<
              TParam1, TParam2, TResult>(
-             Expression<Func< TParam1, TParam2, IQueryable<TResult>>> queryExpression)
-            
-            => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, IQueryable<TResult>>> queryExpression)
+
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, IEnumerable<TResult>>;
 
 
         /// <summary>
@@ -90,11 +85,11 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, TResult> CompileQuery<
+        public static Func<TParam1, TParam2, TResult> CompileQuery<
              TParam1, TParam2, TResult>(
-             Expression<Func< TParam1, TParam2, TResult>> queryExpression)
-            
-            => new CompiledQuery< TResult>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, TResult>> queryExpression)
+
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, TResult>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -105,11 +100,11 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, TParam3, IEnumerable<TResult>> CompileQuery<
+        public static Func<TParam1, TParam2, TParam3, IEnumerable<TResult>> CompileQuery<
              TParam1, TParam2, TParam3, TResult>(
-             Expression<Func< TParam1, TParam2, TParam3, IQueryable<TResult>>> queryExpression)
-            
-            => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, TParam3, IQueryable<TResult>>> queryExpression)
+
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, TParam3, IEnumerable<TResult>>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -120,11 +115,11 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, TParam3, TResult> CompileQuery<
+        public static Func<TParam1, TParam2, TParam3, TResult> CompileQuery<
              TParam1, TParam2, TParam3, TResult>(
-             Expression<Func< TParam1, TParam2, TParam3, TResult>> queryExpression)
-            
-            => new CompiledQuery< TResult>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, TParam3, TResult>> queryExpression)
+
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, TParam3, TResult>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -136,11 +131,11 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, TParam3, TParam4, IEnumerable<TResult>> CompileQuery<
+        public static Func<TParam1, TParam2, TParam3, TParam4, IEnumerable<TResult>> CompileQuery<
              TParam1, TParam2, TParam3, TParam4, TResult>(
-             Expression<Func< TParam1, TParam2, TParam3, TParam4, IQueryable<TResult>>> queryExpression)
-            
-            => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, TParam3, TParam4, IQueryable<TResult>>> queryExpression)
+
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, TParam3, TParam4, IEnumerable<TResult>>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -152,11 +147,11 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, TParam3, TParam4, TResult> CompileQuery<
+        public static Func<TParam1, TParam2, TParam3, TParam4, TResult> CompileQuery<
              TParam1, TParam2, TParam3, TParam4, TResult>(
-             Expression<Func< TParam1, TParam2, TParam3, TParam4, TResult>> queryExpression)
-            
-            => new CompiledQuery< TResult>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, TParam3, TParam4, TResult>> queryExpression)
+
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, TParam3, TParam4, TResult>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -169,11 +164,11 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, TParam3, TParam4, TParam5, IEnumerable<TResult>> CompileQuery<
+        public static Func<TParam1, TParam2, TParam3, TParam4, TParam5, IEnumerable<TResult>> CompileQuery<
              TParam1, TParam2, TParam3, TParam4, TParam5, TResult>(
-             Expression<Func< TParam1, TParam2, TParam3, TParam4, TParam5, IQueryable<TResult>>> queryExpression)
-            
-            => new CompiledQuery< IEnumerable<TResult>>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, TParam3, TParam4, TParam5, IQueryable<TResult>>> queryExpression)
+
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, TParam3, TParam4, TParam5, IEnumerable<TResult>>;
 
         /// <summary>
         ///     Creates a compiled query delegate that when invoked will execute the specified LINQ query.
@@ -186,10 +181,9 @@ namespace Starcounter.Linq
         /// <typeparam name="TResult">The query result type.</typeparam>
         /// <param name="queryExpression">The LINQ query expression.</param>
         /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
-        public static Func< TParam1, TParam2, TParam3, TParam4, TParam5, TResult> CompileQuery<
+        public static Func<TParam1, TParam2, TParam3, TParam4, TParam5, TResult> CompileQuery<
              TParam1, TParam2, TParam3, TParam4, TParam5, TResult>(
-             Expression<Func< TParam1, TParam2, TParam3, TParam4, TParam5, TResult>> queryExpression)
-            
-            => new CompiledQuery< TResult>(queryExpression).Execute;
+             Expression<Func<TParam1, TParam2, TParam3, TParam4, TParam5, TResult>> queryExpression)
+            => new CompiledQuery<TResult>(queryExpression).Execute<TParam1, TParam2, TParam3, TParam4, TParam5, TResult>;
     }
 }

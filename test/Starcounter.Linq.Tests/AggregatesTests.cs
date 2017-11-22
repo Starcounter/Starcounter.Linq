@@ -11,49 +11,49 @@ namespace Starcounter.Linq.Tests
         public void Count()
         {
             Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
-                Sql<Person, int>(() => Objects<Person>().Count()));
+                Sql(() => Objects<Person>().Count()));
         }
 
         [Fact]
         public void CountFiltering()
         {
             Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?))",
-                Sql<Person, int>(() => Objects<Person>().Count(x => x.Name == "XXX")));
+                Sql(() => Objects<Person>().Count(x => x.Name == "XXX")));
         }
 
         [Fact]
         public void Average()
         {
             Assert.Equal("SELECT AVG(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
-                Sql<Person, double>(() => Objects<Person>().Average(p => p.Age)));
+                Sql(() => Objects<Person>().Average(p => p.Age)));
         }
 
         [Fact]
         public void Min()
         {
             Assert.Equal("SELECT MIN(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
-                Sql<Person, int>(() => Objects<Person>().Min(p => p.Age)));
+                Sql(() => Objects<Person>().Min(p => p.Age)));
         }
 
         [Fact]
         public void Max()
         {
             Assert.Equal("SELECT MAX(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
-                Sql<Person, int>(() => Objects<Person>().Max(p => p.Age)));
+                Sql(() => Objects<Person>().Max(p => p.Age)));
         }
 
         [Fact]
         public void Sum()
         {
             Assert.Equal("SELECT SUM(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
-                Sql<Person, int>(() => Objects<Person>().Sum(p => p.Age)));
+                Sql(() => Objects<Person>().Sum(p => p.Age)));
         }
 
         [Fact]
         public void Sum_ReservedWordField()
         {
             Assert.Equal("SELECT SUM(P.\"Limit\") FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
-                Sql<Person, int>(() => Objects<Person>().Sum(p => p.Limit)));
+                Sql(() => Objects<Person>().Sum(p => p.Limit)));
         }
     }
 }

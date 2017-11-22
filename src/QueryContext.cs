@@ -28,7 +28,12 @@ namespace Starcounter.Linq
             {
                 return Db.SlowSQL<T>(sql, variables);
             }
+
             var result = Db.SlowSQL(sql, variables).FirstOrDefault();
+            if (result == null)
+            {
+                return default(TResult);
+            }
             var resultType = result.GetType();
             
             // SC lifts underlying types to a bigger ones in some cases.

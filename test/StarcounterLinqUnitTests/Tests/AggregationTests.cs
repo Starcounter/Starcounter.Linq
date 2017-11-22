@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Starcounter;
-using Starcounter.Linq;
 using Xunit;
+using static Starcounter.Linq.DbLinq;
 
 namespace StarcounterLinqUnitTests.Tests
 {
@@ -11,64 +11,89 @@ namespace StarcounterLinqUnitTests.Tests
         {
         }
 
-        [Fact]
-        public void AverageInteger()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void AverageInteger(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Scheduling.RunTask(() =>
             {
-                var avg = DbLinq.Objects<Person>().Average(x => x.Age);
+                var avg = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Average(x => x.Age))()
+                    : Objects<Person>().Average(x => x.Age);
+
                 Assert.Equal(36, avg);
-            }, waitForCompletion: true);
+            }).Wait();
         }
 
-        [Fact]
-        public void MinInteger()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void MinInteger(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Scheduling.RunTask(() =>
             {
-                var min = DbLinq.Objects<Person>().Min(x => x.Age);
+                var min = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Min(x => x.Age))()
+                    : Objects<Person>().Min(x => x.Age);
                 Assert.Equal(31, min);
-            }, waitForCompletion: true);
+            }).Wait();
         }
 
-        [Fact]
-        public void MaxInteger()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void MaxInteger(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Scheduling.RunTask(() =>
             {
-                var max = DbLinq.Objects<Person>().Max(x => x.Age);
+                var max = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Max(x => x.Age))()
+                    : Objects<Person>().Max(x => x.Age);
                 Assert.Equal(41, max);
-            }, waitForCompletion: true);
+            }).Wait();
         }
 
-        [Fact]
-        public void SumInteger()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SumInteger(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Scheduling.RunTask(() =>
             {
-                var sum = DbLinq.Objects<Person>().Sum(x => x.Age);
+                var sum = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Sum(x => x.Age))()
+                    : Objects<Person>().Sum(x => x.Age);
                 Assert.Equal(72, sum);
-            }, waitForCompletion: true);
+            }).Wait();
         }
 
-        [Fact]
-        public void Count()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Count(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Scheduling.RunTask(() =>
             {
-                var cnt = DbLinq.Objects<Person>().Count();
+                var cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Count())()
+                    : Objects<Person>().Count();
                 Assert.Equal(2, cnt);
-            }, waitForCompletion: true);
+            }).Wait();
         }
 
-        [Fact]
-        public void CountWithPredicate()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void CountWithPredicate(Mode mode)
         {
-            Scheduling.ScheduleTask(() =>
+            Scheduling.RunTask(() =>
             {
-                var cnt = DbLinq.Objects<Person>().Count(x => x is Employee);
+                var cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Count(x => x is Employee))()
+                    : Objects<Person>().Count(x => x is Employee);
                 Assert.Equal(2, cnt);
-            }, waitForCompletion: true);
+            }).Wait();
         }
     }
 }
