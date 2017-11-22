@@ -23,6 +23,17 @@ namespace StarcounterLinqUnitTests.Tests
         }
 
         [Fact]
+        public void WhereIntEqual_ReservedWordField()
+        {
+            Scheduling.ScheduleTask(() =>
+            {
+                var persons = Objects<Person>().Where(p => p.Limit == 2).ToList();
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Roger", persons.First().Name);
+            }, waitForCompletion: true);
+        }
+
+        [Fact]
         public void WhereIs()
         {
             Scheduling.ScheduleTask(() =>

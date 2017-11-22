@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq.Expressions;
+using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Visitors
 {
@@ -134,7 +135,7 @@ namespace Starcounter.Linq.Visitors
             if (node.Expression is ParameterExpression param)
             {
                 state.WriteWhere(param.Type.SourceName());
-                state.WriteWhere("." + node.Member.Name);
+                state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
             }
             else
             {
@@ -152,7 +153,7 @@ namespace Starcounter.Linq.Visitors
                 else if (subNode.Expression is ParameterExpression)
                 {
                     Visit(node.Expression, state);
-                    state.WriteWhere("." + node.Member.Name);
+                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
                 }
                 else
                 {
@@ -263,7 +264,7 @@ namespace Starcounter.Linq.Visitors
         {
             if (node.Expression is ParameterExpression parm)
             {
-                state.WriteWhere($"({state.GetSourceName()} IS {node.TypeOperand.FullName})");
+                state.WriteWhere($"({state.GetSourceName()} IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)})");
             }
             else
             {

@@ -53,6 +53,7 @@
     <Compile Include="CompiledQuery.cs" />
     <Compile Include="DB.cs" />
     <Compile Include="DbLinq.cs" />
+    <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="KnownMethods.cs" />
     <Compile Include="Visitors\OrderByVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -24,6 +24,7 @@ namespace StarcounterLinqUnitTests.Helpers
                     Gender = Gender.Male,
                     Name = "Anton",
                     Age = 31,
+                    Limit = 1,
                     Department = new Department
                     {
                         Name = "Application Development",
@@ -35,6 +36,7 @@ namespace StarcounterLinqUnitTests.Helpers
                     Gender = Gender.Male,
                     Name = "Roger",
                     Age = 41,
+                    Limit = 2,
                     Department = new Department
                     {
                         Name = "Solution Architecture",
