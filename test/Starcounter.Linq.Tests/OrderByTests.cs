@@ -26,6 +26,5 @@ namespace Starcounter.Linq.Tests
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P ORDER BY P.\"Limit\" ASC",
                 Sql(() => Objects<Person>().OrderBy(p => p.Limit)));
         }
-
     }
 }

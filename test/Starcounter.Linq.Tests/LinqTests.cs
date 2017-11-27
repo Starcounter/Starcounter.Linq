@@ -10,8 +10,9 @@ namespace Starcounter.Linq.Tests
         [Fact]
         public void NestedValueEquals_Complex()
         {
+            var age = 123;
             Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE (((E.\"Department\".\"Company\".\"Name\" = ?) AND (E.\"Age\" > ?))) FETCH 1",
-                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "XXX" && p.Age > 123)));
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "XXX" && p.Age > age)));
         }
 
         [Fact]
@@ -82,6 +83,14 @@ namespace Starcounter.Linq.Tests
         {
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ? || '%')) FETCH 1",
                 Sql(() => Objects<Person>().FirstOrDefault(p => p.Name.Contains("XXX"))));
+        }
+
+        [Fact]
+        public void StringContains_CalculatedValue()
+        {
+            var name = "XXX";
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ? || '%')) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Name.Contains(name))));
         }
 
         [Fact]
