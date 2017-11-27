@@ -12,6 +12,6 @@
     <description>$description$</description>
     <releaseNotes>LINQ Provider for Starcounter DB</releaseNotes>
     <copyright>Copyright 2017</copyright>
-    <tags>Starcounter, LINQ</tags>
+    <tags>Starcounter LINQ</tags>
   </metadata>
 </package>
