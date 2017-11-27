@@ -264,14 +264,16 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitTypeBinary(TypeBinaryExpression node, QueryBuilder<TEntity> state)
         {
+            state.WriteWhere("(");
             if (node.Expression is ParameterExpression parm)
             {
-                state.WriteWhere($"({state.GetSourceName()} IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)})");
+                state.WriteWhere(state.GetSourceName());
             }
             else
             {
-                throw new NotSupportedException();
+                Visit(node.Expression, state);
             }
+            state.WriteWhere($" IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)})");
         }
 
         private object RetrieveValue(MemberExpression node)

@@ -106,6 +106,20 @@ namespace Starcounter.Linq.Tests
         }
 
         [Fact]
+        public void TypeIs_Nested()
+        {
+            Assert.Equal("SELECT D FROM \"Starcounter\".\"Linq\".\"Tests\".\"Department\" D WHERE ((D.\"Company\" IS \"Starcounter\".\"Linq\".\"Tests\".\"Company\")) FETCH 1",
+                Sql(() => Objects<Department>().FirstOrDefault(d => d.Company is Company)));
+        }
+
+        [Fact]
+        public void TypeIs_NestedTwice()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Company\" IS \"Starcounter\".\"Linq\".\"Tests\".\"Company\")) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(d => d.Department.Company is Company)));
+        }
+
+        [Fact]
         public void TypeIsNot()
         {
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE (NOT (P IS \"Starcounter\".\"Linq\".\"Tests\".\"Employee\")) FETCH 1",
