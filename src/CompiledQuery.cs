@@ -9,43 +9,43 @@ namespace Starcounter.Linq
     // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
     /// <summary>
-    ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
+    /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+    /// directly from your code. This API may change or be removed in future releases.
     /// </summary>
     public class CompiledQuery<T>
     {
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult Execute<TResult>() => ExecuteCore<TResult>();
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult Execute<TParam1, TResult>(TParam1 param1)
             => ExecuteCore<TResult>(param1);
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult ExecuteAsync<TParam1, TResult>(
             CancellationToken cancellationToken,
             TParam1 param1) => ExecuteCore<TResult>(param1);
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult Execute<TParam1, TParam2, TResult>(
             TParam1 param1,
             TParam2 param2) => ExecuteCore<TResult>(param1, param2);
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult Execute<TParam1, TParam2, TParam3, TResult>(
             TParam1 param1,
@@ -53,8 +53,8 @@ namespace Starcounter.Linq
             TParam3 param3) => ExecuteCore<TResult>(param1, param2, param3);
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult Execute<TParam1, TParam2, TParam3, TParam4, TResult>(
             TParam1 param1,
@@ -63,8 +63,8 @@ namespace Starcounter.Linq
             TParam4 param4) => ExecuteCore<TResult>(param1, param2, param3, param4);
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public virtual TResult Execute<TParam1, TParam2, TParam3, TParam4, TParam5, TResult>(
             TParam1 param1,
@@ -76,8 +76,8 @@ namespace Starcounter.Linq
         public string SqlStatement { get; }
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public CompiledQuery(LambdaExpression queryExpression)
         {
@@ -110,14 +110,14 @@ namespace Starcounter.Linq
         }
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         protected virtual TResult ExecuteCore<TResult>(params object[] parameters) => ExecuteCore<TResult>(CancellationToken.None, parameters);
 
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// This API supports the Entity Framework Core infrastructure and is not intended to be used
+        /// directly from your code. This API may change or be removed in future releases.
         /// </summary>
         protected virtual TResult ExecuteCore<TResult>(CancellationToken cancellationToken, params object[] parameters)
         {

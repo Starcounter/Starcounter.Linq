@@ -5,7 +5,7 @@ namespace Starcounter.Linq.Visitors
 {
     //It's cheaper to pass the state around in a stateless visitor than 
     //to create a new visitor per query
-    public abstract class StatelessVisitor<T>
+    internal abstract class StatelessVisitor<T>
     {
         public virtual void Visit(Expression node, T state)
         {
@@ -18,49 +18,49 @@ namespace Starcounter.Linq.Visitors
                     VisitBlock(block, state);
                     break;
                 case ConditionalExpression cond:
-                    VisitConditional(cond,state);
+                    VisitConditional(cond, state);
                     break;
                 case ConstantExpression @const:
-                    VisitConstant(@const,state);
+                    VisitConstant(@const, state);
                     break;
                 case DebugInfoExpression dbg:
-                    VisitDebugInfo(dbg,state);
+                    VisitDebugInfo(dbg, state);
                     break;
                 case DynamicExpression dyn:
-                    VisitDynamic(dyn,state);
+                    VisitDynamic(dyn, state);
                     break;
                 case DefaultExpression def:
-                    VisitDefault(def,state);
+                    VisitDefault(def, state);
                     break;
                 case InvocationExpression inv:
-                    VisitInvocation(inv,state);
+                    VisitInvocation(inv, state);
                     break;
                 case MemberExpression mem:
-                    VisitMember(mem,state);
+                    VisitMember(mem, state);
                     break;
                 case IndexExpression ind:
-                    VisitIndex(ind,state);
+                    VisitIndex(ind, state);
                     break;
                 case MethodCallExpression call:
-                    VisitMethodCall(call,state);
+                    VisitMethodCall(call, state);
                     break;
                 case NewArrayExpression arr:
-                    VisitNewArray(arr,state);
+                    VisitNewArray(arr, state);
                     break;
                 case NewExpression @new:
-                    VisitNew(@new,state);
+                    VisitNew(@new, state);
                     break;
                 case ParameterExpression param:
-                    VisitParameter(param,state);
+                    VisitParameter(param, state);
                     break;
                 case RuntimeVariablesExpression run:
-                    VisitRuntimeVariables(run,state);
+                    VisitRuntimeVariables(run, state);
                     break;
                 case UnaryExpression unary:
-                    VisitUnary(unary,state);
+                    VisitUnary(unary, state);
                     break;
                 case LambdaExpression lam:
-                    VisitLambda(lam,state);
+                    VisitLambda(lam, state);
                     break;
                 case TypeBinaryExpression typ:
                     VisitTypeBinary(typ, state);
@@ -91,7 +91,7 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(exp, state);
             }
-            Visit(node.Result,state);
+            Visit(node.Result, state);
         }
 
         public virtual void VisitConditional(ConditionalExpression node, T state)
@@ -119,10 +119,10 @@ namespace Starcounter.Linq.Visitors
 
         public virtual void VisitInvocation(InvocationExpression node, T state)
         {
-            Visit(node.Expression,state);
+            Visit(node.Expression, state);
             foreach (var exp in node.Arguments)
             {
-                Visit(exp,state);
+                Visit(exp, state);
             }
         }
 
@@ -138,14 +138,14 @@ namespace Starcounter.Linq.Visitors
 
         public virtual void VisitMember(MemberExpression node, T state)
         {
-           Visit(node.Expression,state);
+            Visit(node.Expression, state);
         }
 
         public virtual void VisitIndex(IndexExpression node, T state)
         {
             foreach (var exp in node.Arguments)
             {
-                Visit(exp,state);
+                Visit(exp, state);
             }
             Visit(node.Object, state);
         }
@@ -154,16 +154,16 @@ namespace Starcounter.Linq.Visitors
         {
             foreach (var exp in node.Arguments)
             {
-                Visit(exp,state);
+                Visit(exp, state);
             }
-            Visit(node.Object,state);
+            Visit(node.Object, state);
         }
 
         public virtual void VisitNewArray(NewArrayExpression node, T state)
         {
             foreach (var exp in node.Expressions)
             {
-                Visit(exp,state);
+                Visit(exp, state);
             }
         }
 
@@ -183,13 +183,13 @@ namespace Starcounter.Linq.Visitors
         {
             foreach (var exp in node.Variables)
             {
-                Visit(exp,state);
+                Visit(exp, state);
             }
         }
 
         public virtual void VisitUnary(UnaryExpression node, T state)
         {
-            Visit(node.Operand,state);
+            Visit(node.Operand, state);
         }
     }
 }

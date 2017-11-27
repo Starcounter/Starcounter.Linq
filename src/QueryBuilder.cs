@@ -7,7 +7,7 @@ using Starcounter.Linq.Helpers;
 //String interpolation, string.Join, string.Format should be avoided due to performance overhead
 namespace Starcounter.Linq
 {
-    public class QueryBuilder<TEntity>
+    internal class QueryBuilder<TEntity>
     {
         private static readonly Type QueryType = UnwrapQueryType(typeof(TEntity));
         // ReSharper disable once StaticMemberInGenericType

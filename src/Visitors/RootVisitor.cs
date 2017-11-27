@@ -4,7 +4,7 @@ using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Visitors
 {
-    public class RootVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
+    internal class RootVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
     {
         public static readonly RootVisitor<TEntity> Instance = new RootVisitor<TEntity>();
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)

@@ -5,13 +5,6 @@ using Starcounter.Linq.Visitors;
 
 namespace Starcounter.Linq
 {
-    public interface IQueryContext
-    {
-        object Execute(Expression expression);
-        object Execute<TResult>(Expression expression);
-        string GetQuery(Expression expression);
-    }
-
     public class QueryContext<T> : IQueryContext
     {
         public object Execute(Expression expression) => Execute<T>(expression);
@@ -35,7 +28,7 @@ namespace Starcounter.Linq
                 return default(TResult);
             }
             var resultType = result.GetType();
-            
+
             // SC lifts underlying types to a bigger ones in some cases.
             // Look at the issue https://github.com/Starcounter/Home/issues/209 for getting more info.
             if (resultType != typeof(TResult) && !resultType.IsSubclassOf(typeof(TResult)))
@@ -78,32 +71,7 @@ namespace Starcounter.Linq
                     return Convert.ToSingle(result);
                 }
             }
-            return (TResult) result;
-        }
-
-
-        public string GetQuery(Expression expression)
-        {
-            var query = new QueryBuilder<T>();
-
-            RootVisitor<T>.Instance.Visit(expression, query);
-            var sql = query.BuildSqlString();
-            return sql;
-        }
-    }
-
-    public class DummyQueryContext<T> : IQueryContext
-    {
-        public object Execute(Expression expression) => Execute<T>(expression);
-
-        public object Execute<TResult>(Expression expression)
-        {
-            var query = new QueryBuilder<T>();
-
-            RootVisitor<T>.Instance.Visit(expression,query);
-            query.BuildSqlString();
-            query.GetVariables();
-            return null;
+            return (TResult)result;
         }
 
         public string GetQuery(Expression expression)

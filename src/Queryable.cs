@@ -13,7 +13,7 @@ namespace Starcounter.Linq
         //This costs a lot of cycles, we simply bypass this and translate the base expression here
         public T FirstOrDefault(Expression<Func<T, bool>> predicate)
         {
-            var res =  Provider.Execute<IEnumerable<T>>(predicate);
+            var res = Provider.Execute<IEnumerable<T>>(predicate);
             if (res == null)
             {
                 return default(T);
@@ -21,9 +21,8 @@ namespace Starcounter.Linq
             return res.FirstOrDefault();
         }
 
-     //   public Queryable(IQueryContext queryContext) => Initialize(new QueryProvider(queryContext), Expression.Empty());
+        //public Queryable(IQueryContext queryContext) => Initialize(new QueryProvider(queryContext), Expression.Empty());
 
-        
         public IEnumerator<T> GetEnumerator()
         {
             return Provider.Execute<IEnumerable<T>>(Expression)?.GetEnumerator() ?? Enumerable.Empty<T>().GetEnumerator();
@@ -41,8 +40,7 @@ namespace Starcounter.Linq
         public Queryable(IQueryProvider provider, Expression expression)
         {
             if (expression != null && !typeof(IQueryable<T>).IsAssignableFrom(expression.Type))
-                throw new ArgumentException(
-                    $"Not assignable from {expression.Type}", nameof(expression));
+                throw new ArgumentException($"Not assignable from {expression.Type}", nameof(expression));
 
             Provider = provider ?? throw new ArgumentNullException(nameof(provider));
             Expression = expression ?? Expression.Constant(this);

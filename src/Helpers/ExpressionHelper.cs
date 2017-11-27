@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Starcounter.Linq.Helpers
 {
-    public static class ExpressionHelper
+    internal static class ExpressionHelper
     {
         public static object RetrieveValue(this MemberExpression node)
         {

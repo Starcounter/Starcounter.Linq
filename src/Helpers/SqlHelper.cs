@@ -1,8 +1,9 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Starcounter.Linq.Helpers
 {
-    public static class SqlHelper
+    internal static class SqlHelper
     {
         /// <summary>
         /// Escape single identifier.
@@ -34,5 +35,9 @@ namespace Starcounter.Linq.Helpers
             sb.Remove(sb.Length - 1, 1);
             return sb.ToString();
         }
+
+        //This returns the source alias for a type.
+        //e.g FROM Person P
+        public static string SourceName(this Type self) => self.Name[0].ToString();
     }
 }

@@ -13,7 +13,7 @@ namespace Starcounter.Linq
     //This way, we can have a zero cost cache of methods for each entity type
     //public static fields in a generic class are often a bug, but not in this case
     //we explicitly want to be able from one generic class get hold of the generic methods of the same type w/o lookups
-    public static class KnownMethods<TEntity>
+    internal static class KnownMethods<TEntity>
     {
         private static readonly IQueryable<TEntity> IQueryable = null;
         private static readonly Queryable<TEntity> Queryable = null;
@@ -41,7 +41,7 @@ namespace Starcounter.Linq
     }
 
     //These are all the non generic known methods
-    public static class KnownMethods
+    internal static class KnownMethods
     {
         private static readonly int[] Enumerable = null;
         private static readonly IQueryable<int> IQueryable = null;

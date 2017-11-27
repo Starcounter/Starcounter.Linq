@@ -3,7 +3,7 @@ using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Visitors
 {
-    public class SelectVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
+    internal class SelectVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
     {
         public static SelectVisitor<TEntity> Instance = new SelectVisitor<TEntity>();
 

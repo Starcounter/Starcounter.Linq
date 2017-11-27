@@ -5,7 +5,7 @@ using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Visitors
 {
-    public class WhereVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
+    internal class WhereVisitor<TEntity> : StatelessVisitor<QueryBuilder<TEntity>>
     {
         public static WhereVisitor<TEntity> Instance = new WhereVisitor<TEntity>();
 

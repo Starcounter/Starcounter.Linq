@@ -51,15 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompiledQuery.cs" />
-    <Compile Include="DB.cs" />
     <Compile Include="DbLinq.cs" />
+    <Compile Include="DummyLinq.cs" />
+    <Compile Include="DummyQueryContext.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
+    <Compile Include="IQueryContext.cs" />
     <Compile Include="KnownMethods.cs" />
     <Compile Include="Visitors\OrderByVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilder.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Queryable.cs" />
     <Compile Include="QueryContext.cs" />
     <Compile Include="QueryProvider.cs" />
