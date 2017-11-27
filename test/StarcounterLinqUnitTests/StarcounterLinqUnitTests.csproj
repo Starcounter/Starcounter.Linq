@@ -106,7 +106,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Starcounter.Linq.csproj">
+    <ProjectReference Include="..\..\src\Starcounter.Linq\Starcounter.Linq.csproj">
       <Project>{df08e065-aaf1-42db-a92e-d288154f5663}</Project>
       <Name>Starcounter.Linq</Name>
     </ProjectReference>
