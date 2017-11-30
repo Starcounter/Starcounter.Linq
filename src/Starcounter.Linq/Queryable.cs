@@ -21,6 +21,16 @@ namespace Starcounter.Linq
             return res.FirstOrDefault();
         }
 
+        public T First(Expression<Func<T, bool>> predicate)
+        {
+            var res = Provider.Execute<IEnumerable<T>>(predicate);
+            if (res == null)
+            {
+                throw new InvalidOperationException("Sequence has no elements");
+            }
+            return res.First();
+        }
+
         //public Queryable(IQueryContext queryContext) => Initialize(new QueryProvider(queryContext), Expression.Empty());
 
         public IEnumerator<T> GetEnumerator()

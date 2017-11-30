@@ -21,10 +21,10 @@ namespace Starcounter.Linq
         public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
         public static readonly MethodInfo IQueryableSkip = MethodFromExample(() => IQueryable.Skip(0));
 
-        public static readonly MethodInfo QueryableFirstOrDefault = MethodFromExample(() => Queryable.FirstOrDefault());
         public static readonly MethodInfo QueryableFirstOrDefaultPred = MethodFromExample(() => Queryable.FirstOrDefault(i => true));
-        public static readonly MethodInfo IQueryableFirstOrDefault = MethodFromExample(() => IQueryable.FirstOrDefault());
         public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
+        public static readonly MethodInfo QueryableFirstPred = MethodFromExample(() => Queryable.First(i => true));
+        public static readonly MethodInfo IQueryableFirstPred = MethodFromExample(() => IQueryable.First(i => true));
         public static readonly MethodInfo IQueryableWhere = MethodFromExample(() => IQueryable.Where(i => true));
         public static readonly MethodInfo IQueryableCountPredicate = MethodFromExample(() => IQueryable.Count(i => true));
 

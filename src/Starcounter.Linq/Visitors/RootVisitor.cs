@@ -11,13 +11,13 @@ namespace Starcounter.Linq.Visitors
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
             var method = node.Method;
-            if (method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred)
+            if (method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.QueryableFirstPred)
             {
                 state.Fetch(1);
                 var expression = node.Arguments[0];
                 VisitWhere(expression, state);
             }
-            else if (method == KnownMethods<TEntity>.IQueryableFirstOrDefaultPred)
+            else if (method == KnownMethods<TEntity>.IQueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.IQueryableFirstPred)
             {
                 var left = node.Arguments[0];
                 Visit(left, state);
@@ -146,7 +146,7 @@ namespace Starcounter.Linq.Visitors
             }
             else
             {
-                //   throw new NotSupportedException();
+                throw new NotSupportedException();
             }
         }
 

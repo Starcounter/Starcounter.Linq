@@ -36,5 +36,33 @@ namespace Starcounter.Linq.Tests
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P FETCH 10 OFFSET 20",
                 Sql(() => Objects<Person>().Skip(skipValue).Take(10)));
         }
+
+        [Fact]
+        public void FirstOrDefault()
+        {
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
+                Sql(() => Objects<Person>().FirstOrDefault()));
+        }
+
+        [Fact]
+        public void First()
+        {
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",
+                Sql(() => Objects<Person>().First()));
+        }
+
+        [Fact]
+        public void FirstOrDefault_Predicate()
+        {
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?)) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Name == "XXX")));
+        }
+
+        [Fact]
+        public void First_Predicate()
+        {
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?)) FETCH 1",
+                Sql(() => Objects<Person>().First(p => p.Name == "XXX")));
+        }
     }
 }
