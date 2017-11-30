@@ -8,16 +8,16 @@ namespace StarcounterLinqUnitTests.Tests
     {
         public BaseTestsFixture()
         {
-            Scheduling.ScheduleTask(() =>
+            Scheduling.RunTask(() =>
             {
                 DataHelper.ResetData();
                 DataHelper.CreateEmployees();
-            }, waitForCompletion: true);
+            }).Wait();
         }
 
         public void Dispose()
         {
-            Scheduling.ScheduleTask(DataHelper.ResetData, waitForCompletion: true);
+            Scheduling.RunTask(DataHelper.ResetData).Wait();
         }
     }
 }

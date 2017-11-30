@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Starcounter, untone</authors>
+    <owners>Starcounter, untone</owners>
+    <licenseUrl>https://github.com/Starcounter/Starcounter.Linq/blob/prepare-release/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Starcounter/Starcounter.Linq</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>LINQ to SQL Provider for Starcounter Database</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>Starcounter LINQ</tags>
+  </metadata>
+</package>
