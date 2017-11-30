@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/Starcounter/Starcounter.Linq</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>LINQ Provider for Starcounter DB</releaseNotes>
+    <releaseNotes>LINQ to SQL Provider for Starcounter Database</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Starcounter LINQ</tags>
   </metadata>

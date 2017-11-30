@@ -33,6 +33,7 @@ namespace Starcounter.Linq
         public Type ElementType => typeof(T);
 
         public Expression Expression { get; }
+
         public IQueryProvider Provider { get; }
 
         public Queryable(IQueryProvider provider) : this(provider, null) { }

@@ -5,11 +5,11 @@ namespace Starcounter.Linq
 {
     public class QueryProvider : IQueryProvider
     {
-        private readonly IQueryContext _queryContext;
+        private readonly IQueryContext QueryContext;
 
         public QueryProvider(IQueryContext queryContext)
         {
-            _queryContext = queryContext;
+            QueryContext = queryContext;
         }
 
         //Multi-method magic, this is faster than `MakeGenericType` + Activator.CreateInstance
@@ -17,8 +17,8 @@ namespace Starcounter.Linq
 
         public virtual IQueryable<T> CreateQuery<T>(Expression expression) => new Queryable<T>(this, expression);
 
-        object IQueryProvider.Execute(Expression expression) => _queryContext.Execute(expression);
+        object IQueryProvider.Execute(Expression expression) => QueryContext.Execute(expression);
 
-        T IQueryProvider.Execute<T>(Expression expression) => (T)_queryContext.Execute<T>(expression);
+        T IQueryProvider.Execute<T>(Expression expression) => (T)QueryContext.Execute<T>(expression);
     }
 }

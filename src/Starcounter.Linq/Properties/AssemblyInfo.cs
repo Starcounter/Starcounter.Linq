@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Starcounter.Linq")]
-[assembly: AssemblyDescription("LINQ Provider for Starcounter DB")]
+[assembly: AssemblyDescription("LINQ to SQL Provider for Starcounter Database")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Starcounter")]
 [assembly: AssemblyProduct("Starcounter.Linq")]
