@@ -41,7 +41,8 @@ namespace StarcounterLinqUnitTests.Helpers
                     {
                         Name = "Solution Architecture",
                         Company = company
-                    }
+                    },
+                    Disabled = true
                 };
             });
         }

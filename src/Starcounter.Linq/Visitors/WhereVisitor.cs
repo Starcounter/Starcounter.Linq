@@ -35,14 +35,10 @@ namespace Starcounter.Linq.Visitors
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.Equal:
-                    Visit(node.Left, state);
-                    state.WriteWhere(" = ");
-                    Visit(node.Right, state);
+                    VisitBinaryEquality(node, state, " = ");
                     break;
                 case ExpressionType.NotEqual:
-                    Visit(node.Left, state);
-                    state.WriteWhere(" <> ");
-                    Visit(node.Right, state);
+                    VisitBinaryEquality(node, state, " <> ");
                     break;
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
@@ -87,6 +83,21 @@ namespace Starcounter.Linq.Visitors
             }
 
             state.WriteWhere(")");
+        }
+
+        private void VisitBinaryEquality(BinaryExpression node, QueryBuilder<TEntity> state, string equalitySign)
+        {
+            if (node.Left is MemberExpression memberExpression && memberExpression.Type == typeof(bool) && memberExpression.Expression is ParameterExpression parameterExpression)
+            {
+                state.WriteWhere(parameterExpression.Type.SourceName());
+                state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberExpression.Member.Name));
+            }
+            else
+            {
+                Visit(node.Left, state);
+            }
+            state.WriteWhere(equalitySign);
+            Visit(node.Right, state);
         }
 
         public override void VisitBlock(BlockExpression node, QueryBuilder<TEntity> state)
@@ -134,8 +145,20 @@ namespace Starcounter.Linq.Visitors
         {
             if (node.Expression is ParameterExpression param)
             {
-                state.WriteWhere(param.Type.SourceName());
-                state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                if (node.Type == typeof(bool))
+                {
+                    state.WriteWhere("(");
+
+                    state.WriteWhere(param.Type.SourceName());
+                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+
+                    state.WriteWhere(" = True)");
+                }
+                else
+                {
+                    state.WriteWhere(param.Type.SourceName());
+                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                }
             }
             else
             {
@@ -259,7 +282,6 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(node.Operand, state);
             }
-            //   base.VisitUnary(node, state);
         }
 
         public override void VisitTypeBinary(TypeBinaryExpression node, QueryBuilder<TEntity> state)
