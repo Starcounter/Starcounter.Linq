@@ -24,6 +24,36 @@ namespace Starcounter.Linq.Tests
         }
 
         [Fact]
+        public void ValueIsNull()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\" IS NULL)) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department == null)));
+        }
+
+        [Fact]
+        public void ValueIsNotNull()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\" IS NOT NULL)) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department != null)));
+        }
+
+        [Fact]
+        public void ValueIsNullVariable()
+        {
+            Department department = null;
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\" IS NULL)) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department == department)));
+        }
+
+        [Fact]
+        public void ValueIsNotNullVariable()
+        {
+            Department department = null;
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\" IS NOT NULL)) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department != department)));
+        }
+
+        [Fact]
         public void ValueEquals_ReservedWordField()
         {
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Limit\" = ?)) FETCH 1",
