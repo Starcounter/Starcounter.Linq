@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Starcounter;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
@@ -216,6 +217,28 @@ namespace StarcounterLinqUnitTests.Tests
                     ? CompileQuery(() => Objects<Person>().First())()
                     : Objects<Person>().First();
                 Assert.NotNull(person);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void First_SequenceEmpty(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                if (mode == Mode.CompiledQuery)
+                {
+                    var person = CompileQuery((int age) => Objects<Person>().First(x => x.Age == age))(100);
+                    Assert.Null(person);    // Compiled Query cannot support full-featured .First() method, so it works like .FirstOrDefault()
+                }
+                else
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                    {
+                        Objects<Person>().First(x => x.Age == 100);
+                    });
+                }
             }).Wait();
         }
 
