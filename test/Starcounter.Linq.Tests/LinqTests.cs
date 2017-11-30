@@ -10,8 +10,9 @@ namespace Starcounter.Linq.Tests
         [Fact]
         public void NestedValueEquals_Complex()
         {
+            var age = 123;
             Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE (((E.\"Department\".\"Company\".\"Name\" = ?) AND (E.\"Age\" > ?))) FETCH 1",
-                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "XXX" && p.Age > 123)));
+                Sql(() => Objects<Employee>().FirstOrDefault(p => p.Department.Company.Name == "XXX" && p.Age > age)));
         }
 
         [Fact]
@@ -85,6 +86,14 @@ namespace Starcounter.Linq.Tests
         }
 
         [Fact]
+        public void StringContains_CalculatedValue()
+        {
+            var name = "XXX";
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ? || '%')) FETCH 1",
+                Sql(() => Objects<Person>().FirstOrDefault(p => p.Name.Contains(name))));
+        }
+
+        [Fact]
         public void StringStartsWith()
         {
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" LIKE ? || '%')) FETCH 1",
@@ -103,6 +112,20 @@ namespace Starcounter.Linq.Tests
         {
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P IS \"Starcounter\".\"Linq\".\"Tests\".\"Employee\")) FETCH 1",
                 Sql(() => Objects<Person>().FirstOrDefault(p => p is Employee)));
+        }
+
+        [Fact]
+        public void TypeIs_Nested()
+        {
+            Assert.Equal("SELECT D FROM \"Starcounter\".\"Linq\".\"Tests\".\"Department\" D WHERE ((D.\"Company\" IS \"Starcounter\".\"Linq\".\"Tests\".\"Company\")) FETCH 1",
+                Sql(() => Objects<Department>().FirstOrDefault(d => d.Company is Company)));
+        }
+
+        [Fact]
+        public void TypeIs_NestedTwice()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Company\" IS \"Starcounter\".\"Linq\".\"Tests\".\"Company\")) FETCH 1",
+                Sql(() => Objects<Employee>().FirstOrDefault(d => d.Department.Company is Company)));
         }
 
         [Fact]

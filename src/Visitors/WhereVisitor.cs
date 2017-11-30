@@ -146,7 +146,7 @@ namespace Starcounter.Linq.Visitors
                 }
                 if (subNode.Expression is ConstantExpression)
                 {
-                    var memberValue = this.RetrieveValue(node);
+                    var memberValue = node.RetrieveValue();
                     state.WriteWhere("?");
                     state.AddVariable(memberValue);
                 }
@@ -196,7 +196,7 @@ namespace Starcounter.Linq.Visitors
                 node.Arguments[0] is MemberExpression memberExpression)
             {
                 state.WriteWhere("(");
-                var items = (IEnumerable) this.RetrieveValue(memberExpression);
+                var items = (IEnumerable)memberExpression.RetrieveValue();
                 int i = 0;
 
                 foreach (var item in items)
@@ -259,27 +259,21 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(node.Operand, state);
             }
-         //   base.VisitUnary(node, state);
+            //   base.VisitUnary(node, state);
         }
 
         public override void VisitTypeBinary(TypeBinaryExpression node, QueryBuilder<TEntity> state)
         {
+            state.WriteWhere("(");
             if (node.Expression is ParameterExpression parm)
             {
-                state.WriteWhere($"({state.GetSourceName()} IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)})");
+                state.WriteWhere(state.GetSourceName());
             }
             else
             {
-                throw new NotSupportedException();
+                Visit(node.Expression, state);
             }
-        }
-
-        private object RetrieveValue(MemberExpression node)
-        {
-            var objectMember = Expression.Convert(node, typeof(object));
-            var getterLambda = Expression.Lambda<Func<object>>(objectMember);
-            var getter = getterLambda.Compile();
-            return getter();
+            state.WriteWhere($" IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)})");
         }
     }
 }

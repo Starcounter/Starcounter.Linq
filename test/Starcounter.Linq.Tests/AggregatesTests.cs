@@ -22,6 +22,14 @@ namespace Starcounter.Linq.Tests
         }
 
         [Fact]
+        public void CountFiltering_CalculatedValue()
+        {
+            var name = "XXX";
+            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?))",
+                Sql(() => Objects<Person>().Count(x => x.Name == name)));
+        }
+
+        [Fact]
         public void Average()
         {
             Assert.Equal("SELECT AVG(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P",

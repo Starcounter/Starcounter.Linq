@@ -17,22 +17,25 @@ namespace Starcounter.Linq.Tests
         [Fact]
         public void MultipleWhereEquals()
         {
+            var name = "XXX";
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?)) AND ((P.\"Age\" = ?))",
-                Sql(() => Objects<Person>().Where(p => p.Name == "XXX").Where(p => p.Age == 1)));
+                Sql(() => Objects<Person>().Where(p => p.Name == name).Where(p => p.Age == 1)));
         }
 
         [Fact]
         public void WhereOrEquals()
         {
+            var name = "XXX";
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE (((P.\"Name\" = ?) OR (P.\"Age\" = ?)))",
-                Sql(() => Objects<Person>().Where(p => p.Name == "XXX" || p.Age == 1)));
+                Sql(() => Objects<Person>().Where(p => p.Name == name || p.Age == 1)));
         }
 
         [Fact]
         public void WhereAndEquals()
         {
+            var name = "XXX";
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE (((P.\"Name\" = ?) AND (P.\"Age\" = ?)))",
-                Sql(() => Objects<Person>().Where(p => p.Name == "XXX" && p.Age == 1)));
+                Sql(() => Objects<Person>().Where(p => p.Name == name && p.Age == 1)));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Visitors
 {
@@ -40,9 +41,15 @@ namespace Starcounter.Linq.Visitors
             }
             else if (method == KnownMethods<TEntity>.IQueryableTake)
             {
-                if (node.Arguments[1] is ConstantExpression takeExpression)
+                if (node.Arguments[1] is ConstantExpression takeConstExpression)
                 {
-                    var value = (int)takeExpression.Value;
+                    var value = (int)takeConstExpression.Value;
+                    state.Fetch(value);
+                    Visit(node.Arguments[0], state);
+                }
+                else if (node.Arguments[1] is MemberExpression takeMemberExpression)
+                {
+                    var value = (int)takeMemberExpression.RetrieveValue();
                     state.Fetch(value);
                     Visit(node.Arguments[0], state);
                 }
@@ -53,9 +60,15 @@ namespace Starcounter.Linq.Visitors
             }
             else if (method == KnownMethods<TEntity>.IQueryableSkip)
             {
-                if (node.Arguments[1] is ConstantExpression skipExpression)
+                if (node.Arguments[1] is ConstantExpression skipConstExpression)
                 {
-                    var value = (int)skipExpression.Value;
+                    var value = (int)skipConstExpression.Value;
+                    state.Offset(value);
+                    Visit(node.Arguments[0], state);
+                }
+                else if (node.Arguments[1] is MemberExpression takeMemberExpression)
+                {
+                    var value = (int)takeMemberExpression.RetrieveValue();
                     state.Offset(value);
                     Visit(node.Arguments[0], state);
                 }
@@ -132,7 +145,7 @@ namespace Starcounter.Linq.Visitors
             }
             else
             {
-             //   throw new NotSupportedException();
+                //   throw new NotSupportedException();
             }
         }
 
@@ -148,7 +161,7 @@ namespace Starcounter.Linq.Visitors
 
         private static void VisitWhere(Expression expression, QueryBuilder<TEntity> state)
         {
-            state.BeginWhereSection(); 
+            state.BeginWhereSection();
             WhereVisitor<TEntity>.Instance.Visit(expression, state);
             state.EndWhereSection();
         }
