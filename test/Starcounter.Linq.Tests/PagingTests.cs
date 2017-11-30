@@ -5,7 +5,7 @@ using static Starcounter.Linq.Tests.Utils;
 
 namespace Starcounter.Linq.Tests
 {
-    public class TakeTests
+    public class PagingTests
     {
         [Fact]
         public void Take()
