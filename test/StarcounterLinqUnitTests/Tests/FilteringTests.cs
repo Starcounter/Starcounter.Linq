@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Starcounter;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
@@ -58,7 +59,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstStringEqual(Mode mode)
+        public void FirstOrDefault_StringEqual(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -73,7 +74,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void WhereStringEqual_Take_FirstEnumEqual(Mode mode)
+        public void WhereStringEqual_Take_FirstOrDefault_EnumEqual(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -89,7 +90,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstStringNotEqual(Mode mode)
+        public void FirstOrDefault_StringNotEqual(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -104,7 +105,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstNestedStringEqual(Mode mode)
+        public void FirstOrDefault_NestedStringEqual(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -119,7 +120,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstStringContains(Mode mode)
+        public void FirstOrDefault_StringContains(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -134,7 +135,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstStringNotContains(Mode mode)
+        public void FirstOrDefault_StringNotContains(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -149,7 +150,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstStringStartsWith(Mode mode)
+        public void FirstOrDefault_StringStartsWith(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -164,7 +165,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstStringEndsWith(Mode mode)
+        public void FirstOrDefault_StringEndsWith(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -179,7 +180,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstIntegerGreaterAndLess(Mode mode)
+        public void FirstOrDefault_IntegerGreaterAndLess(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -194,7 +195,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstStringEqualsNull__NotFound(Mode mode)
+        public void FirstOrDefault_StringEqualsNull__NotFound(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -222,7 +223,29 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstObjectEqual(Mode mode)
+        public void First_SequenceEmpty(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                if (mode == Mode.CompiledQuery)
+                {
+                    var person = CompileQuery((int age) => Objects<Person>().First(x => x.Age == age))(100);
+                    Assert.Null(person);    // Compiled Query cannot support full-featured .First() method, so it works like .FirstOrDefault()
+                }
+                else
+                {
+                    Assert.Throws<InvalidOperationException>(() =>
+                    {
+                        Objects<Person>().First(x => x.Age == 100);
+                    });
+                }
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void FirstOrDefault_ObjectEqual(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -238,7 +261,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstObjectNotEqual(Mode mode)
+        public void FirstOrDefault_ObjectNotEqual(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
@@ -251,8 +274,87 @@ namespace StarcounterLinqUnitTests.Tests
             }).Wait();
         }
 
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void FirstOrDefault_ObjectNull(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var employee = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Employee>().FirstOrDefault(p => p.Office == null))()
+                    : Objects<Employee>().FirstOrDefault(p => p.Office == null);
+
+                Assert.NotNull(employee);
+                Assert.Equal("Anton", employee.Name);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void FirstOrDefault_ObjectNotNull(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var employee = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Employee>().FirstOrDefault(p => p.Office != null))()
+                    : Objects<Employee>().FirstOrDefault(p => p.Office != null);
+
+                Assert.NotNull(employee);
+                Assert.Equal("Roger", employee.Name);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void FirstOrDefault_ObjectNull_Variable(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Office office = null;
+                var employee = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Employee>().FirstOrDefault(p => p.Office == office))()
+                    : Objects<Employee>().FirstOrDefault(p => p.Office == office);
+
+                Assert.NotNull(employee);
+                Assert.Equal("Anton", employee.Name);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void FirstOrDefault_ObjectNotNull_Variable(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Office office = null;
+                var employee = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Employee>().FirstOrDefault(p => p.Office != office))()
+                    : Objects<Employee>().FirstOrDefault(p => p.Office != office);
+
+                Assert.NotNull(employee);
+                Assert.Equal("Roger", employee.Name);
+            }).Wait();
+        }
+
         [Fact]
-        public void FirstIntegerInArray__AdHoc()
+        public void FirstOrDefault_CompiledQuery_NullParameter()
+        {
+            Scheduling.RunTask(() =>
+            {
+                Office office = null;
+                // this is incorrect, Compiled Query is not supported passing null with parameter (only inline, see FirstObjectEqualNull test)
+                var employee = CompileQuery((Office o) => Objects<Employee>().FirstOrDefault(p => p.Office == o))(office);
+
+                Assert.Null(employee);  // because the built SQL was incorrect
+            }).Wait();
+        }
+
+        [Fact]
+        public void FirstOrDefault_IntegerInArray__AdHoc()
         {
             Scheduling.RunTask(() =>
             {
@@ -264,7 +366,7 @@ namespace StarcounterLinqUnitTests.Tests
         }
 
         [Fact]
-        public void FirstIntegerInArray__NotFound__AdHoc()
+        public void FirstOrDefault_IntegerInArray__NotFound__AdHoc()
         {
             Scheduling.RunTask(() =>
             {
@@ -275,7 +377,7 @@ namespace StarcounterLinqUnitTests.Tests
         }
 
         [Fact]
-        public void FirstIntegerNotInArray__AdHoc()
+        public void FirstOrDefault_IntegerNotInArray__AdHoc()
         {
             Scheduling.RunTask(() =>
             {

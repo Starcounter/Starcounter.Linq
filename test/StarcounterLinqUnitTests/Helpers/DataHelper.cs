@@ -42,6 +42,10 @@ namespace StarcounterLinqUnitTests.Helpers
                         Name = "Solution Architecture",
                         Company = company
                     },
+                    Office = new Office
+                    {
+                        City = "Stockholm"
+                    },
                     Disabled = true
                 };
             });

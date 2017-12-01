@@ -35,10 +35,10 @@ namespace Starcounter.Linq.Visitors
                     Visit(node.Right, state);
                     break;
                 case ExpressionType.Equal:
-                    VisitBinaryEquality(node, state, " = ");
+                    VisitBinaryEquality(node, state, true);
                     break;
                 case ExpressionType.NotEqual:
-                    VisitBinaryEquality(node, state, " <> ");
+                    VisitBinaryEquality(node, state, false);
                     break;
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
@@ -85,7 +85,7 @@ namespace Starcounter.Linq.Visitors
             state.WriteWhere(")");
         }
 
-        private void VisitBinaryEquality(BinaryExpression node, QueryBuilder<TEntity> state, string equalitySign)
+        private void VisitBinaryEquality(BinaryExpression node, QueryBuilder<TEntity> state, bool isEqualsSign)
         {
             if (node.Left is MemberExpression memberExpression && memberExpression.Type == typeof(bool) && memberExpression.Expression is ParameterExpression parameterExpression)
             {
@@ -96,8 +96,17 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(node.Left, state);
             }
-            state.WriteWhere(equalitySign);
-            Visit(node.Right, state);
+
+            if (node.Right is ConstantExpression constantExpression && constantExpression.Value == null ||
+                node.Right is MemberExpression rightMemberExpression && rightMemberExpression.RetrieveValue() == null)
+            {
+                state.WriteWhere(isEqualsSign ? " IS NULL" : " IS NOT NULL");
+            }
+            else
+            {
+                state.WriteWhere(isEqualsSign ? " = " : " <> ");
+                Visit(node.Right, state);
+            }
         }
 
         public override void VisitBlock(BlockExpression node, QueryBuilder<TEntity> state)
