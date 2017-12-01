@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace Starcounter.Linq
 {
     // ReSharper disable once InconsistentNaming
-    public class DbLinq
+    public static class DbLinq
     {
         private static class Cache<T>
         {
