@@ -4,5 +4,6 @@ namespace Starcounter.Linq.Tests
     {
         public string Name { get; set; }
         public int Index { get; set; }
+        public bool Global { get; set; }
     }
 }

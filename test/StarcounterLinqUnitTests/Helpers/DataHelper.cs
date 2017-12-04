@@ -18,7 +18,11 @@ namespace StarcounterLinqUnitTests.Helpers
         {
             Db.Transact(() =>
             {
-                var company = new Company {Name = "Starcounter"};
+                var company = new Company
+                {
+                    Name = "Starcounter",
+                    Global = true
+                };
                 new Employee
                 {
                     Gender = Gender.Male,
@@ -28,7 +32,8 @@ namespace StarcounterLinqUnitTests.Helpers
                     Department = new Department
                     {
                         Name = "Application Development",
-                        Company = company
+                        Company = company,
+                        Global = true
                     }
                 };
                 new Employee
@@ -40,7 +45,8 @@ namespace StarcounterLinqUnitTests.Helpers
                     Department = new Department
                     {
                         Name = "Solution Architecture",
-                        Company = company
+                        Company = company,
+                        Global = true
                     },
                     Office = new Office
                     {

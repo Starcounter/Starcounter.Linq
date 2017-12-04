@@ -22,6 +22,27 @@ namespace Starcounter.Linq.Tests
         }
 
         [Fact]
+        public void BooleanTrue_Nested()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Global\" = True))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Global)));
+        }
+
+        [Fact]
+        public void BooleanTrue_NestedTwice()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Company\".\"Global\" = True))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Company.Global)));
+        }
+
+        [Fact]
+        public void BooleanFalse_NestedTwice()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE (NOT (E.\"Department\".\"Company\".\"Global\" = True))",
+                Sql(() => Objects<Employee>().Where(p => !p.Department.Company.Global)));
+        }
+
+        [Fact]
         public void BooleanEquals()
         {
             Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Disabled\" = ?))",
@@ -32,7 +53,37 @@ namespace Starcounter.Linq.Tests
         public void BooleanEqualsNot()
         {
             Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Disabled\" <> ?))",
-                Sql(() => Objects<Employee>().Where(p => p.Disabled != true)));
+                Sql(() => Objects<Employee>().Where(p => p.Disabled != false)));
+        }
+
+        [Fact]
+        public void BooleanEquals_Variable_Nested()
+        {
+            var fl = false;
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Global\" = ?))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Global == fl)));
+        }
+
+        [Fact]
+        public void BooleanEqualsNot_Variable_Nested()
+        {
+            var fl = false;
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Global\" <> ?))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Global != fl)));
+        }
+
+        [Fact]
+        public void BooleanEquals_NestedTwice()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Company\".\"Global\" = ?))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Company.Global == false)));
+        }
+
+        [Fact]
+        public void BooleanEqualsNot_NestedTwice()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\".\"Company\".\"Global\" <> ?))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Company.Global != false)));
         }
 
         [Fact]

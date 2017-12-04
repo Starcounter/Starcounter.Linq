@@ -15,7 +15,7 @@ namespace StarcounterLinqUnitTests
                 DbLinq.Objects<Department>().Where(e => e.Company == com));
 
         public string Name { get; set; }
-
+        public bool Global { get; set; }
         public IEnumerable<Department> Departments => DepartmentsByCompany(this);
     }
 }
