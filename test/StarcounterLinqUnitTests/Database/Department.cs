@@ -18,5 +18,6 @@ namespace StarcounterLinqUnitTests
         public string Name { get; set; }
 
         public IEnumerable<Employee> Employees => EmployeesByDepartment(this);
+        public bool Global { get; set; }
     }
 }

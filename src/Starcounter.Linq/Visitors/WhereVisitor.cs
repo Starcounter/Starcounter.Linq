@@ -87,10 +87,17 @@ namespace Starcounter.Linq.Visitors
 
         private void VisitBinaryEquality(BinaryExpression node, QueryBuilder<TEntity> state, bool isEqualsSign)
         {
-            if (node.Left is MemberExpression memberExpression && memberExpression.Type == typeof(bool) && memberExpression.Expression is ParameterExpression parameterExpression)
+            if (node.Left is MemberExpression memberExpression && memberExpression.Type == typeof(bool))
             {
-                state.WriteWhere(parameterExpression.Type.SourceName());
-                state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberExpression.Member.Name));
+                if (memberExpression.Expression is ParameterExpression parameterExpression)
+                {
+                    state.WriteWhere(parameterExpression.Type.SourceName());
+                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberExpression.Member.Name));
+                }
+                else
+                {
+                    VisitMember(memberExpression, state, false);
+                }
             }
             else
             {
@@ -152,16 +159,28 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMember(MemberExpression node, QueryBuilder<TEntity> state)
         {
+            VisitMember(node, state, true);
+        }
+
+        public void VisitMember(MemberExpression node, QueryBuilder<TEntity> state, bool specifyValueForBoolean)
+        {
+            var isBoolean = node.Type == typeof(bool);
             if (node.Expression is ParameterExpression param)
             {
-                if (node.Type == typeof(bool))
+                if (isBoolean)
                 {
-                    state.WriteWhere("(");
+                    if (specifyValueForBoolean)
+                    {
+                        state.WriteWhere("(");
+                    }
 
                     state.WriteWhere(param.Type.SourceName());
                     state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
 
-                    state.WriteWhere(" = True)");
+                    if (specifyValueForBoolean)
+                    {
+                        state.WriteWhere(" = True)");
+                    }
                 }
                 else
                 {
@@ -184,8 +203,18 @@ namespace Starcounter.Linq.Visitors
                 }
                 else if (subNode.Expression is ParameterExpression)
                 {
+                    if (isBoolean && specifyValueForBoolean)
+                    {
+                        state.WriteWhere("(");
+                    }
+
                     Visit(node.Expression, state);
                     state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+
+                    if (isBoolean && specifyValueForBoolean)
+                    {
+                        state.WriteWhere(" = True)");
+                    }
                 }
                 else
                 {
