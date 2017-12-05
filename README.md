@@ -1,16 +1,16 @@
 # Starcounter.Linq
 
-Starcounter.Linq is a LINQ to SQL Provider for Starcounter Database. It uses standard LINQ syntax for queries.
+Starcounter.Linq is a LINQ to SQL Provider for Starcounter. It uses standard LINQ syntax for queries.
 
 It is available for downloading as [Starcounter.Linq](https://www.nuget.org/packages/Starcounter.Linq/) NuGet package.
 
 ## Requirements
 
-Requires Starcounter version 2.3.1 and .NET Framework 4.5.
+Requires Starcounter version 2.3.1 or later and .NET Framework 4.5.
 
 ## How to use
 
-Firstly, in your Starcounter app add a reference to `Starcounter.Linq.dll` through NuGet: `Install-Package Starcounter.Linq`.
+First, in your Starcounter app, add a reference to `Starcounter.Linq.dll` through NuGet: `Install-Package Starcounter.Linq`.
 
 `DbLinq` static class defined in `Starcounter.Linq` namespace should be used as starting point when you want to build LINQ queries. It contains two important methods: `Objects<T>` and `CompileQuery<T>` (many overloaded ones) which are used for two different approaches. For example:
 
@@ -26,16 +26,16 @@ var jennifers = peopleByNameQuery("Jennifer");
 
 ## Ad-hoc requests
 
-Using this approach you build a LINQ expression and obtain data as usual when an application needs it.
+With this approach, you build a LINQ expression and obtain data as usual when an application needs it.
 
 `DbLinq.Objects<T>()` returns a data context `Queryable<T>` which can be used for obtaining data.
 
-We recommend to use it only in cases when a request is expected to be executed infrequently. The reason is that it is very expensive to translate LINQ expression to SQL. Using this approach such translating will be done every calling.
+The LINQ expression is translated to SQL every time it's called if `DbLinq.Objects<T>()` is called. This is an expensive operation. Thus, don't use `DbLinq.Objects<T>()` in places where it's executed many times.
 
 Example:
 
 ```csharp
-// this method is used quite rare, so we can use ad-hoc requests here
+// this method is rarely used, so we can use ad-hoc requests here
 void Handle(Input.DeleteGroupTrigger action)
 {
     Db.Transact(() =>
@@ -51,13 +51,13 @@ void Handle(Input.DeleteGroupTrigger action)
 }
 ```
 
-## Compiled Query
+## Compiled query
 
-Compiled Query lets you build a LINQ expression with translated SQL once and use it many times.
+Compiled query lets you build a LINQ expression with translated SQL once and use it many times.
 
 `DbLinq.CompileQuery<T>` returns a delegate `Func<IEnumerable<T>>` which can be invoked to execute the compiled query. It has many overloads and it supports passing parameters.
 
-We recommend to use in all cases when a request is executed quite frequently.
+Use `DbLinq.CompileQuery<T>()` in places where the query will be executed many times since it only translates the LINQ statement to SQL one time which makes subsequent calls fast.
 
 Example:
 
@@ -77,7 +77,7 @@ partial class SurfacePage : Json
     ...
     */
 
-    // this method is called quite frequently so we should use compiled queries
+    // this method is often called, so we should use compiled queries
     public void RefreshData()
     {
         this.SurfaceGroups.Data = SurfaceGroupsQuery();
@@ -86,13 +86,13 @@ partial class SurfacePage : Json
 }
 ```
 
-Please note, that Compiled Query has some additional restrictions since it represents a pre-translated SQL and should support passing parameters.
+Compiled queries are more restricted than ad-hoc requests since it represents a pre-translated SQL and should support passing parameters. Read more about the restrictions below.
 
 ## Restrictions
 
 ### Database fields
 
-Starcounter.Linq supports **only database properties**. It is not possible to get access to fields.
+Starcounter.Linq **only supports database properties**. It is not possible to get access to fields.
 
 Example:
 
@@ -104,11 +104,11 @@ DbLinq.Objects<WebTemplateGroup>().OrderBy(x => x.Name);
 DbLinq.Objects<WebTemplateGroup>().OrderBy(x => x.SortNumber);
 ```
 
-Also please note, that the exception will be thrown when calling the method which contains the query definition, i.e. not from Starcounter.Linq code.
+The exception will be thrown when calling the method which contains the query definition, which means that the exception will not be thrown from Starcounter.Linq code.
 
 ### `Take` and `Skip` methods
 
-Starcounter.Linq uses literal values for `FETCH` and `OFFSET` clauses (for performance reason), it means that you cannot pass the value when executing a compiled query.
+Starcounter.Linq uses literal values for `FETCH` and `OFFSET` clauses for performance reason, it means that you cannot pass the value when executing a compiled query.
 
 Example:
 
@@ -120,14 +120,14 @@ var people = DbLinq.Objects<Person>().Take(10).Skip(20).ToList();
 var query = DbLinq.CompileQuery((int take, int skip) => DbLinq.Objects<Person>().Take(take).Skip(skip));
 people = query(10, 20);
 
-// work well
+// works well
 var query = DbLinq.CompileQuery(() => DbLinq.Objects<Person>().Take(10).Skip(20));
 people = query();
 ```
 
 ### NULL values
 
-Since comparisons with `null` values should be translated to `IS NULL` form in SQL, there is no possibility to pass such values with parameters into compiled queries.
+Since comparisons with `null` values are translated to `IS NULL` form in SQL, there is no possibility to pass such values with parameters into compiled queries.
 
 Example:
 
@@ -148,7 +148,7 @@ var withoutOfficeQuery2 = DbLinq.CompileQuery(() =>
 var withOfficeQuery = DbLinq.CompileQuery((notNullOffice) =>
                       DbLinq.Objects<Employee>().FirstOrDefault(p => p.Office == notNullOffice));
 
-// it does not work because the SQL query has been already translated and IS NULL cannot be inserted
+// it does not work because the SQL query has been translated and IS NULL cannot be inserted
 employee1 = withOfficeQuery(null);
 
 // that should be written in the following way
@@ -157,19 +157,19 @@ employee1 = office == null ? withoutOfficeQuery() : withOfficeQuery(office);
 
 ### `First` method
 
-For Compiled Query `First` method works like `FirstOrDefault`, i.e. it doesn't throw an exception when a sequence has no elements.
+For compiled queries the `First` method works like `FirstOrDefault` - it doesn't throw an exception when a sequence has no elements.
 
 ```csharp
 // throws exception as expected
 var employee = DbLinq.Objects<Employee>().First(x => x.Age == 100);
 
-// just returns null
+// returns null
 employee = DbLinq.CompileQuery((int age) => DbLinq.Objects<Employee>().First(x => x.Age == age))(100);
 ```
 
 ### `Contains` method
 
-Compiled Query **does not support** `Contains` method while ad-hoc requests works well.
+The `Contains` method is supported by ad-hoc requests but not by compiled queries.
 
 ### Roadmap
 
