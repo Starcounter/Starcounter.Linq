@@ -200,7 +200,7 @@ namespace StarcounterLinqUnitTests.Tests
             Scheduling.RunTask(() =>
             {
                 var person = mode == Mode.CompiledQuery
-                    ? CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name == name))(null)
+                    ? CompileQuery(() => Objects<Person>().FirstOrDefault(p => p.Name == null))()
                     : Objects<Person>().FirstOrDefault(p => p.Name == null);
                 Assert.Null(person);
             }).Wait();
@@ -347,7 +347,7 @@ namespace StarcounterLinqUnitTests.Tests
             {
                 Office office = null;
                 // this is incorrect, Compiled Query is not supported passing null with parameter (only inline, see FirstObjectEqualNull test)
-                var employee = CompileQuery((Office o) => Objects<Employee>().FirstOrDefault(p => p.Office == o))(office);
+                var employee = CompileQuery((Office o) => Objects<Employee>().FirstOrDefault(p => p.Office != o))(office);
 
                 Assert.Null(employee);  // because the built SQL was incorrect
             }).Wait();
