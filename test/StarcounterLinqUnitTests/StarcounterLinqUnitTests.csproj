@@ -98,6 +98,7 @@
     <Compile Include="Tests\BaseTestsFixture.cs" />
     <Compile Include="Tests\FilteringTests.cs" />
     <Compile Include="Tests\BooleanTests.cs" />
+    <Compile Include="Tests\LinqTests.cs" />
     <Compile Include="Tests\PagingTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -31,7 +31,21 @@ namespace Starcounter.Linq
             return res.First();
         }
 
-        //public Queryable(IQueryContext queryContext) => Initialize(new QueryProvider(queryContext), Expression.Empty());
+        public bool Any(Expression<Func<T, bool>> predicate)
+        {
+            return InternalAny(predicate);
+        }
+
+        public bool Any()
+        {
+            return InternalAny(Expression.Empty());
+        }
+
+        private bool InternalAny(Expression predicate)
+        {
+            var res = Provider.Execute<IEnumerable<T>>(predicate);
+            return res != null && res.Any();
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
