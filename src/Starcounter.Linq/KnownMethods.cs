@@ -23,8 +23,25 @@ namespace Starcounter.Linq
 
         public static readonly MethodInfo QueryableFirstOrDefaultPred = MethodFromExample(() => Queryable.FirstOrDefault(i => true));
         public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
-        public static readonly MethodInfo QueryableFirstPred = MethodFromExample(() => Queryable.First(i => true));
+        public static readonly MethodInfo QueryableFirstOrDefault = MethodFromExample(() => Queryable.FirstOrDefault());
+        public static readonly MethodInfo IQueryableFirstOrDefault = MethodFromExample(() => IQueryable.FirstOrDefault());
+
         public static readonly MethodInfo IQueryableFirstPred = MethodFromExample(() => IQueryable.First(i => true));
+        public static readonly MethodInfo IQueryableFirst = MethodFromExample(() => IQueryable.First());
+
+        public static readonly MethodInfo IQueryableSingleOrDefaultPred = MethodFromExample(() => IQueryable.SingleOrDefault(i => true));
+        public static readonly MethodInfo IQueryableSingleOrDefault = MethodFromExample(() => IQueryable.SingleOrDefault());
+
+        public static readonly MethodInfo IQueryableSinglePred = MethodFromExample(() => IQueryable.Single(i => true));
+        public static readonly MethodInfo IQueryableSingle = MethodFromExample(() => IQueryable.Single());
+
+        public static readonly MethodInfo IQueryableAllPred = MethodFromExample(() => IQueryable.All(i => true));
+
+        public static readonly MethodInfo QueryableAnyPred = MethodFromExample(() => Queryable.Any(i => true));
+        public static readonly MethodInfo IQueryableAnyPred = MethodFromExample(() => IQueryable.Any(i => true));
+        public static readonly MethodInfo QueryableAny = MethodFromExample(() => Queryable.Any());
+        public static readonly MethodInfo IQueryableAny = MethodFromExample(() => IQueryable.Any());
+
         public static readonly MethodInfo IQueryableWhere = MethodFromExample(() => IQueryable.Where(i => true));
         public static readonly MethodInfo IQueryableCountPredicate = MethodFromExample(() => IQueryable.Count(i => true));
 

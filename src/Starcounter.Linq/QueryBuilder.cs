@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using Starcounter.Linq.Helpers;
 
@@ -23,6 +24,10 @@ namespace Starcounter.Linq
             if (!type.IsConstructedGenericType) return type;
             return type.GetGenericArguments().First();
         }
+
+        public QueryResultMethod ResultMethod { get; set; } = QueryResultMethod.FirstOrDefault;
+
+        public Expression AllMethodExpression { get; set; }
 
         private StringBuilder Select { get; } = new StringBuilder();
         private StringBuilder Where { get; } = new StringBuilder();

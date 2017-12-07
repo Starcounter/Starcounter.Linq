@@ -11,19 +11,60 @@ namespace Starcounter.Linq.Visitors
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
             var method = node.Method;
-            if (method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.QueryableFirstPred)
+            if (method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.QueryableAnyPred)
             {
-                state.Fetch(1);
+                state.ResultMethod = method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred
+                    ? QueryResultMethod.FirstOrDefault
+                    : QueryResultMethod.Any;
                 var expression = node.Arguments[0];
-                VisitWhere(expression, state);
+                if (state.ResultMethod == QueryResultMethod.All)
+                {
+                    state.AllMethodExpression = expression;
+                }
+                else
+                {
+                    VisitWhere(expression, state);
+                }
             }
-            else if (method == KnownMethods<TEntity>.IQueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.IQueryableFirstPred)
+            else if (method == KnownMethods<TEntity>.QueryableFirstOrDefault || method == KnownMethods<TEntity>.QueryableAny)
+            {
+                state.ResultMethod = method == KnownMethods<TEntity>.QueryableFirstOrDefault
+                    ? QueryResultMethod.FirstOrDefault
+                    : QueryResultMethod.Any;
+            }
+            else if (method == KnownMethods<TEntity>.IQueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.IQueryableFirstPred ||
+                     method == KnownMethods<TEntity>.IQueryableSingleOrDefaultPred || method == KnownMethods<TEntity>.IQueryableSinglePred ||
+                     method == KnownMethods<TEntity>.IQueryableAnyPred || method == KnownMethods<TEntity>.IQueryableAllPred)
             {
                 var left = node.Arguments[0];
                 Visit(left, state);
-                state.Fetch(1);
+                state.ResultMethod = method == KnownMethods<TEntity>.IQueryableFirstOrDefaultPred ? QueryResultMethod.FirstOrDefault
+                    : method == KnownMethods<TEntity>.IQueryableFirstPred ? QueryResultMethod.First
+                        : method == KnownMethods<TEntity>.IQueryableSingleOrDefaultPred ? QueryResultMethod.SingleOrDefault
+                            : method == KnownMethods<TEntity>.IQueryableSinglePred ? QueryResultMethod.Single
+                                : method == KnownMethods<TEntity>.IQueryableAnyPred ? QueryResultMethod.Any
+                                    : QueryResultMethod.All;
                 var expression = node.Arguments[1];
-                VisitWhere(expression, state);
+                if (state.ResultMethod == QueryResultMethod.All)
+                {
+                    state.AllMethodExpression = expression;
+                }
+                else
+                {
+                    VisitWhere(expression, state);
+                }
+            }
+            else if (method == KnownMethods<TEntity>.IQueryableFirstOrDefault || method == KnownMethods<TEntity>.IQueryableFirst ||
+                     method == KnownMethods<TEntity>.IQueryableSingleOrDefault || method == KnownMethods<TEntity>.IQueryableSingle ||
+                     method == KnownMethods<TEntity>.IQueryableAny)
+            {
+                var left = node.Arguments[0];
+                Visit(left, state);
+                state.ResultMethod = method == KnownMethods<TEntity>.IQueryableFirstOrDefault ? QueryResultMethod.FirstOrDefault
+                    : method == KnownMethods<TEntity>.IQueryableFirst ? QueryResultMethod.First
+                        : method == KnownMethods<TEntity>.IQueryableSingleOrDefault ? QueryResultMethod.SingleOrDefault
+                            : method == KnownMethods<TEntity>.IQueryableSingle ? QueryResultMethod.Single
+                                : QueryResultMethod.Any;
             }
             else if (method == KnownMethods<TEntity>.IQueryableWhere)
             {
@@ -143,10 +184,6 @@ namespace Starcounter.Linq.Visitors
                     SelectVisitor<TEntity>.Instance.Visit(right, state);
                     state.WriteSelect(")");
                 }
-            }
-            else
-            {
-                throw new NotSupportedException();
             }
         }
 

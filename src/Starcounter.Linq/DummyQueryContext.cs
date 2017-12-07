@@ -17,13 +17,17 @@ namespace Starcounter.Linq
             return null;
         }
 
-        public string GetQuery(Expression expression)
+        public TranslatedQuery GetQuery(Expression expression)
         {
             var query = new QueryBuilder<T>();
 
             RootVisitor<T>.Instance.Visit(expression, query);
             var sql = query.BuildSqlString();
-            return sql;
+            return new TranslatedQuery
+            {
+                SqlStatement = sql,
+                ResultMethod = query.ResultMethod
+            };
         }
     }
 }
