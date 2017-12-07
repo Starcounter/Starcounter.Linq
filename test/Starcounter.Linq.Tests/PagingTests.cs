@@ -54,14 +54,14 @@ namespace Starcounter.Linq.Tests
         [Fact]
         public void FirstOrDefault_Predicate()
         {
-            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?)) FETCH 1",
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?))",
                 Sql(() => Objects<Person>().FirstOrDefault(p => p.Name == "XXX")));
         }
 
         [Fact]
         public void First_Predicate()
         {
-            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?)) FETCH 1",
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" = ?))",
                 Sql(() => Objects<Person>().First(p => p.Name == "XXX")));
         }
     }

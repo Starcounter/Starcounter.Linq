@@ -155,18 +155,6 @@ employee1 = withOfficeQuery(null);
 employee1 = office == null ? withoutOfficeQuery() : withOfficeQuery(office);
 ```
 
-### `First` method
-
-For compiled queries the `First` method works like `FirstOrDefault` - it doesn't throw an exception when a sequence has no elements.
-
-```csharp
-// throws exception as expected
-var employee = DbLinq.Objects<Employee>().First(x => x.Age == 100);
-
-// returns null
-employee = DbLinq.CompileQuery((int age) => DbLinq.Objects<Employee>().First(x => x.Age == age))(100);
-```
-
 ### `Contains` method
 
 The `Contains` method is supported by ad-hoc requests but not by compiled queries.

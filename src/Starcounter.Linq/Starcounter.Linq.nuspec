@@ -6,11 +6,12 @@
     <title>$title$</title>
     <authors>Starcounter, untone</authors>
     <owners>Starcounter, untone</owners>
-    <licenseUrl>https://github.com/Starcounter/Starcounter.Linq/blob/prepare-release/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/Starcounter/Starcounter.Linq/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Starcounter/Starcounter.Linq</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>$description$</summary>
     <description>$description$</description>
-    <releaseNotes>LINQ to SQL Provider for Starcounter Database</releaseNotes>
+    <releaseNotes>Fixed bugs. Implemented new features.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Starcounter LINQ</tags>
   </metadata>
