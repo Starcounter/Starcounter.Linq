@@ -11,20 +11,23 @@ namespace Starcounter.Linq.Visitors
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
             var method = node.Method;
-            if (method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.QueryableAnyPred)
+            if (method == KnownMethods<TEntity>.QueryableDeletePred)
+            {
+                state.ResultMethod = QueryResultMethod.Delete;
+                var expression = node.Arguments[0];
+                VisitWhere(expression, state);
+            }
+            else if (method == KnownMethods<TEntity>.QueryableDeleteAll)
+            {
+                state.ResultMethod = QueryResultMethod.Delete;
+            }
+            else if (method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.QueryableAnyPred)
             {
                 state.ResultMethod = method == KnownMethods<TEntity>.QueryableFirstOrDefaultPred
                     ? QueryResultMethod.FirstOrDefault
                     : QueryResultMethod.Any;
                 var expression = node.Arguments[0];
-                if (state.ResultMethod == QueryResultMethod.All)
-                {
-                    state.AllMethodExpression = expression;
-                }
-                else
-                {
-                    VisitWhere(expression, state);
-                }
+                VisitWhere(expression, state);
             }
             else if (method == KnownMethods<TEntity>.QueryableFirstOrDefault || method == KnownMethods<TEntity>.QueryableAny)
             {

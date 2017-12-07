@@ -91,8 +91,15 @@ namespace Starcounter.Linq.Visitors
             {
                 if (memberExpression.Expression is ParameterExpression parameterExpression)
                 {
-                    state.WriteWhere(parameterExpression.Type.SourceName());
-                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberExpression.Member.Name));
+                    if (state.ResultMethod == QueryResultMethod.Delete)
+                    {
+                        state.WriteWhere(SqlHelper.EscapeSingleIdentifier(memberExpression.Member.Name));
+                    }
+                    else
+                    {
+                        state.WriteWhere(parameterExpression.Type.SourceName());
+                        state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberExpression.Member.Name));
+                    }
                 }
                 else
                 {
@@ -174,8 +181,15 @@ namespace Starcounter.Linq.Visitors
                         state.WriteWhere("(");
                     }
 
-                    state.WriteWhere(param.Type.SourceName());
-                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                    if (state.ResultMethod == QueryResultMethod.Delete)
+                    {
+                        state.WriteWhere(SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                    }
+                    else
+                    {
+                        state.WriteWhere(param.Type.SourceName());
+                        state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                    }
 
                     if (specifyValueForBoolean)
                     {
@@ -184,8 +198,15 @@ namespace Starcounter.Linq.Visitors
                 }
                 else
                 {
-                    state.WriteWhere(param.Type.SourceName());
-                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                    if (state.ResultMethod == QueryResultMethod.Delete)
+                    {
+                        state.WriteWhere(SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                    }
+                    else
+                    {
+                        state.WriteWhere(param.Type.SourceName());
+                        state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+                    }
                 }
             }
             else
@@ -198,8 +219,15 @@ namespace Starcounter.Linq.Visitors
                 if (subNode.Expression is ConstantExpression)
                 {
                     var memberValue = node.RetrieveValue();
-                    state.WriteWhere("?");
-                    state.AddVariable(memberValue);
+                    if (memberValue is LambdaExpression lambdaExpression)
+                    {
+                        Visit(lambdaExpression.Body, state);
+                    }
+                    else
+                    {
+                        state.WriteWhere("?");
+                        state.AddVariable(memberValue);
+                    }
                 }
                 else if (subNode.Expression is ParameterExpression)
                 {

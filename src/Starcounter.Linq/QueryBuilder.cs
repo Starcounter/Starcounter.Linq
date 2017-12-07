@@ -17,7 +17,8 @@ namespace Starcounter.Linq
         private static readonly string QueryTypeName = SqlHelper.EscapeIdentifiers(QueryType.FullName);
         // Precompute the from clause for this <T>
         // ReSharper disable once StaticMemberInGenericType
-        private static readonly string From = $" FROM {QueryTypeName} {QueryType.SourceName()}";
+        private static readonly string FromAlias = $" FROM {QueryTypeName} {QueryType.SourceName()}";
+        private static readonly string From = $" FROM {QueryTypeName}";
 
         private static Type UnwrapQueryType(Type type)
         {
@@ -78,18 +79,25 @@ namespace Starcounter.Linq
 
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append("SELECT ");
-
-            if (Select.Length == 0)
+            if (ResultMethod == QueryResultMethod.Delete)
             {
-                stringBuilder.Append(SourceName); //SELECT TEntity
+                stringBuilder.Append("DELETE");
+                stringBuilder.Append(From);
             }
             else
             {
-                stringBuilder.Append(Select); //SELECT AVG(a.b.c)
-            }
+                stringBuilder.Append("SELECT ");
 
-            stringBuilder.Append(From);
+                if (Select.Length == 0)
+                {
+                    stringBuilder.Append(SourceName); //SELECT TEntity
+                }
+                else
+                {
+                    stringBuilder.Append(Select); //SELECT AVG(a.b.c)
+                }
+                stringBuilder.Append(FromAlias);
+            }
 
             if (Where.Length > 0)
             {
