@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq
 {
