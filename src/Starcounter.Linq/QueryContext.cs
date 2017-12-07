@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Starcounter.Linq.Helpers;
 using Starcounter.Linq.Visitors;
 
 namespace Starcounter.Linq

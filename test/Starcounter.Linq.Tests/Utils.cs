@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Tests
 {

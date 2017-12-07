@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Starcounter;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
