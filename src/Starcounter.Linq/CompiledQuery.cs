@@ -28,7 +28,14 @@ namespace Starcounter.Linq
             switch (queryExpression.Body)
             {
                 case MethodCallExpression methodCall:
-                    contextType = methodCall.Arguments.Any() ? (methodCall.Arguments[0] as MethodCallExpression)?.Type.GenericTypeArguments[0] : methodCall.Type;
+                    if (methodCall.Arguments.Any() && methodCall.Arguments[0] is MethodCallExpression methodCallExpression)
+                    {
+                        contextType = methodCallExpression.Type.GenericTypeArguments[0];
+                    }
+                    else
+                    {
+                        contextType = methodCall.Object?.Type.GenericTypeArguments.FirstOrDefault() ?? methodCall.Type;
+                    }
                     break;
                 default:
                     throw new NotSupportedException();

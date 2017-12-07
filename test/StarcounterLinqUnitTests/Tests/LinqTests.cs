@@ -12,22 +12,30 @@ namespace StarcounterLinqUnitTests.Tests
         {
         }
 
-        [Fact]
-        public void Any_Predicate()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Any_Predicate(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
-                var any = Objects<Person>().Any(x => x.Age > 0);
+                var any = mode == Mode.CompiledQuery
+                    ? CompileQuery((int age) => Objects<Person>().Any(x => x.Age > age))(0)
+                    : Objects<Person>().Any(x => x.Age > 0);
                 Assert.True(any);
             }).Wait();
         }
 
-        [Fact]
-        public void Any()
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Any(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
-                var any = Objects<Person>().Any();
+                var any = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Any())()
+                    : Objects<Person>().Any();
                 Assert.True(any);
             }).Wait();
         }
@@ -74,6 +82,112 @@ namespace StarcounterLinqUnitTests.Tests
                     var person = mode == Mode.CompiledQuery
                         ? CompileQuery((int age) => Objects<Person>().Where(x => x.Age == age).First())(100)
                         : Objects<Person>().Where(x => x.Age == 100).First();
+                });
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Single(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var person = mode == Mode.CompiledQuery
+                    ? CompileQuery((int age) => Objects<Person>().Single(x => x.Age > age))(40)
+                    : Objects<Person>().Single(x => x.Age > 40);
+                Assert.NotNull(person);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SingleOrDefault(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var person = mode == Mode.CompiledQuery
+                    ? CompileQuery((int age) => Objects<Person>().SingleOrDefault(x => x.Age > age))(40)
+                    : Objects<Person>().SingleOrDefault(x => x.Age > 40);
+                Assert.NotNull(person);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Single_SequenceEmpty(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Assert.Throws<InvalidOperationException>(() =>
+                {
+                    var person = mode == Mode.CompiledQuery
+                        ? CompileQuery((int age) => Objects<Person>().Single(x => x.Age == age))(100)
+                        : Objects<Person>().Single(x => x.Age == 100);
+                });
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SingleOrDefault_SequenceEmpty(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var person = mode == Mode.CompiledQuery
+                    ? CompileQuery((int age) => Objects<Person>().SingleOrDefault(x => x.Age == age))(100)
+                    : Objects<Person>().SingleOrDefault(x => x.Age == 100);
+                Assert.Null(person);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Single_TooMuchSequence(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Assert.Throws<InvalidOperationException>(() =>
+                {
+                    var person = mode == Mode.CompiledQuery
+                        ? CompileQuery((int age) => Objects<Person>().Single(x => x.Age > age))(0)
+                        : Objects<Person>().Single(x => x.Age > 0);
+                });
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SingleOrDefault_TooMuchSequence(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Assert.Throws<InvalidOperationException>(() =>
+                {
+                    var person = mode == Mode.CompiledQuery
+                        ? CompileQuery((int age) => Objects<Person>().Single(x => x.Age > age))(0)
+                        : Objects<Person>().Single(x => x.Age > 0);
+                });
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_Single_SequenceEmpty(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Assert.Throws<InvalidOperationException>(() =>
+                {
+                    var person = mode == Mode.CompiledQuery
+                        ? CompileQuery((int age) => Objects<Person>().Where(x => x.Age == age).Single())(100)
+                        : Objects<Person>().Where(x => x.Age == 100).Single();
                 });
             }).Wait();
         }
