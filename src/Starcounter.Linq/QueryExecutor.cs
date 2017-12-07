@@ -7,6 +7,12 @@ namespace Starcounter.Linq
     {
         public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod)
         {
+            if (queryResultMethod == QueryResultMethod.Delete)
+            {
+                Db.SlowSQL(sql, variables);
+                return null;
+            }
+
             if (typeof(TResult).IsGenericType)
             {
                 return Db.SlowSQL<T>(sql, variables);

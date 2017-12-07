@@ -34,6 +34,20 @@ namespace Starcounter.Linq
 
         IEnumerator IEnumerable.GetEnumerator() => Provider.Execute<IEnumerable>(Expression).GetEnumerator();
 
+        public void Delete(Expression<Func<T, bool>> predicate)
+        {
+            // This should be optimized, I guess
+            Expression<Action> methodExpression = () => this.Delete(predicate);
+            var expression = Expression.Lambda<Action<Func<T, bool>>>(methodExpression.Body, Expression.Parameter(typeof(Func<T, bool>)));
+            Provider.Execute(expression.Body);
+        }
+
+        public void DeleteAll()
+        {
+            Expression<Action> expression = () => this.DeleteAll();
+            Provider.Execute(expression.Body);
+        }
+
         //Why an instance impl of FirstOrDefault instead of default extension method?
         //The extension method creates a new expression based on the old expression + a call to first or default
         //This costs a lot of cycles, we simply bypass this and translate the base expression here

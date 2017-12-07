@@ -18,6 +18,9 @@ namespace Starcounter.Linq
         private static readonly IQueryable<TEntity> IQueryable = null;
         private static readonly Queryable<TEntity> Queryable = null;
 
+        public static readonly MethodInfo QueryableDeletePred = MethodFromExample(() => Queryable.Delete(i => true));
+        public static readonly MethodInfo QueryableDeleteAll = MethodFromExample(() => Queryable.DeleteAll());
+
         public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
         public static readonly MethodInfo IQueryableSkip = MethodFromExample(() => IQueryable.Skip(0));
 
@@ -48,6 +51,14 @@ namespace Starcounter.Linq
         //This takes an expression lambda and extracts the contained method.
         //This way, we can by example specify exactly what overload we want, instead of looking up by name and args
         private static MethodInfo MethodFromExample<TIgnore>(Expression<Func<TIgnore>> fun)
+        {
+            if (fun.Body is MethodCallExpression call)
+            {
+                return call.Method;
+            }
+            throw new NotSupportedException();
+        }
+        private static MethodInfo MethodFromExample(Expression<Action> fun)
         {
             if (fun.Body is MethodCallExpression call)
             {

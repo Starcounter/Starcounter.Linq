@@ -159,7 +159,25 @@ employee1 = office == null ? withoutOfficeQuery() : withOfficeQuery(office);
 
 The `Contains` method is supported by ad-hoc requests but not by compiled queries.
 
-### Roadmap
+Example:
+
+```csharp
+var ages = new[] { 41, 42, 43 };
+var person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
+```
+
+### Deleting data
+
+Deleting data is supported by ad-hoc requests but not by compiled queries.
+
+Example:
+
+```csharp
+Objects<Person>().Delete(x => x.Age > 40);
+Objects<Person>().DeleteAll();
+```
+
+## Roadmap
 
 Look at [Starcounter.Linq#6](https://github.com/Starcounter/Starcounter.Linq/issues/6)
 
