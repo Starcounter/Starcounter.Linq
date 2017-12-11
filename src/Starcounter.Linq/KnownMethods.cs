@@ -73,7 +73,9 @@ namespace Starcounter.Linq
     {
         private static readonly int[] Enumerable = null;
         private static readonly IQueryable<int> IQueryable = null;
+        private static readonly object obj = new object();
 
+        public static readonly MethodInfo ObjectEquals = MethodFromExample(() => obj.Equals(null));
         public static readonly MethodInfo EnumerableContains = MethodFromExample(() => Enumerable.Contains(0));
         public static readonly MethodInfo StringContains = MethodFromExample(() => "".Contains(""));
         public static readonly MethodInfo StringStartsWith = MethodFromExample(() => "".StartsWith(""));

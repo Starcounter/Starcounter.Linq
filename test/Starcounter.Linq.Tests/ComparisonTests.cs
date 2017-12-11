@@ -45,6 +45,37 @@ namespace Starcounter.Linq.Tests
         }
 
         [Fact]
+        public void ObjectEqualsMethod_NullVariable()
+        {
+            Department department = null;
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\" IS NULL))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Equals(department))));
+        }
+
+        [Fact]
+        public void ObjectNotEqualsMethod_NullVariable()
+        {
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE (NOT (E.\"Department\" IS NULL))",
+                Sql(() => Objects<Employee>().Where(p => !p.Department.Equals(null))));
+        }
+
+        [Fact]
+        public void ObjectEqualsMethod_NotNullVariable()
+        {
+            Department department = new Department();
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE ((E.\"Department\" = ?))",
+                Sql(() => Objects<Employee>().Where(p => p.Department.Equals(department))));
+        }
+
+        [Fact]
+        public void ObjectNotEqualsMethod_NotNullVariable()
+        {
+            Department department = new Department();
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"Tests\".\"Employee\" E WHERE (NOT (E.\"Department\" = ?))",
+                Sql(() => Objects<Employee>().Where(p => !p.Department.Equals(department))));
+        }
+
+        [Fact]
         public void ValueNotEquals()
         {
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE ((P.\"Name\" <> ?))",
