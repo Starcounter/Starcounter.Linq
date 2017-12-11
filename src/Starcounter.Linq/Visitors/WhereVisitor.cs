@@ -87,7 +87,12 @@ namespace Starcounter.Linq.Visitors
 
         private void VisitBinaryEquality(BinaryExpression node, QueryBuilder<TEntity> state, bool isEqualsSign)
         {
-            if (node.Left is MemberExpression memberExpression && memberExpression.Type == typeof(bool))
+            this.VisitBinaryEquality(node.Left, node.Right, state, isEqualsSign);
+        }
+
+        private void VisitBinaryEquality(Expression left, Expression right, QueryBuilder<TEntity> state, bool isEqualsSign)
+        {
+            if (left is MemberExpression memberExpression && memberExpression.Type == typeof(bool))
             {
                 if (memberExpression.Expression is ParameterExpression parameterExpression)
                 {
@@ -108,18 +113,18 @@ namespace Starcounter.Linq.Visitors
             }
             else
             {
-                Visit(node.Left, state);
+                Visit(left, state);
             }
 
-            if (node.Right is ConstantExpression constantExpression && constantExpression.Value == null ||
-                node.Right is MemberExpression rightMemberExpression && rightMemberExpression.RetrieveValue() == null)
+            if (right is ConstantExpression constantExpression && constantExpression.Value == null ||
+                right is MemberExpression rightMemberExpression && rightMemberExpression.RetrieveValue() == null)
             {
                 state.WriteWhere(isEqualsSign ? " IS NULL" : " IS NOT NULL");
             }
             else
             {
                 state.WriteWhere(isEqualsSign ? " = " : " <> ");
-                Visit(node.Right, state);
+                Visit(right, state);
             }
         }
 
@@ -259,7 +264,13 @@ namespace Starcounter.Linq.Visitors
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
             ConstantExpression constNode = null;
-            if (node.Method == KnownMethods.StringContains)
+            if (node.Method == KnownMethods.ObjectEquals)
+            {
+                state.WriteWhere("(");
+                VisitBinaryEquality(node.Object, node.Arguments[0], state, true);
+                state.WriteWhere(")");
+            }
+            else if (node.Method == KnownMethods.StringContains)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
