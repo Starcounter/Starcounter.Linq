@@ -68,19 +68,5 @@ namespace Starcounter.Linq.Tests
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" P WHERE (NOT ((P.\"Age\" = ?) OR (P.\"Age\" = ?) OR (P.\"Age\" = ?)))",
                 Sql(() => Objects<Person>().Where(p => !ages.Contains(p.Age))));
         }
-
-        [Fact]
-        public void Delete()
-        {
-            Assert.Equal("DELETE FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\" WHERE ((\"Age\" > ?))",
-                Sql<Person>(() => Objects<Person>().Delete(x => x.Age > 0)));
-        }
-
-        [Fact]
-        public void DeleteAll()
-        {
-            Assert.Equal("DELETE FROM \"Starcounter\".\"Linq\".\"Tests\".\"Person\"",
-                Sql<Person>(() => Objects<Person>().DeleteAll()));
-        }
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="AggregatesTests.cs" />
     <Compile Include="BooleanTests.cs" />
     <Compile Include="ComparisonTests.cs" />
+    <Compile Include="DeleteTests.cs" />
     <Compile Include="Domain\Company.cs" />
     <Compile Include="Domain\Department.cs" />
     <Compile Include="Domain\Employee.cs" />
