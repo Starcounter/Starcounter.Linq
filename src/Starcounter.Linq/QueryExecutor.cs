@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 
 namespace Starcounter.Linq
 {
     public class QueryExecutor<T> : IQueryExecutor
     {
+        private static readonly Type enumerableType = typeof(IEnumerable);
+
         public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod)
         {
             if (queryResultMethod == QueryResultMethod.Delete)
@@ -13,7 +16,8 @@ namespace Starcounter.Linq
                 return null;
             }
 
-            if (typeof(TResult).IsGenericType)
+            var resultType = typeof(TResult);
+            if (resultType == enumerableType || resultType.GetInterfaces().Contains(enumerableType))
             {
                 return Db.SlowSQL<T>(sql, variables);
             }
