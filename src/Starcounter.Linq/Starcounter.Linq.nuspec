@@ -4,15 +4,15 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Starcounter, untone</authors>
+    <authors>Starcounter</authors>
     <owners>Starcounter, untone</owners>
     <licenseUrl>https://github.com/Starcounter/Starcounter.Linq/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Starcounter/Starcounter.Linq</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>$description$</summary>
     <description>$description$</description>
-    <releaseNotes>Fixed bugs. Implemented new features.</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <releaseNotes>Release 1.0. Fixed some bugs.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
     <tags>Starcounter LINQ</tags>
   </metadata>
 </package>
