@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 
 namespace Starcounter.Linq
@@ -13,7 +14,7 @@ namespace Starcounter.Linq
                 return null;
             }
 
-            if (typeof(TResult).IsGenericType)
+            if (typeof(IEnumerable).IsAssignableFrom(typeof(TResult)))
             {
                 return Db.SlowSQL<T>(sql, variables);
             }
