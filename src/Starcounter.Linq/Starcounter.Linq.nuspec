@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/Starcounter/Starcounter.Linq</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>$description$</summary>
-    <description>$description$</description>
-    <releaseNotes>Release 1.0. Fixed some bugs.</releaseNotes>
+    <description>It is a LINQ to SQL Provider for Starcounter. This Starcounter.Linq v2 supports only Starcounter version 2.4 or later. If you want to use this library for earlier versions, please use Starcounter.Linq v1.</description>
+    <releaseNotes>Released Starcounter.Linq version 2.0 which supports Starcounter 2.4.</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Starcounter LINQ</tags>
   </metadata>
