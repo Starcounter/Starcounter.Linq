@@ -1,12 +1,12 @@
 # Starcounter.Linq
 
-Starcounter.Linq is a LINQ to SQL Provider for Starcounter. It uses standard LINQ syntax for queries.
+Starcounter.Linq v2 is a LINQ to SQL Provider for Starcounter 2.4. It uses standard LINQ syntax for queries.
 
 It is available for downloading as [Starcounter.Linq](https://www.nuget.org/packages/Starcounter.Linq/) NuGet package.
 
 ## Requirements
 
-Requires Starcounter version 2.3.1 or later and .NET Framework 4.5.
+Requires Starcounter version 2.4 or later and .NET Framework 4.6.1.
 
 ## How to use
 
@@ -176,10 +176,6 @@ Example:
 Objects<Person>().Delete(x => x.Age > 40);
 Objects<Person>().DeleteAll();
 ```
-
-## Roadmap
-
-Look at [Starcounter.Linq#6](https://github.com/Starcounter/Starcounter.Linq/issues/6)
 
 -----
 
