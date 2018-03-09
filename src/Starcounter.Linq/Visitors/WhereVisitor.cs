@@ -263,7 +263,6 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
-            ConstantExpression constNode = null;
             if (node.Method == KnownMethods.ObjectEquals)
             {
                 state.WriteWhere("(");
@@ -274,21 +273,21 @@ namespace Starcounter.Linq.Visitors
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
-                constNode = node.Arguments[0] as ConstantExpression;
+                AddConstantOrMemberNodeValue(node, state);
                 state.WriteWhere(" LIKE '%' || ? || '%')");
             }
             else if (node.Method == KnownMethods.StringStartsWith)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
-                constNode = node.Arguments[0] as ConstantExpression;
+                AddConstantOrMemberNodeValue(node, state);
                 state.WriteWhere(" LIKE ? || '%')");
             }
             else if (node.Method == KnownMethods.StringEndsWith)
             {
                 state.WriteWhere("(");
                 Visit(node.Object, state);
-                constNode = node.Arguments[0] as ConstantExpression;
+                AddConstantOrMemberNodeValue(node, state);
                 state.WriteWhere(" LIKE '%' || ?)");
             }
             else if (node.Method.IsGenericMethod &&
@@ -317,11 +316,24 @@ namespace Starcounter.Linq.Visitors
             {
                 throw new NotSupportedException("Method call is not supported");
             }
+        }
 
-            if (constNode != null)
+        private void AddConstantOrMemberNodeValue(MethodCallExpression node, QueryBuilder<TEntity> state)
+        {
+            object variable;
+            if (node.Arguments[0] is ConstantExpression constNode)
             {
-                state.AddVariable(constNode.Value);
+                variable = constNode.Value;
             }
+            else if (node.Arguments[0] is MemberExpression memberNode)
+            {
+                variable = memberNode.RetrieveValue();
+            }
+            else
+            {
+                return;
+            }
+            state.AddVariable(variable);
         }
 
         public override void VisitNewArray(NewArrayExpression node, QueryBuilder<TEntity> state)

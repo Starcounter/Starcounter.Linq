@@ -119,13 +119,14 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstOrDefault_StringContains(Mode mode)
+        public void FirstOrDefault_StringContains_Variable(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
+                var value = "oge";
                 var person = mode == Mode.CompiledQuery
-                    ? CompileQuery((string namePart) => Objects<Person>().FirstOrDefault(p => p.Name.Contains(namePart)))("oge")
-                    : Objects<Person>().FirstOrDefault(p => p.Name.Contains("oge"));
+                    ? CompileQuery((string namePart) => Objects<Person>().FirstOrDefault(p => p.Name.Contains(namePart)))(value)
+                    : Objects<Person>().FirstOrDefault(p => p.Name.Contains(value));
                 Assert.NotNull(person);
                 Assert.Equal("Roger", person.Name);
             }).Wait();
@@ -134,7 +135,7 @@ namespace StarcounterLinqUnitTests.Tests
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void FirstOrDefault_StringNotContains(Mode mode)
+        public void FirstOrDefault_StringNotContains_Constant(Mode mode)
         {
             Scheduling.RunTask(() =>
             {
