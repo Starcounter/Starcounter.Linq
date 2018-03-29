@@ -1,22 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\..\global-library.props" />
 
   <PropertyGroup>
     <Description>LINQ to SQL Provider for Starcounter.Nova</Description>
     <AssemblyName>Starcounter.Linq</AssemblyName>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Starcounter.Nova" Version="0.8.7-alpha-*" />
-    <!--<PackageReference Include="Starcounter.Nova.Hosting" Version="0.8.7-alpha-*" />-->
-    <PackageReference Include="Starcounter.Nova.Level1QPBridge" Version="0.8.7-alpha-*" NoWarn="NU1603" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="*.cs" />
-    <Compile Include="Helpers\*.cs" />
-    <Compile Include="Visitors\*.cs" />
   </ItemGroup>
 
 </Project>

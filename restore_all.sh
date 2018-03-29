@@ -1,3 +1,3 @@
 #!/bin/bash
-dotnet restore `dirname $0`/Starcounter.Nova.sln
+dotnet restore `dirname $0`/Starcounter.Linq.sln
 

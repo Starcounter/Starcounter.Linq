@@ -1,3 +1,3 @@
 @echo off
-dotnet restore %~dp0\Starcounter.Nova.sln
+dotnet restore %~dp0\Starcounter.Linq.sln
 
