@@ -1,4 +1,4 @@
-﻿using Starcounter;
+﻿using Starcounter.Nova;
 
 namespace StarcounterLinqUnitTests.Helpers
 {
@@ -18,42 +18,35 @@ namespace StarcounterLinqUnitTests.Helpers
         {
             Db.Transact(() =>
             {
-                var company = new Company
-                {
-                    Name = "Starcounter",
-                    Global = true
-                };
-                new Employee
-                {
-                    Gender = Gender.Male,
-                    Name = "Anton",
-                    Age = 31,
-                    Limit = 1,
-                    Department = new Department
-                    {
-                        Name = "Application Development",
-                        Company = company,
-                        Global = true
-                    }
-                };
-                new Employee
-                {
-                    Gender = Gender.Male,
-                    Name = "Roger",
-                    Age = 41,
-                    Limit = 2,
-                    Department = new Department
-                    {
-                        Name = "Solution Architecture",
-                        Company = company,
-                        Global = true
-                    },
-                    Office = new Office
-                    {
-                        City = "Stockholm"
-                    },
-                    Disabled = true
-                };
+                var company = Db.Insert<Company>();
+                company.Name = "Starcounter";
+                company.Global = true;
+
+                var employee = Db.Insert<Employee>();
+                employee.Gender = Gender.Male;
+                employee.Name = "Anton";
+                employee.Age = 31;
+                employee.Limit = 1;
+
+                employee.Department = Db.Insert<Department>();
+                employee.Department.Name = "Application Development";
+                employee.Department.Company = company;
+                employee.Department.Global = true;
+
+                employee = Db.Insert<Employee>();
+                employee.Gender = Gender.Male;
+                employee.Name = "Roger";
+                employee.Age = 41;
+                employee.Limit = 2;
+                employee.Disabled = true;
+
+                employee.Department = Db.Insert<Department>();
+                employee.Department.Name = "Solution Architecture";
+                employee.Department.Company = company;
+                employee.Department.Global = true;
+
+                employee.Office = Db.Insert<Office>();
+                employee.Office.City = "Stockholm";
             });
         }
     }

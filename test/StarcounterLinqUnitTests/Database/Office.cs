@@ -1,10 +1,10 @@
-﻿using Starcounter;
+﻿using Starcounter.Nova;
 
 namespace StarcounterLinqUnitTests
 {
     [Database]
-    public class Office
+    public abstract class Office
     {
-        public string City { get; set; }
+        public abstract string City { get; set; }
     }
 }

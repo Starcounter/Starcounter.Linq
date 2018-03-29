@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Starcounter;
 using Starcounter.Linq;
+using Starcounter.Nova;
 
 // ReSharper disable once CheckNamespace
 namespace StarcounterLinqUnitTests
 {
     [Database]
-    public class Person
+    public abstract class Person
     {
         public static readonly Func<string, Person> FirstNamed =
             DbLinq.CompileQuery((string name) =>
@@ -23,10 +23,10 @@ namespace StarcounterLinqUnitTests
                 select p
             );
 
-        public Gender Gender { get; set; }
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public int Limit { get; set; }
-        public Office Office { get; set; }
+        public abstract Gender Gender { get; set; }
+        public abstract string Name { get; set; }
+        public abstract int Age { get; set; }
+        public abstract int Limit { get; set; }
+        public abstract Office Office { get; set; }
     }
 }

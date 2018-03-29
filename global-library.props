@@ -1,0 +1,10 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="global.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>$(LibFrameworks)</TargetFrameworks>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+</Project>

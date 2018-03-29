@@ -1,12 +1,12 @@
-﻿using Starcounter;
+﻿using Starcounter.Nova;
 
 // ReSharper disable once CheckNamespace
 namespace StarcounterLinqUnitTests
 {
     [Database]
-    public class Employee : Person
+    public abstract class Employee : Person
     {
-        public Department Department { get; set; }
-        public bool Disabled { get; set; }
+        public abstract Department Department { get; set; }
+        public abstract bool Disabled { get; set; }
     }
 }

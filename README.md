@@ -1,12 +1,12 @@
 # Starcounter.Linq
 
-Starcounter.Linq v2 is a LINQ to SQL Provider for Starcounter 2.4. It uses standard LINQ syntax for queries.
+Starcounter.Linq v3 is a LINQ to SQL Provider for Starcounter.Nova. It uses standard LINQ syntax for queries.
 
 It is available for downloading as [Starcounter.Linq](https://www.nuget.org/packages/Starcounter.Linq/) NuGet package.
 
 ## Requirements
 
-Requires Starcounter version 2.4 or later and .NET Framework 4.6.1.
+Requires Starcounter.Nova or later and .NET Core 2.0.
 
 ## How to use
 

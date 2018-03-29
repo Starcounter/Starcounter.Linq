@@ -1,29 +1,25 @@
-﻿using System;
-using Starcounter;
-using StarcounterLinqUnitTests.Helpers;
+﻿using StarcounterLinqUnitTests.Helpers;
+using StarcounterLinqUnitTests.Utilities;
 
 namespace StarcounterLinqUnitTests.Tests
 {
-    public class BaseTestsFixture : IDisposable
+    public class BaseTestsFixture : TestAppHost
     {
-        public BaseTestsFixture()
-        {
-            Scheduling.RunTask(() =>
-            {
-                DataHelper.ResetData();
-                DataHelper.CreateEmployees();
-            }).Wait();
-        }
-
-        public void RecreateData()
+        public BaseTestsFixture() : base()
         {
             DataHelper.ResetData();
             DataHelper.CreateEmployees();
         }
 
-        public void Dispose()
-        {
-            Scheduling.RunTask(DataHelper.ResetData).Wait();
-        }
+        //public void RecreateData()
+        //{
+        //    DataHelper.ResetData();
+        //    DataHelper.CreateEmployees();
+        //}
+
+        //public void Dispose()
+        //{
+        //    DataHelper.ResetData();
+        //}
     }
 }

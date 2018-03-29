@@ -1,81 +1,53 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq", "src\Starcounter.Linq\Starcounter.Linq.csproj", "{DF08E065-AAF1-42DB-A92E-D288154F5663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Linq", "src\Starcounter.Linq\Starcounter.Linq.csproj", "{3EBE22E1-8092-4BDB-B388-C7A9740A6704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "test\Demo\Demo.csproj", "{3F282C79-FC3D-482C-8287-7471594A060E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{0156BB0A-1EE1-4F11-B138-0ED662B4736D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq.Tests", "test\Starcounter.Linq.Tests\Starcounter.Linq.Tests.csproj", "{F39F0151-A278-47BB-8D5F-4A627590E487}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Linq.Tests", "test\Starcounter.Linq.Tests\Starcounter.Linq.Tests.csproj", "{39764245-77EE-49BF-B3DB-6C9C0A27AEE9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69E68944-6806-48BD-A48D-9390EC5CC663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarcounterLinqUnitTests", "test\StarcounterLinqUnitTests\StarcounterLinqUnitTests.csproj", "{FD5CACC9-9350-450E-997D-6053F35947F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F46419A-23E9-4CA7-9D2D-C58500D5766F}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		LICENSE = LICENSE
+		NuGet.Config = NuGet.Config
 		README.md = README.md
+		restore_all.bat = restore_all.bat
+		restore_all.sh = restore_all.sh
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{62519F4C-D4CE-4C59-A594-378E06AEFDEA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarcounterLinqUnitTests", "test\StarcounterLinqUnitTests\StarcounterLinqUnitTests.csproj", "{1F9A5F6E-D0DE-4738-BF11-F1827989680E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
-		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Debug|x64.Build.0 = Debug|Any CPU
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Release|x64.ActiveCfg = Release|Any CPU
-		{DF08E065-AAF1-42DB-A92E-D288154F5663}.Release|x64.Build.0 = Release|Any CPU
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|Any CPU.Build.0 = Debug|x64
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|x64.ActiveCfg = Debug|x64
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Debug|x64.Build.0 = Debug|x64
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|Any CPU.ActiveCfg = Release|x64
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|Any CPU.Build.0 = Release|x64
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|x64.ActiveCfg = Release|x64
-		{3F282C79-FC3D-482C-8287-7471594A060E}.Release|x64.Build.0 = Release|x64
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Debug|x64.Build.0 = Debug|Any CPU
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Release|x64.ActiveCfg = Release|Any CPU
-		{F39F0151-A278-47BB-8D5F-4A627590E487}.Release|x64.Build.0 = Release|Any CPU
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Debug|Any CPU.Build.0 = Debug|x64
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Debug|x64.ActiveCfg = Debug|x64
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Debug|x64.Build.0 = Debug|x64
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Release|Any CPU.ActiveCfg = Release|x64
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Release|Any CPU.Build.0 = Release|x64
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Release|x64.ActiveCfg = Release|x64
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E}.Release|x64.Build.0 = Release|x64
+		{3EBE22E1-8092-4BDB-B388-C7A9740A6704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EBE22E1-8092-4BDB-B388-C7A9740A6704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EBE22E1-8092-4BDB-B388-C7A9740A6704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EBE22E1-8092-4BDB-B388-C7A9740A6704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39764245-77EE-49BF-B3DB-6C9C0A27AEE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39764245-77EE-49BF-B3DB-6C9C0A27AEE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39764245-77EE-49BF-B3DB-6C9C0A27AEE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39764245-77EE-49BF-B3DB-6C9C0A27AEE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD5CACC9-9350-450E-997D-6053F35947F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5CACC9-9350-450E-997D-6053F35947F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5CACC9-9350-450E-997D-6053F35947F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5CACC9-9350-450E-997D-6053F35947F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3F282C79-FC3D-482C-8287-7471594A060E} = {62519F4C-D4CE-4C59-A594-378E06AEFDEA}
-		{F39F0151-A278-47BB-8D5F-4A627590E487} = {62519F4C-D4CE-4C59-A594-378E06AEFDEA}
-		{1F9A5F6E-D0DE-4738-BF11-F1827989680E} = {62519F4C-D4CE-4C59-A594-378E06AEFDEA}
+		{39764245-77EE-49BF-B3DB-6C9C0A27AEE9} = {0156BB0A-1EE1-4F11-B138-0ED662B4736D}
+		{FD5CACC9-9350-450E-997D-6053F35947F7} = {0156BB0A-1EE1-4F11-B138-0ED662B4736D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {46FDB161-53B6-48A2-BD88-C77AF0B37EF6}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
+		SolutionGuid = {B2D55BD8-4538-4689-ADEC-480D938B7E78}
 	EndGlobalSection
 EndGlobal
