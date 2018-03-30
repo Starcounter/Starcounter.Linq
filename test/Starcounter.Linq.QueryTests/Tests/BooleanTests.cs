@@ -25,7 +25,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Employee>().Where(x => x.Disabled))().ToList()
                     : Objects<Employee>().Where(x => x.Disabled).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Roger", employees.First().Name);
             });
         }
@@ -40,7 +40,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Employee>().Where(x => !x.Disabled))().ToList()
                     : Objects<Employee>().Where(x => !x.Disabled).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Anton", employees.First().Name);
             });
         }
@@ -55,7 +55,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Employee>().Where(x => !x.Department.Global))().ToList()
                     : Objects<Employee>().Where(x => !x.Department.Global).ToList();
-                Assert.Equal(0, employees.Count);
+                Assert.Empty(employees);
             });
         }
 
@@ -82,8 +82,9 @@ namespace Starcounter.Linq.QueryTests
             {
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((bool fl) => Objects<Employee>().Where(x => x.Disabled == fl))(true).ToList()
+                    // ReSharper disable once RedundantBoolCompare
                     : Objects<Employee>().Where(x => x.Disabled == true).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Roger", employees.First().Name);
             });
         }
@@ -98,7 +99,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((bool fl) => Objects<Employee>().Where(x => x.Disabled != fl))(true).ToList()
                     : Objects<Employee>().Where(x => x.Disabled != true).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Anton", employees.First().Name);
             });
         }
@@ -112,6 +113,7 @@ namespace Starcounter.Linq.QueryTests
             {
                 var global = true;
                 var employees = mode == Mode.CompiledQuery
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                     ? CompileQuery((bool fl) => Objects<Employee>().Where(x => x.Department.Global == fl))(global).ToList()
                     : Objects<Employee>().Where(x => x.Department.Global == global).ToList();
                 Assert.Equal(2, employees.Count);
@@ -127,6 +129,7 @@ namespace Starcounter.Linq.QueryTests
             {
                 var global = false;
                 var employees = mode == Mode.CompiledQuery
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                     ? CompileQuery((bool fl) => Objects<Employee>().Where(x => x.Department.Global != fl))(global).ToList()
                     : Objects<Employee>().Where(x => x.Department.Global != global).ToList();
                 Assert.Equal(2, employees.Count);
@@ -142,6 +145,7 @@ namespace Starcounter.Linq.QueryTests
             {
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((bool fl) => Objects<Employee>().Where(x => x.Department.Company.Global == fl))(true).ToList()
+                    // ReSharper disable once RedundantBoolCompare
                     : Objects<Employee>().Where(x => x.Department.Company.Global == true).ToList();
                 Assert.Equal(2, employees.Count);
             });
@@ -157,7 +161,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((bool fl) => Objects<Employee>().Where(x => x.Department.Company.Global != fl))(true).ToList()
                     : Objects<Employee>().Where(x => x.Department.Company.Global != true).ToList();
-                Assert.Equal(0, employees.Count);
+                Assert.Empty(employees);
             });
         }
 
@@ -171,7 +175,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((int age) => Objects<Employee>().Where(x => x.Age > age && x.Disabled))(10).ToList()
                     : Objects<Employee>().Where(x => x.Age > 10 && x.Disabled).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Roger", employees.First().Name);
             });
         }
@@ -186,7 +190,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((int age) => Objects<Employee>().Where(x => x.Age > age && !x.Disabled))(10).ToList()
                     : Objects<Employee>().Where(x => x.Age > 10 && !x.Disabled).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Anton", employees.First().Name);
             });
         }
@@ -200,8 +204,9 @@ namespace Starcounter.Linq.QueryTests
             {
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((int age, bool fl) => Objects<Employee>().Where(x => x.Age > age && x.Disabled == fl))(10, true).ToList()
+                    // ReSharper disable once RedundantBoolCompare
                     : Objects<Employee>().Where(x => x.Age > 10 && x.Disabled == true).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Roger", employees.First().Name);
             });
         }
@@ -216,7 +221,7 @@ namespace Starcounter.Linq.QueryTests
                 var employees = mode == Mode.CompiledQuery
                     ? CompileQuery((int age, bool fl) => Objects<Employee>().Where(x => x.Age > age && x.Disabled != fl))(10, true).ToList()
                     : Objects<Employee>().Where(x => x.Age > 10 && x.Disabled != true).ToList();
-                Assert.Equal(1, employees.Count);
+                Assert.Single(employees);
                 Assert.Equal("Anton", employees.First().Name);
             });
         }

@@ -25,7 +25,7 @@ namespace Starcounter.Linq.QueryTests
                 var persons = mode == Mode.CompiledQuery
                     ? CompileQuery((string name) => Objects<Person>().Where(p => p.Name == name))("Roger").ToList()
                     : Objects<Person>().Where(p => p.Name == "Roger").ToList();
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Roger", persons.First().Name);
             });
         }
@@ -40,7 +40,7 @@ namespace Starcounter.Linq.QueryTests
                 var persons = mode == Mode.CompiledQuery
                     ? CompileQuery((int limit) => Objects<Person>().Where(p => p.Limit == limit))(2).ToList()
                     : Objects<Person>().Where(p => p.Limit == 2).ToList();
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Roger", persons.First().Name);
             });
         }
@@ -315,6 +315,7 @@ namespace Starcounter.Linq.QueryTests
             {
                 Office office = null;
                 // this is incorrect, Compiled Query is not supported passing null with parameter (only inline, see FirstObjectEqualNull test)
+                // ReSharper disable once ExpressionIsAlwaysNull
                 var employee = CompileQuery((Office o) => Objects<Employee>().FirstOrDefault(p => p.Office != o))(office);
 
                 Assert.Null(employee);  // because the built SQL was incorrect

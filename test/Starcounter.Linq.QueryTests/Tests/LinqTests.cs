@@ -83,9 +83,11 @@ namespace Starcounter.Linq.QueryTests
             {
                 Assert.Throws<InvalidOperationException>(() =>
                 {
+                    // ReSharper disable ReplaceWithSingleCallToFirst
                     var person = mode == Mode.CompiledQuery
                         ? CompileQuery((int age) => Objects<Person>().Where(x => x.Age == age).First())(100)
                         : Objects<Person>().Where(x => x.Age == 100).First();
+                    // ReSharper restore ReplaceWithSingleCallToFirst
                 });
             });
         }
@@ -189,9 +191,11 @@ namespace Starcounter.Linq.QueryTests
             {
                 Assert.Throws<InvalidOperationException>(() =>
                 {
+                    // ReSharper disable ReplaceWithSingleCallToSingle
                     var person = mode == Mode.CompiledQuery
                         ? CompileQuery((int age) => Objects<Person>().Where(x => x.Age == age).Single())(100)
                         : Objects<Person>().Where(x => x.Age == 100).Single();
+                    // ReSharper restore ReplaceWithSingleCallToSingle
                 });
             });
         }

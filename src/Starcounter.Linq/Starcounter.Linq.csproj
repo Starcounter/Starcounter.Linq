@@ -1,9 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>LINQ to SQL Provider for Starcounter.Nova</Description>
+    <Description>It is a LINQ to SQL Provider for Starcounter. This Starcounter.Linq v3 supports only Starcounter.Nova. If you want to use this library for earlier versions, please use Starcounter.Linq v1 or v2.</Description>
     <AssemblyName>Starcounter.Linq</AssemblyName>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyVersion>3.0.1.0</AssemblyVersion>
+    <FileVersion>3.0.1.0</FileVersion>
+    <Version>3.0.1</Version>
+    <Authors>Starcounter</Authors>
+    <Copyright>Copyright © 2018</Copyright>
+    <PackageTags>Starcounter LINQ</PackageTags>
+    <PackageReleaseNotes>Starcounter.Linq v3 release for Starcounter.Nova</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Starcounter/Starcounter.Linq/tree/nova</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/Starcounter/Starcounter.Linq/blob/nova/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Starcounter/Starcounter.Linq</PackageProjectUrl>
+    <Product>Starcounter.Linq for Starcounter.Nova</Product>
   </PropertyGroup>
 
   <ItemGroup>
