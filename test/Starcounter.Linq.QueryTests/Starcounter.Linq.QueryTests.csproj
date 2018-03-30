@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
     <PackageReference Include="Starcounter.Nova" Version="0.8.7-alpha-*" />
-    <PackageReference Include="Starcounter.Nova" Version="0.8.7-alpha-*" />
     <PackageReference Include="Starcounter.Nova.Bluestar" Version="0.8.7-alpha-*" />
     <PackageReference Include="Starcounter.Nova.Options" Version="0.8.7-alpha-*" />
     <PackageReference Include="Starcounter.Nova.Hosting" Version="0.8.7-alpha-*" />
