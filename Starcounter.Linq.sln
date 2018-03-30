@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq", "src\Starcounter.Linq\Starcounter.Linq.csproj", "{DF08E065-AAF1-42DB-A92E-D288154F5663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq.Tests", "test\Starcounter.Linq.Tests\Starcounter.Linq.Tests.csproj", "{F39F0151-A278-47BB-8D5F-4A627590E487}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq.SqlTests", "test\Starcounter.Linq.SqlTests\Starcounter.Linq.SqlTests.csproj", "{F39F0151-A278-47BB-8D5F-4A627590E487}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69E68944-6806-48BD-A48D-9390EC5CC663}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{62519F4C-D4CE-4C59-A594-378E06AEFDEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarcounterLinqUnitTests", "test\StarcounterLinqUnitTests\StarcounterLinqUnitTests.csproj", "{1F9A5F6E-D0DE-4738-BF11-F1827989680E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starcounter.Linq.QueryTests", "test\Starcounter.Linq.QueryTests\Starcounter.Linq.QueryTests.csproj", "{1F9A5F6E-D0DE-4738-BF11-F1827989680E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
