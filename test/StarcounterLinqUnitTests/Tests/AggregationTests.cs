@@ -7,8 +7,11 @@ namespace StarcounterLinqUnitTests.Tests
 {
     public class AggregationTests : IClassFixture<BaseTestsFixture>
     {
+        private readonly BaseTestsFixture _fixture;
+
         public AggregationTests(BaseTestsFixture fixture)
         {
+            _fixture = fixture;
         }
 
         [Theory]
@@ -31,10 +34,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void MinInteger(Mode mode)
         {
-            var min = mode == Mode.CompiledQuery
-                ? CompileQuery(() => Objects<Person>().Min(x => x.Age))()
-                : Objects<Person>().Min(x => x.Age);
-            Assert.Equal(31, min);
+            Db.Transact(() =>
+            {
+                var min = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Min(x => x.Age))()
+                    : Objects<Person>().Min(x => x.Age);
+                Assert.Equal(31, min);
+            });
         }
 
         [Theory]
@@ -42,10 +48,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void MaxInteger(Mode mode)
         {
-            var max = mode == Mode.CompiledQuery
-                ? CompileQuery(() => Objects<Person>().Max(x => x.Age))()
-                : Objects<Person>().Max(x => x.Age);
-            Assert.Equal(41, max);
+            Db.Transact(() =>
+            {
+                var max = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Max(x => x.Age))()
+                    : Objects<Person>().Max(x => x.Age);
+                Assert.Equal(41, max);
+            });
         }
 
         [Theory]
@@ -53,10 +62,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void SumInteger(Mode mode)
         {
-            var sum = mode == Mode.CompiledQuery
-                ? CompileQuery(() => Objects<Person>().Sum(x => x.Age))()
-                : Objects<Person>().Sum(x => x.Age);
-            Assert.Equal(72, sum);
+            Db.Transact(() =>
+            {
+                var sum = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Sum(x => x.Age))()
+                    : Objects<Person>().Sum(x => x.Age);
+                Assert.Equal(72, sum);
+            });
         }
 
         [Theory]
@@ -64,10 +76,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void Count(Mode mode)
         {
-            var cnt = mode == Mode.CompiledQuery
-                ? CompileQuery(() => Objects<Person>().Count())()
-                : Objects<Person>().Count();
-            Assert.Equal(2, cnt);
+            Db.Transact(() =>
+            {
+                var cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Count())()
+                    : Objects<Person>().Count();
+                Assert.Equal(2, cnt);
+            });
         }
 
         [Theory]
@@ -75,10 +90,13 @@ namespace StarcounterLinqUnitTests.Tests
         [InlineData(Mode.CompiledQuery)]
         public void CountWithPredicate(Mode mode)
         {
-            var cnt = mode == Mode.CompiledQuery
-                ? CompileQuery(() => Objects<Person>().Count(x => x is Employee))()
-                : Objects<Person>().Count(x => x is Employee);
-            Assert.Equal(2, cnt);
+            Db.Transact(() =>
+            {
+                var cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Count(x => x is Employee))()
+                    : Objects<Person>().Count(x => x is Employee);
+                Assert.Equal(2, cnt);
+            });
         }
     }
 }

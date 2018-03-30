@@ -49,7 +49,7 @@ namespace StarcounterLinqUnitTests.Utilities
             Console.WriteLine($"Using query processor \"{qp.Name}\" of type {qp?.GetType()?.ToString()}");
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Console.WriteLine($"Disposing TempAppHost");
             Interlocked.Exchange(ref _apphost, null).Dispose();
