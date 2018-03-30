@@ -26,7 +26,7 @@ namespace Starcounter.Linq.QueryTests
                 var cnt = Objects<Person>().Count();
                 Assert.Equal(1, cnt);
             });
-            Fixture.RecreateData();
+            _fixture.RecreateData();
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Starcounter.Linq.QueryTests
             {
                 Assert.False(Objects<Person>().Any());
             });
-            Fixture.RecreateData();
+            _fixture.RecreateData();
         }
     }
 }

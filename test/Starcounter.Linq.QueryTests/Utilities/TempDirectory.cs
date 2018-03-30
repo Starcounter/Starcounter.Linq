@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace StarcounterLinqUnitTests.Utilities
+namespace Starcounter.Linq.QueryTests.Utilities
 {
     public class TempDirectory : IDisposable
     {

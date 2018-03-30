@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Linq", "src\Sta
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Projects", "Test Projects", "{0156BB0A-1EE1-4F11-B138-0ED662B4736D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Linq.Tests", "test\Starcounter.Linq.Tests\Starcounter.Linq.Tests.csproj", "{39764245-77EE-49BF-B3DB-6C9C0A27AEE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Linq.SqlTests", "test\Starcounter.Linq.SqlTests\Starcounter.Linq.SqlTests.csproj", "{39764245-77EE-49BF-B3DB-6C9C0A27AEE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarcounterLinqUnitTests", "test\StarcounterLinqUnitTests\StarcounterLinqUnitTests.csproj", "{FD5CACC9-9350-450E-997D-6053F35947F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Starcounter.Linq.QueryTests", "test\Starcounter.Linq.QueryTests\Starcounter.Linq.QueryTests.csproj", "{FD5CACC9-9350-450E-997D-6053F35947F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F46419A-23E9-4CA7-9D2D-C58500D5766F}"
 	ProjectSection(SolutionItems) = preProject

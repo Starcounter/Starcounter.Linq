@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Xunit;
-using Starcounter.Linq;
+using Starcounter.Linq.QueryTests.Utilities;
 using Starcounter.Nova;
 using static Starcounter.Linq.DbLinq;
 

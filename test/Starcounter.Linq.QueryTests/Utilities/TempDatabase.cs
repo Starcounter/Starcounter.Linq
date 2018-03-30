@@ -3,7 +3,7 @@ using System.Threading;
 using Starcounter.Nova.Bluestar;
 using Starcounter.Nova.Options;
 
-namespace StarcounterLinqUnitTests.Utilities
+namespace Starcounter.Linq.QueryTests.Utilities
 {
     /// <summary>
     /// Creates a temporary Starcounter database that is removed when Disposed.

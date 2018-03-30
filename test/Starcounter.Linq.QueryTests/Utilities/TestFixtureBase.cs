@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace StarcounterLinqUnitTests.Utilities
+namespace Starcounter.Linq.QueryTests.Utilities
 {
     public class TestFixtureBase
     {

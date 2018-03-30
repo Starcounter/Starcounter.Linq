@@ -4,7 +4,7 @@ using System.Threading;
 using Starcounter.Nova.Abstractions;
 using Starcounter.Nova.Hosting;
 
-namespace StarcounterLinqUnitTests.Utilities
+namespace Starcounter.Linq.QueryTests.Utilities
 {
     /// <summary>
     /// Fixture that establish the host for a group of tests.
