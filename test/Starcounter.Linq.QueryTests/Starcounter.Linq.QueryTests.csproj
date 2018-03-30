@@ -24,9 +24,9 @@
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-<!--  
+
   <ItemGroup>
-    <PackageReference Include="runtime.native.Starcounter.Bluestar" Version="2.4.0-*" />
+    <PackageReference Include="runtime.native.Starcounter.Bluestar" Version="2.4.0-pre-012442" />
   </ItemGroup>
--->
+
 </Project>
