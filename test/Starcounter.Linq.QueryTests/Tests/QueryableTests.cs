@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using Xunit;
-using Starcounter.Linq.QueryTests.Utilities;
 using Starcounter.Nova;
 using static Starcounter.Linq.DbLinq;
 
 namespace Starcounter.Linq.QueryTests
 {
-    public class QueryableTests : IClassFixture<TestAppHost>
+    public class QueryableTests : IClassFixture<BaseTestsFixture>
     {
-        private readonly TestAppHost _fixture;
+        private readonly BaseTestsFixture _fixture;
 
-        public QueryableTests(TestAppHost fixture)
+        public QueryableTests(BaseTestsFixture fixture)
         {
             _fixture = fixture;
         }

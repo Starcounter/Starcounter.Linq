@@ -4,9 +4,9 @@ using System.Threading;
 
 namespace Starcounter.Linq.QueryTests.Utilities
 {
-    public class TestFixtureBase
+    public class TestAppHostBase
     {
-        static TestFixtureBase()
+        static TestAppHostBase()
         {
             PromptAttachDebuggerIfNotAttached();
         }

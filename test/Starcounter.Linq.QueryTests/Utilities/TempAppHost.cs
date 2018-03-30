@@ -14,7 +14,7 @@ namespace Starcounter.Linq.QueryTests.Utilities
     /// particular, here:
     /// https://xunit.github.io/docs/shared-context.html#class-fixture 
     /// </remarks>
-    public class TempAppHost : TestFixtureBase, IDisposable
+    public class TempAppHost : TestAppHostBase, IDisposable
     {
         private TempDatabase _tmpDb;
         private IAppHost _apphost;

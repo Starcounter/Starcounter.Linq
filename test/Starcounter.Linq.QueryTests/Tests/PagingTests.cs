@@ -5,11 +5,12 @@ using static Starcounter.Linq.DbLinq;
 
 namespace Starcounter.Linq.QueryTests
 {
-    public class PagingTests : IClassFixture<BaseTestsFixture>
+    [Collection("Data tests")]
+    public class PagingTests : IClassFixture<DataTestFixture>
     {
-        private readonly BaseTestsFixture _fixture;
+        private readonly DataTestFixture _fixture;
 
-        public PagingTests(BaseTestsFixture fixture)
+        public PagingTests(DataTestFixture fixture)
         {
             _fixture = fixture;
         }
