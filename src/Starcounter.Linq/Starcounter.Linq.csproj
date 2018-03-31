@@ -10,7 +10,7 @@
     <Authors>Starcounter</Authors>
     <Copyright>Copyright © 2018</Copyright>
     <PackageTags>Starcounter LINQ</PackageTags>
-    <PackageReleaseNotes>Starcounter.Linq v3 release for Starcounter.Nova</PackageReleaseNotes>
+    <PackageReleaseNotes>Starcounter.Linq v3 for Starcounter.Nova</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Starcounter/Starcounter.Linq/tree/nova</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/Starcounter/Starcounter.Linq/blob/nova/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/Starcounter/Starcounter.Linq</PackageProjectUrl>
