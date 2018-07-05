@@ -63,5 +63,40 @@ namespace Starcounter.Linq.SqlTests
             Assert.Equal("SELECT SUM(P.\"Limit\") FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P",
                 Sql(() => Objects<Person>().Sum(p => p.Limit)));
         }
+
+        [Fact]
+        public void OrderBy_Count()
+        {
+            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P",
+                Sql(() => Objects<Person>().OrderBy(p => p.Age).Count()));
+        }
+
+        [Fact]
+        public void OrderBy_Sum()
+        {
+            Assert.Equal("SELECT SUM(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P",
+                Sql(() => Objects<Person>().OrderBy(p => p.Age).Sum(x => x.Age)));
+        }
+
+        [Fact]
+        public void OrderBy_Min()
+        {
+            Assert.Equal("SELECT MIN(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P",
+                Sql(() => Objects<Person>().OrderBy(p => p.Age).Min(x => x.Age)));
+        }
+
+        [Fact]
+        public void OrderBy_Max()
+        {
+            Assert.Equal("SELECT MAX(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P",
+                Sql(() => Objects<Person>().OrderBy(p => p.Age).Max(x => x.Age)));
+        }
+
+        [Fact]
+        public void OrderBy_Avg()
+        {
+            Assert.Equal("SELECT AVG(P.\"Age\") FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P",
+                Sql(() => Objects<Person>().OrderBy(p => p.Age).Average(x => x.Age)));
+        }
     }
 }

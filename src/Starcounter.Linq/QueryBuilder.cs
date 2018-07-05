@@ -65,6 +65,21 @@ namespace Starcounter.Linq
 
         public void WriteSelect(string text) => Select.Append(text);
 
+        public void WriteAggregationSelect(string aggregation)
+        {
+            OrderBy.Clear();
+            Select.Append(aggregation);
+        }
+
+        public void WriteAggregationSelect(string @operator, Action writeOperand)
+        {
+            OrderBy.Clear();
+            Select.Append(@operator);
+            Select.Append("(");
+            writeOperand();
+            Select.Append(")");
+        }
+
         public string GetSourceName()
         {
             return SourceName;
