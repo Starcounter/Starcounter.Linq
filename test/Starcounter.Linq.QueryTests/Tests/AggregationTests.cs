@@ -97,5 +97,33 @@ namespace Starcounter.Linq.QueryTests
                 Assert.Equal(2, cnt);
             }).Wait();
         }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void OrderBy_Count(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().OrderBy(x => x.Age).Count())()
+                    : Objects<Person>().OrderBy(x => x.Age).Count();
+                Assert.Equal(2, cnt);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void OrderBy_SumInteger(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var sum = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().OrderBy(x => x.Age).Sum(x => x.Age))()
+                    : Objects<Person>().OrderBy(x => x.Age).Sum(x => x.Age);
+                Assert.Equal(72, sum);
+            }).Wait();
+        }
     }
 }
