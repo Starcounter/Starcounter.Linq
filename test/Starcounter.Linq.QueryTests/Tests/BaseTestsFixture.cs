@@ -21,7 +21,7 @@ namespace Starcounter.Linq.QueryTests
 
         public void Dispose()
         {
-            Scheduling.RunTask(DataHelper.ResetData).Wait();
+            Scheduling.RunTask(() => DataHelper.ResetData()).Wait();
         }
     }
 }
