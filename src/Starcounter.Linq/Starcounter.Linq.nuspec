@@ -11,7 +11,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>$description$</summary>
     <description>$description$</description>
-    <releaseNotes>Fixed bugs with String methods inside predicates.</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Starcounter LINQ</tags>
   </metadata>
