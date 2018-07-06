@@ -11,7 +11,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>$description$</summary>
     <description>It is a LINQ to SQL Provider for Starcounter. This Starcounter.Linq v2 supports only Starcounter version 2.4 or later. If you want to use this library for earlier versions, please use Starcounter.Linq v1.</description>
-    <releaseNotes>Fixed bugs with String methods inside predicates</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Starcounter LINQ</tags>
   </metadata>
