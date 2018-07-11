@@ -15,5 +15,17 @@ namespace Starcounter.Linq.Visitors
                 Visit(node.Expression, state);
             state.WriteOrderBy("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
         }
+
+        public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
+        {
+            if (node.Method == KnownMethods.GetObjectNo)
+            {
+                state.WriteOrderByObjectNo();
+            }
+            else
+            {
+                base.VisitMethodCall(node, state);
+            }
+        }
     }
 }

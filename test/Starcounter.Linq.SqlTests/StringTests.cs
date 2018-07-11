@@ -10,30 +10,30 @@ namespace Starcounter.Linq.SqlTests
         [Fact]
         public void StringContains()
         {
-            Assert.Equal((string)"SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ? || '%'))",
-                (string)Sql(() => Objects<Person>().Where(p => p.Name.Contains("XXX"))));
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ? || '%'))",
+                Sql(() => Objects<Person>().Where(p => p.Name.Contains("XXX"))));
         }
 
         [Fact]
         public void StringContains_CalculatedValue()
         {
             var name = "XXX";
-            Assert.Equal((string)"SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ? || '%'))",
-                (string)Sql(() => Objects<Person>().Where(p => p.Name.Contains(name))));
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ? || '%'))",
+                Sql(() => Objects<Person>().Where(p => p.Name.Contains(name))));
         }
 
         [Fact]
         public void StringStartsWith()
         {
-            Assert.Equal((string)"SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE ? || '%'))",
-                (string)Sql(() => Objects<Person>().Where(p => p.Name.StartsWith("XXX"))));
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE ? || '%'))",
+                Sql(() => Objects<Person>().Where(p => p.Name.StartsWith("XXX"))));
         }
 
         [Fact]
         public void StringEndsWith()
         {
-            Assert.Equal((string)"SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ?))",
-                (string)Sql(() => Objects<Person>().Where(p => p.Name.EndsWith("XXX"))));
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" LIKE '%' || ?))",
+                Sql(() => Objects<Person>().Where(p => p.Name.EndsWith("XXX"))));
         }
     }
 }
