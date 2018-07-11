@@ -80,6 +80,25 @@ namespace Starcounter.Linq
         /// <br/> - Since comparisons with null values are translated to IS NULL form in SQL, there is no possibility to pass such values with parameters into compiled queries.
         /// <br/> - The Contains method is not supported by compiled queries.
         /// </remarks>
+        public static Func<IEnumerable<TResult>> CompileQuery<TResult>(
+            Expression<Func<IOrderedQueryable<TResult>>> queryExpression)
+            => CreateCompiledQuery<TResult>(queryExpression).Execute<IEnumerable<TResult>>;
+
+        /// <summary>
+        /// Creates a compiled query delegate that when invoked will execute the specified LINQ query.
+        /// It lets you build a LINQ expression with translated SQL once and use it many times.
+        /// </summary>
+        /// <typeparam name="TResult">The query result type.</typeparam>
+        /// <param name="queryExpression">The LINQ query expression.</param>
+        /// <returns>A delegate that can be invoked to execute the compiled query.</returns>
+        /// <remarks>
+        /// Use it in places where the query will be executed many times since it only translates the LINQ statement to SQL one time which makes subsequent calls fast.
+        /// <br/>Restrictions:
+        /// <br/> - Starcounter.Linq only supports database properties. It is not possible to get access to fields.
+        /// <br/> - Starcounter.Linq uses literal values for FETCH and OFFSET clauses for performance reason, it means that you cannot pass the value when executing a compiled query.
+        /// <br/> - Since comparisons with null values are translated to IS NULL form in SQL, there is no possibility to pass such values with parameters into compiled queries.
+        /// <br/> - The Contains method is not supported by compiled queries.
+        /// </remarks>
         public static Func<TResult> CompileQuery<TResult>(
             Expression<Func<TResult>> queryExpression)
             => CreateCompiledQuery<TResult>(queryExpression).Execute<TResult>;
