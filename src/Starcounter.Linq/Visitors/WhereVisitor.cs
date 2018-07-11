@@ -290,6 +290,10 @@ namespace Starcounter.Linq.Visitors
                 AddConstantOrMemberNodeValue(node, state);
                 state.WriteWhere(" LIKE '%' || ?)");
             }
+            else if (node.Method == KnownMethods.GetObjectNo)
+            {
+                state.WriteWhereObjectNo();
+            }
             else if (node.Method.IsGenericMethod &&
                 node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains &&
                 node.Arguments[0] is MemberExpression memberExpression)

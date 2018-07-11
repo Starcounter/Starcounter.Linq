@@ -355,5 +355,39 @@ namespace Starcounter.Linq.QueryTests
                 Assert.NotNull(person);
             });
         }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void WhereObjectNoEqual(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                ulong testPersonId = Db.SQL<Person>($"SELECT p FROM {typeof(Person)} p WHERE p.Name = ?", "Roger").First().GetObjectNo();
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery((ulong id) => Objects<Person>().Where(p => p.GetObjectNo() == id))(testPersonId).ToList()
+                    : Objects<Person>().Where(p => p.GetObjectNo() == testPersonId).ToList();
+                
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Roger", persons.First().Name);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void WhereObjectNoNotEqualWithOtherPredicate(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                ulong testPersonId = Db.SQL<Person>($"SELECT p FROM {typeof(Person)} p WHERE p.Name = ?", "Roger").First().GetObjectNo();
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery((ulong id, string name) => Objects<Person>().Where(p => p.GetObjectNo() != id && p.Name == name))(testPersonId, "Anton").ToList()
+                    : Objects<Person>().Where(p => p.GetObjectNo() != testPersonId && p.Name == "Anton").ToList();
+                
+                Assert.Equal(1, persons.Count);
+                Assert.NotEqual("Roger", persons.First().Name);
+            });
+        }
     }
 }

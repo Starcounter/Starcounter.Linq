@@ -61,7 +61,11 @@ namespace Starcounter.Linq
 
         public void WriteWhere(string text) => Where.Append(text);
 
+        public void WriteWhereObjectNo() => Where.Append($"{SourceName}.\"ObjectNo\"");
+
         public void WriteOrderBy(string text) => OrderBy.Append(text);
+
+        public void WriteOrderByObjectNo() => OrderBy.Append($"{SourceName}.\"ObjectNo\"");
 
         public void WriteSelect(string text) => Select.Append(text);
 
