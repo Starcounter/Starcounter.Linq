@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Starcounter.Nova" Version="0.10.0-alpha-*" />
+    <PackageReference Include="Starcounter.Nova" Version="0.10.1-alpha-*" />
   </ItemGroup>
 
 </Project>
