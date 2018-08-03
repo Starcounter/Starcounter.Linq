@@ -94,7 +94,7 @@ namespace Starcounter.Linq.Visitors
                 }
                 else if (node.Arguments[1] is MemberExpression takeMemberExpression)
                 {
-                    var value = (int)takeMemberExpression.RetrieveValue();
+                    var value = (int)takeMemberExpression.RetrieveMemberValue();
                     state.Fetch(value);
                     Visit(node.Arguments[0], state);
                 }
@@ -113,7 +113,7 @@ namespace Starcounter.Linq.Visitors
                 }
                 else if (node.Arguments[1] is MemberExpression takeMemberExpression)
                 {
-                    var value = (int)takeMemberExpression.RetrieveValue();
+                    var value = (int)takeMemberExpression.RetrieveMemberValue();
                     state.Offset(value);
                     Visit(node.Arguments[0], state);
                 }

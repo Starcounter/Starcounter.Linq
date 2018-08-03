@@ -364,7 +364,7 @@ namespace Starcounter.Linq.QueryTests
                 var persons = mode == Mode.CompiledQuery
                     ? CompileQuery((ulong id) => Objects<Person>().Where(p => p.GetObjectNo() == id))(testPersonId).ToList()
                     : Objects<Person>().Where(p => p.GetObjectNo() == testPersonId).ToList();
-                
+
                 Assert.Equal(1, persons.Count);
                 Assert.Equal("Roger", persons.First().Name);
             }).Wait();
@@ -381,10 +381,93 @@ namespace Starcounter.Linq.QueryTests
                 var persons = mode == Mode.CompiledQuery
                     ? CompileQuery((ulong id, string name) => Objects<Person>().Where(p => p.GetObjectNo() != id && p.Name == name))(testPersonId, "Anton").ToList()
                     : Objects<Person>().Where(p => p.GetObjectNo() != testPersonId && p.Name == "Anton").ToList();
-                
+
                 Assert.Equal(1, persons.Count);
                 Assert.NotEqual("Roger", persons.First().Name);
             }).Wait();
+        }
+
+        [Fact]
+        public void WhereEnumToString()
+        {
+            Scheduling.RunTask(() =>
+            {
+                var persons = Objects<Person>().Where(p => p.Name == Names.Anton.ToString()).ToList();
+
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Anton", persons.First().Name);
+            }).Wait();
+        }
+
+        [Fact]
+        public void WhereObjectMethodParameterless()
+        {
+            Scheduling.RunTask(() =>
+            {
+                var nameInstance = new NameClass();
+
+                var persons = Objects<Person>().Where(p => p.Name == nameInstance.GetName()).ToList();
+
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Anton", persons.First().Name);
+            }).Wait();
+        }
+
+        [Fact]
+        public void WhereObjectMethodParameters1()
+        {
+            Scheduling.RunTask(() =>
+            {
+                var nameInstance = new NameClass();
+                int param1 = 999;
+
+                var persons = Objects<Person>().Where(p => p.Name == nameInstance.GetName(param1)).ToList();
+
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Anton", persons.First().Name);
+            }).Wait();
+        }
+
+        [Fact]
+        public void WhereObjectMethodParameters2()
+        {
+            Scheduling.RunTask(() =>
+            {
+                int ctorArg = 99;
+                int param1 = 999;
+                string param2 = "any";
+
+                var persons = Objects<Person>().Where(p => p.Name == new NameClass(ctorArg).GetName(param1, param2)).ToList();
+
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Anton", persons.First().Name);
+            }).Wait();
+        }
+
+
+        private enum Names { Anton, Roger }
+
+        private class NameClass
+        {
+            private const string Name = "Anton";
+            
+            public NameClass()
+            { }
+            public NameClass(int arg1)
+            { }
+
+            public string GetName()
+            {
+                return Name;
+            }
+            public string GetName(int val1)
+            {
+                return Name;
+            }
+            public string GetName(int val1, string val2)
+            {
+                return Name;
+            }
         }
     }
 }
