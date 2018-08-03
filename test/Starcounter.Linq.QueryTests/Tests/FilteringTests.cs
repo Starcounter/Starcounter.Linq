@@ -393,19 +393,19 @@ namespace Starcounter.Linq.QueryTests
         [Fact]
         public void WhereEnumToString()
         {
-            Scheduling.RunTask(() =>
+            Db.Transact(() =>
             {
                 var persons = Objects<Person>().Where(p => p.Name == Names.Anton.ToString()).ToList();
 
                 Assert.Equal(1, persons.Count);
                 Assert.Equal("Anton", persons.First().Name);
-            }).Wait();
+            });
         }
 
         [Fact]
         public void WhereObjectMethodParameterless()
         {
-            Scheduling.RunTask(() =>
+            Db.Transact(() =>
             {
                 var nameInstance = new NameClass();
 
@@ -413,13 +413,13 @@ namespace Starcounter.Linq.QueryTests
 
                 Assert.Equal(1, persons.Count);
                 Assert.Equal("Anton", persons.First().Name);
-            }).Wait();
+            });
         }
 
         [Fact]
         public void WhereObjectMethodParameters1()
         {
-            Scheduling.RunTask(() =>
+            Db.Transact(() =>
             {
                 var nameInstance = new NameClass();
                 int param1 = 999;
@@ -428,13 +428,13 @@ namespace Starcounter.Linq.QueryTests
 
                 Assert.Equal(1, persons.Count);
                 Assert.Equal("Anton", persons.First().Name);
-            }).Wait();
+            });
         }
 
         [Fact]
         public void WhereObjectMethodParameters2()
         {
-            Scheduling.RunTask(() =>
+            Db.Transact(() =>
             {
                 int ctorArg = 99;
                 int param1 = 999;
@@ -444,7 +444,7 @@ namespace Starcounter.Linq.QueryTests
 
                 Assert.Equal(1, persons.Count);
                 Assert.Equal("Anton", persons.First().Name);
-            }).Wait();
+            });
         }
 
 
