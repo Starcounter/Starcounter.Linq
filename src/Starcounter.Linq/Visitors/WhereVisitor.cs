@@ -117,7 +117,7 @@ namespace Starcounter.Linq.Visitors
             }
 
             if (right is ConstantExpression constantExpression && constantExpression.Value == null ||
-                right is MemberExpression rightMemberExpression && rightMemberExpression.RetrieveValue() == null)
+                right is MemberExpression rightMemberExpression && rightMemberExpression.RetrieveMemberValue() == null)
             {
                 state.WriteWhere(isEqualsSign ? " IS NULL" : " IS NOT NULL");
             }
@@ -223,7 +223,7 @@ namespace Starcounter.Linq.Visitors
                 }
                 if (subNode.Expression is ConstantExpression)
                 {
-                    var memberValue = node.RetrieveValue();
+                    var memberValue = node.RetrieveMemberValue();
                     if (memberValue is LambdaExpression lambdaExpression)
                     {
                         Visit(lambdaExpression.Body, state);
@@ -299,7 +299,7 @@ namespace Starcounter.Linq.Visitors
                 node.Arguments[0] is MemberExpression memberExpression)
             {
                 state.WriteWhere("(");
-                var items = (IEnumerable)memberExpression.RetrieveValue();
+                var items = (IEnumerable)memberExpression.RetrieveMemberValue();
                 int i = 0;
 
                 foreach (var item in items)
@@ -316,6 +316,12 @@ namespace Starcounter.Linq.Visitors
                 }
                 state.WriteWhere(")");
             }
+            else if (node.Object != null)
+            {
+                object callValue = node.RetrieveMethodCallValue();
+                state.WriteWhere("?");
+                state.AddVariable(callValue);
+            }
             else
             {
                 throw new NotSupportedException("Method call is not supported");
@@ -331,7 +337,7 @@ namespace Starcounter.Linq.Visitors
             }
             else if (node.Arguments[0] is MemberExpression memberNode)
             {
-                variable = memberNode.RetrieveValue();
+                variable = memberNode.RetrieveMemberValue();
             }
             else
             {
