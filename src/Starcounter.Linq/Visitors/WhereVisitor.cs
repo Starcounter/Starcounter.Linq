@@ -113,7 +113,14 @@ namespace Starcounter.Linq.Visitors
             }
             else
             {
-                Visit(left, state);
+                if (left is ParameterExpression parameterExpression)
+                {
+                    state.WriteWhere(parameterExpression.Type.SourceName());
+                }
+                else
+                {
+                    Visit(left, state);
+                }
             }
 
             if (right is ConstantExpression constantExpression && constantExpression.Value == null ||

@@ -387,6 +387,23 @@ namespace Starcounter.Linq.QueryTests
             }).Wait();
         }
 
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_PredicateParameter(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                var person = Db.SQL<Person>($"SELECT p FROM {typeof(Person)} p WHERE p.Name = ?", "Roger").First();
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery((Person prsn) => Objects<Person>().Where(p => p == prsn))(person).ToList()
+                    : Objects<Person>().Where(p => p == person).ToList();
+
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Roger", persons.First().Name);
+            }).Wait();
+        }
+
         [Fact]
         public void WhereEnumToString()
         {
@@ -450,7 +467,7 @@ namespace Starcounter.Linq.QueryTests
         private class NameClass
         {
             private const string Name = "Anton";
-            
+
             public NameClass()
             { }
             public NameClass(int arg1)

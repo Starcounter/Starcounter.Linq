@@ -68,5 +68,13 @@ namespace Starcounter.Linq.SqlTests
             Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE (NOT ((P.\"Age\" = ?) OR (P.\"Age\" = ?) OR (P.\"Age\" = ?)))",
                 Sql(() => Objects<Person>().Where(p => !ages.Contains(p.Age))));
         }
+
+        [Fact]
+        public void PredicateParameterComparison()
+        {
+            var dept = new Department();
+            Assert.Equal("SELECT D FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE ((D = ?))",
+                Sql(() => Objects<Department>().Where(d => d == dept)));
+        }
     }
 }
