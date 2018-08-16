@@ -78,6 +78,14 @@ namespace Starcounter.Linq.SqlTests
         }
 
         [Fact]
+        public void EnumerableObjectsEmptyContains()
+        {
+            var people = new Person[0];
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P <> P))",
+                Sql(() => Objects<Person>().Where(p => people.Contains(p))));
+        }
+
+        [Fact]
         public void PredicateParameterComparison()
         {
             var dept = new Department();

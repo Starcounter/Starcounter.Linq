@@ -343,6 +343,17 @@ namespace Starcounter.Linq.QueryTests
         }
 
         [Fact]
+        public void FirstOrDefault_ObjectInEmptyArray__AdHoc()
+        {
+            Scheduling.RunTask(() =>
+            {
+                var people = new Person[0];
+                var person = Objects<Person>().FirstOrDefault(p => people.Contains(p));
+                Assert.Null(person);
+            }).Wait();
+        }
+
+        [Fact]
         public void FirstOrDefault_IntegerInArray__NotFound__AdHoc()
         {
             Scheduling.RunTask(() =>

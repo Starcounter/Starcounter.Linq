@@ -113,14 +113,7 @@ namespace Starcounter.Linq.Visitors
             }
             else
             {
-                if (left is ParameterExpression parameterExpression)
-                {
-                    state.WriteWhere(parameterExpression.Type.SourceName());
-                }
-                else
-                {
-                    Visit(left, state);
-                }
+                VisitPartOfBinaryExpression(left, state);
             }
 
             if (right is ConstantExpression constantExpression && constantExpression.Value == null ||
@@ -323,9 +316,9 @@ namespace Starcounter.Linq.Visitors
                 }
                 if (i <= 0) // empty collection
                 {
-                    Visit(node.Arguments[1], state);
+                    VisitPartOfBinaryExpression(node.Arguments[1], state);
                     state.WriteWhere(" <> ");
-                    Visit(node.Arguments[1], state);
+                    VisitPartOfBinaryExpression(node.Arguments[1], state);
                 }
                 state.WriteWhere(")");
             }
@@ -408,6 +401,18 @@ namespace Starcounter.Linq.Visitors
                 Visit(node.Expression, state);
             }
             state.WriteWhere($" IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)})");
+        }
+
+        private void VisitPartOfBinaryExpression(Expression expr, QueryBuilder<TEntity> state)
+        {
+            if (expr is ParameterExpression parameterExpression)
+            {
+                state.WriteWhere(parameterExpression.Type.SourceName());
+            }
+            else
+            {
+                Visit(expr, state);
+            }
         }
     }
 }
