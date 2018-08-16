@@ -321,6 +321,12 @@ namespace Starcounter.Linq.Visitors
                     state.AddVariable(item);
                     state.WriteWhere(")");
                 }
+                if (i <= 0) // empty collection
+                {
+                    Visit(node.Arguments[1], state);
+                    state.WriteWhere(" <> ");
+                    Visit(node.Arguments[1], state);
+                }
                 state.WriteWhere(")");
             }
             else if (node.Object != null)
