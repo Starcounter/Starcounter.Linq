@@ -48,6 +48,7 @@
     <Compile Include="DummyLinq.cs" />
     <Compile Include="DummyQueryContext.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="IQueryExecutor.cs" />
     <Compile Include="QueryExecutor.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />

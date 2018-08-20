@@ -95,6 +95,7 @@
     <Compile Include="Tests\LinqTests.cs" />
     <Compile Include="Tests\PagingTests.cs" />
     <Compile Include="Tests\QueryableTests.cs" />
+    <Compile Include="Tests\SelectTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

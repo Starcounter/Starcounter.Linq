@@ -59,6 +59,7 @@
     <Compile Include="OrderByTests.cs" />
     <Compile Include="Domain\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="PagingTests.cs" />
     <Compile Include="TypeTests.cs" />
