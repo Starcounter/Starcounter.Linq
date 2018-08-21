@@ -81,6 +81,7 @@
     <Compile Include="Database\Department.cs" />
     <Compile Include="Database\Employee.cs" />
     <Compile Include="Database\Gender.cs" />
+    <Compile Include="Database\Interfaces.cs" />
     <Compile Include="Database\Office.cs" />
     <Compile Include="Database\Person.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Tests\LinqTests.cs" />
     <Compile Include="Tests\PagingTests.cs" />
     <Compile Include="Tests\QueryableTests.cs" />
+    <Compile Include="Tests\SelectTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
