@@ -174,45 +174,54 @@ namespace Starcounter.Linq.Visitors
             VisitMember(node, state, true);
         }
 
+        private void VisitMemberParameterExpression(string paramName, string memberName, bool isBoolean, QueryBuilder<TEntity> state, bool specifyValueForBoolean)
+        {
+            if (isBoolean)
+            {
+                if (specifyValueForBoolean)
+                {
+                    state.WriteWhere("(");
+                }
+
+                if (state.ResultMethod == QueryResultMethod.Delete)
+                {
+                    state.WriteWhere(SqlHelper.EscapeSingleIdentifier(memberName));
+                }
+                else
+                {
+                    state.WriteWhere(paramName);
+                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberName));
+                }
+
+                if (specifyValueForBoolean)
+                {
+                    state.WriteWhere(" = True)");
+                }
+            }
+            else
+            {
+                if (state.ResultMethod == QueryResultMethod.Delete)
+                {
+                    state.WriteWhere(SqlHelper.EscapeSingleIdentifier(memberName));
+                }
+                else
+                {
+                    state.WriteWhere(paramName);
+                    state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberName));
+                }
+            }
+        }
+
         public void VisitMember(MemberExpression node, QueryBuilder<TEntity> state, bool specifyValueForBoolean)
         {
             var isBoolean = node.Type == typeof(bool);
             if (node.Expression is ParameterExpression param)
             {
-                if (isBoolean)
-                {
-                    if (specifyValueForBoolean)
-                    {
-                        state.WriteWhere("(");
-                    }
-
-                    if (state.ResultMethod == QueryResultMethod.Delete)
-                    {
-                        state.WriteWhere(SqlHelper.EscapeSingleIdentifier(node.Member.Name));
-                    }
-                    else
-                    {
-                        state.WriteWhere(param.Type.SourceName());
-                        state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
-                    }
-
-                    if (specifyValueForBoolean)
-                    {
-                        state.WriteWhere(" = True)");
-                    }
-                }
-                else
-                {
-                    if (state.ResultMethod == QueryResultMethod.Delete)
-                    {
-                        state.WriteWhere(SqlHelper.EscapeSingleIdentifier(node.Member.Name));
-                    }
-                    else
-                    {
-                        state.WriteWhere(param.Type.SourceName());
-                        state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
-                    }
-                }
+                VisitMemberParameterExpression(param.Type.SourceName(), node.Member.Name, isBoolean, state, specifyValueForBoolean);
+            }
+            else if (node.Expression is UnaryExpression unaryExpr)
+            {
+                VisitMemberParameterExpression(unaryExpr.Operand.Type.SourceName(), node.Member.Name, isBoolean, state, specifyValueForBoolean);
             }
             else
             {
@@ -234,7 +243,7 @@ namespace Starcounter.Linq.Visitors
                         state.AddVariable(memberValue);
                     }
                 }
-                else if (subNode.Expression is ParameterExpression)
+                else if (subNode.Expression is ParameterExpression || subNode.Expression is UnaryExpression)
                 {
                     if (isBoolean && specifyValueForBoolean)
                     {

@@ -7,7 +7,7 @@ using static Starcounter.Linq.DbLinq;
 namespace Starcounter.Linq.QueryTests
 {
     [Database]
-    public class Person
+    public class Person : INamed
     {
         public static readonly Func<string, Person> FirstNamed =
             CompileQuery((string name) => Objects<Person>().FirstOrDefault(p => p.Name == name));

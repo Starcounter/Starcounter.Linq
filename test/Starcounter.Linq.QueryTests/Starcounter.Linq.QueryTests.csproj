@@ -81,6 +81,7 @@
     <Compile Include="Database\Department.cs" />
     <Compile Include="Database\Employee.cs" />
     <Compile Include="Database\Gender.cs" />
+    <Compile Include="Database\Interfaces.cs" />
     <Compile Include="Database\Office.cs" />
     <Compile Include="Database\Person.cs" />
     <Compile Include="Helpers\DataHelper.cs" />

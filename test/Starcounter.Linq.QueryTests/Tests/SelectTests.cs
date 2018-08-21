@@ -69,5 +69,46 @@ namespace Starcounter.Linq.QueryTests
                 Assert.Equal(2, ages.Count);
             }).Wait();
         }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SelectGenericType(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                List<Person> people = SelectByName<Person>(mode, "Roger");
+                Assert.Equal(1, people.Count);
+                Assert.Equal("Roger", people[0].Name);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SelectGenericTypeEmbedded(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                List<Department> departments = SelectByCompanyName<Department>(mode, "Starcounter");
+                Assert.Equal(2, departments.Count);
+            }).Wait();
+        }
+
+        private List<T> SelectByName<T>(Mode mode, string name)
+            where T : INamed
+        {
+            return mode == Mode.CompiledQuery
+                ? CompileQuery((string n) => Objects<T>().Where(x => x.Name == n))(name).ToList()
+                : Objects<T>().Where(x => x.Name == name).ToList();
+        }
+
+        private List<T> SelectByCompanyName<T>(Mode mode, string companyName)
+            where T : IHaveCompany
+        {
+            return mode == Mode.CompiledQuery
+                ? CompileQuery((string cn) => Objects<T>().Where(x => x.Company.Name == cn))(companyName).ToList()
+                : Objects<T>().Where(x => x.Company.Name == companyName).ToList();
+        }
     }
 }
