@@ -89,6 +89,7 @@ namespace Starcounter.Linq
         public static readonly MethodInfo IQueryableOrderByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i));
         public static readonly MethodInfo IQueryableThenBy = MethodFromExample(() => IQueryable.OrderBy(i => i).ThenBy(i => i));
         public static readonly MethodInfo IQueryableThenByDesc = MethodFromExample(() => IQueryable.OrderByDescending(i => i).ThenByDescending(i => i));
+        public static readonly MethodInfo IQueryableSelect = MethodFromExample(() => IQueryable.Select(i => i));
         public static readonly MethodInfo IQueryableSum = MethodFromExample(() => IQueryable.Sum(i => i));
         public static readonly MethodInfo IQueryableAverage = MethodFromExample(() => IQueryable.Average(i => i));
         public static readonly MethodInfo IQueryableMin = MethodFromExample(() => IQueryable.Min(i => i));

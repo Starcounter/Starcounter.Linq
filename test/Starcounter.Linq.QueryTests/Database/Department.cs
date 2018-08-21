@@ -8,7 +8,7 @@ using static Starcounter.Linq.DbLinq;
 namespace Starcounter.Linq.QueryTests
 {
     [Database]
-    public abstract class Department
+    public abstract class Department : INamed, IHaveCompany
     {
         private static readonly Func<Department, IEnumerable<Employee>> EmployeesByDepartment =
             CompileQuery((Department dep) => Objects<Employee>().Where(e => e.Department == dep));

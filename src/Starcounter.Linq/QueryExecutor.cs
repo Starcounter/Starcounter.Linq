@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
+using Starcounter.Linq.Helpers;
 using Starcounter.Nova;
 
 namespace Starcounter.Linq
 {
     public class QueryExecutor<T> : IQueryExecutor
     {
+        private readonly Type contextType = typeof(T);
+
         public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod)
         {
             if (queryResultMethod == QueryResultMethod.Delete)
@@ -15,8 +19,16 @@ namespace Starcounter.Linq
                 return null;
             }
 
-            if (typeof(IEnumerable).IsAssignableFrom(typeof(TResult)))
+            Type resultType = typeof(TResult);
+
+            if (typeof(IEnumerable).IsAssignableFrom(resultType))
             {
+                Type resultItemType = resultType.GetGenericArguments().FirstOrDefault();
+                if (resultItemType != null && resultItemType != contextType)
+                {
+                    MethodInfo dbSqlMethod = ReflectionHelper.DbSlowSqlMethodBase.MakeGenericMethod(resultItemType);
+                    return (TResult)dbSqlMethod.Invoke(null, new object[] { sql, variables });
+                }
                 return Db.SlowSQL<T>(sql, variables);
             }
 
@@ -26,7 +38,7 @@ namespace Starcounter.Linq
                 return default(TResult);
             }
 
-            result = DeliftQueryResult(result, typeof(TResult));
+            result = DeliftQueryResult(result, resultType);
 
             return (TResult)result;
         }

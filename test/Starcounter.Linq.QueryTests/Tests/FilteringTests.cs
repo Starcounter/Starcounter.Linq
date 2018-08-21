@@ -335,6 +335,28 @@ namespace Starcounter.Linq.QueryTests
         }
 
         [Fact]
+        public void FirstOrDefault_IntegerInEmptyArray__AdHoc()
+        {
+            Db.Transact(() =>
+            {
+                var ages = new int[0];
+                var person = Objects<Person>().FirstOrDefault(p => ages.Contains(p.Age));
+                Assert.Null(person);
+            });
+        }
+
+        [Fact]
+        public void FirstOrDefault_ObjectInEmptyArray__AdHoc()
+        {
+            Db.Transact(() =>
+            {
+                var people = new Person[0];
+                var person = Objects<Person>().FirstOrDefault(p => people.Contains(p));
+                Assert.Null(person);
+            });
+        }
+
+        [Fact]
         public void FirstOrDefault_IntegerInArray__NotFound__AdHoc()
         {
             Db.Transact(() =>
@@ -387,6 +409,23 @@ namespace Starcounter.Linq.QueryTests
 
                 Assert.Equal(1, persons.Count);
                 Assert.NotEqual("Roger", persons.First().Name);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_PredicateParameter(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                var person = Db.SQL<Person>($"SELECT p FROM {typeof(Person)} p WHERE p.Name = ?", "Roger").First();
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery((Person prsn) => Objects<Person>().Where(p => p == prsn))(person).ToList()
+                    : Objects<Person>().Where(p => p == person).ToList();
+
+                Assert.Equal(1, persons.Count);
+                Assert.Equal("Roger", persons.First().Name);
             });
         }
 
@@ -453,7 +492,7 @@ namespace Starcounter.Linq.QueryTests
         private class NameClass
         {
             private const string Name = "Anton";
-            
+
             public NameClass()
             { }
             public NameClass(int arg1)

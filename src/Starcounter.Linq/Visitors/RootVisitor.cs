@@ -145,6 +145,13 @@ namespace Starcounter.Linq.Visitors
                 {
                     VisitOrderBy(node, state, false);
                 }
+                else if (gen == KnownMethods.IQueryableSelect)
+                {
+                    var left = node.Arguments[0];
+                    var right = node.Arguments[1];
+                    Visit(left, state);
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
+                }
                 else if (gen == KnownMethods.IQueryableCount)
                 {
                     var left = node.Arguments[0];
