@@ -28,11 +28,11 @@ namespace Starcounter.Linq.QueryTests
         [Fact]
         public void TestGetEnumerable_ToString()
         {
-            Scheduling.RunTask(() =>
+            Db.Transact(() =>
             {
                 var enumerable = Objects<Person>();
                 Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"QueryTests\".\"Person\" P", enumerable.ToString());
-            }).Wait();
+            });
         }
     }
 }
