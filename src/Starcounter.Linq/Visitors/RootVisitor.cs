@@ -82,7 +82,7 @@ namespace Starcounter.Linq.Visitors
                 Visit(left, state);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
-                state.WriteAggregationSelect($"COUNT({state.GetSourceName()})");
+                state.SetAggregation("COUNT");
             }
             else if (method == KnownMethods<TEntity>.IQueryableTake)
             {
@@ -152,39 +152,50 @@ namespace Starcounter.Linq.Visitors
                     Visit(left, state);
                     SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
+                else if (gen == KnownMethods.IQueryableWhere)
+                {
+                    var left = node.Arguments[0];
+                    var expression = node.Arguments[1];
+                    Visit(left, state);
+                    VisitWhere(expression, state);
+                }
                 else if (gen == KnownMethods.IQueryableCount)
                 {
                     var left = node.Arguments[0];
                     Visit(left, state);
-                    state.WriteAggregationSelect($"COUNT({state.GetSourceName()})");
+                    state.SetAggregation("COUNT");
                 }
                 else if (gen == KnownMethods.IQueryableAverage)
                 {
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.WriteAggregationSelect("AVG", () => SelectVisitor<TEntity>.Instance.Visit(right, state));
+                    state.SetAggregation("AVG");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
                 else if (gen == KnownMethods.IQueryableMin)
                 {
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.WriteAggregationSelect("MIN", () => SelectVisitor<TEntity>.Instance.Visit(right, state));
+                    state.SetAggregation("MIN");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
                 else if (gen == KnownMethods.IQueryableMax)
                 {
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.WriteAggregationSelect("MAX", () => SelectVisitor<TEntity>.Instance.Visit(right, state));
+                    state.SetAggregation("MAX");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
                 else if (gen == KnownMethods.IQueryableSum)
                 {
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.WriteAggregationSelect("SUM", () => SelectVisitor<TEntity>.Instance.Visit(right, state));
+                    state.SetAggregation("SUM");
+                    SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
             }
         }

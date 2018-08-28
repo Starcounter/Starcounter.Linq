@@ -24,5 +24,15 @@ namespace Starcounter.Linq.QueryTests
                 Assert.NotNull(enumerator);
             });
         }
+
+        [Fact]
+        public void TestGetEnumerable_ToString()
+        {
+            Scheduling.RunTask(() =>
+            {
+                var enumerable = Objects<Person>();
+                Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"QueryTests\".\"Person\" P", enumerable.ToString());
+            }).Wait();
+        }
     }
 }

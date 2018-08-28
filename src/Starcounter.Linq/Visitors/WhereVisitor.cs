@@ -94,7 +94,7 @@ namespace Starcounter.Linq.Visitors
         {
             if (left is MemberExpression memberExpression && memberExpression.Type == typeof(bool))
             {
-                if (memberExpression.Expression is ParameterExpression parameterExpression)
+                if (memberExpression.Expression is ParameterExpression)
                 {
                     if (state.ResultMethod == QueryResultMethod.Delete)
                     {
@@ -102,7 +102,7 @@ namespace Starcounter.Linq.Visitors
                     }
                     else
                     {
-                        state.WriteWhere(parameterExpression.Type.SourceName());
+                        state.WriteWhere(state.GetSource());
                         state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(memberExpression.Member.Name));
                     }
                 }
@@ -215,13 +215,13 @@ namespace Starcounter.Linq.Visitors
         public void VisitMember(MemberExpression node, QueryBuilder<TEntity> state, bool specifyValueForBoolean)
         {
             var isBoolean = node.Type == typeof(bool);
-            if (node.Expression is ParameterExpression param)
+            if (node.Expression is ParameterExpression)
             {
-                VisitMemberParameterExpression(param.Type.SourceName(), node.Member.Name, isBoolean, state, specifyValueForBoolean);
+                VisitMemberParameterExpression(state.GetSource(), node.Member.Name, isBoolean, state, specifyValueForBoolean);
             }
-            else if (node.Expression is UnaryExpression unaryExpr)
+            else if (node.Expression is UnaryExpression)
             {
-                VisitMemberParameterExpression(unaryExpr.Operand.Type.SourceName(), node.Member.Name, isBoolean, state, specifyValueForBoolean);
+                VisitMemberParameterExpression(state.GetSource(), node.Member.Name, isBoolean, state, specifyValueForBoolean);
             }
             else
             {
@@ -401,9 +401,9 @@ namespace Starcounter.Linq.Visitors
         public override void VisitTypeBinary(TypeBinaryExpression node, QueryBuilder<TEntity> state)
         {
             state.WriteWhere("(");
-            if (node.Expression is ParameterExpression parm)
+            if (node.Expression is ParameterExpression)
             {
-                state.WriteWhere(state.GetSourceName());
+                state.WriteWhere(state.GetSource());
             }
             else
             {
@@ -414,9 +414,9 @@ namespace Starcounter.Linq.Visitors
 
         private void VisitPartOfBinaryExpression(Expression expr, QueryBuilder<TEntity> state)
         {
-            if (expr is ParameterExpression parameterExpression)
+            if (expr is ParameterExpression)
             {
-                state.WriteWhere(parameterExpression.Type.SourceName());
+                state.WriteWhere(state.GetSource());
             }
             else
             {
