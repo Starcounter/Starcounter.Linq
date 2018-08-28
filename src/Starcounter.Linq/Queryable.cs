@@ -86,5 +86,10 @@ namespace Starcounter.Linq
             var res = Provider.Execute<IEnumerable<T>>(predicate);
             return res != null && res.Any();
         }
+
+        public override string ToString()
+        {
+            return Provider is QueryProvider scProvider ? scProvider.GetQuery(Expression) : base.ToString();
+        }
     }
 }
