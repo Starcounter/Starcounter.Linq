@@ -24,20 +24,21 @@ namespace Starcounter.Linq
             QueryExecutor = queryExecutor ?? throw new ArgumentNullException(nameof(queryExecutor));
 
             Type contextType;
-            switch (queryExpression.Body)
+            if (queryExpression.Body is MethodCallExpression methodCall)
             {
-                case MethodCallExpression methodCall:
-                    if (methodCall.Arguments.Any() && methodCall.Arguments[0] is MethodCallExpression methodCallExpression)
-                    {
-                        contextType = methodCallExpression.Type.GenericTypeArguments[0];
-                    }
-                    else
-                    {
-                        contextType = methodCall.Object?.Type.GenericTypeArguments.FirstOrDefault() ?? methodCall.Type;
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException();
+                var rootMethodCall = GetRootMethodCall(methodCall);
+                if (methodCall != rootMethodCall)
+                {
+                    contextType = rootMethodCall.Type.GenericTypeArguments[0];
+                }
+                else
+                {
+                    contextType = rootMethodCall.Object?.Type.GenericTypeArguments.FirstOrDefault() ?? rootMethodCall.Type;
+                }
+            }
+            else
+            {
+                throw new NotSupportedException();
             }
 
             TranslatedQuery translatedQuery;
@@ -59,6 +60,16 @@ namespace Starcounter.Linq
             }
             SqlStatement = translatedQuery.SqlStatement;
             QueryResultMethod = translatedQuery.ResultMethod;
+        }
+
+        private MethodCallExpression GetRootMethodCall(MethodCallExpression methodCall)
+        {
+            MethodCallExpression currentMethodCall = methodCall;
+            while (currentMethodCall.Arguments.Any() && currentMethodCall.Arguments[0] is MethodCallExpression upperMethodCall)
+            {
+                currentMethodCall = upperMethodCall;
+            }
+            return currentMethodCall;
         }
 
         protected virtual TResult ExecuteCore<TResult>(CancellationToken cancellationToken, params object[] parameters)

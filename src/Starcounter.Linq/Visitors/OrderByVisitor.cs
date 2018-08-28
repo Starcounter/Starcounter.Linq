@@ -9,8 +9,8 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMember(MemberExpression node, QueryBuilder<TEntity> state)
         {
-            if (node.Expression is ParameterExpression param)
-                state.WriteOrderBy(param.Type.SourceName());
+            if (node.Expression is ParameterExpression)
+                state.WriteOrderBy(state.GetSource());
             else
                 Visit(node.Expression, state);
             state.WriteOrderBy("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));

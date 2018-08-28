@@ -9,11 +9,11 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMember(MemberExpression node, QueryBuilder<TEntity> state)
         {
-            if (node.Expression is ParameterExpression param)
-                state.WriteSelect(param.Type.SourceName());
-            else
+            if (!(node.Expression is ParameterExpression))
+            {
                 Visit(node.Expression, state);
-            state.WriteSelect("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+            }
+            state.AppendSelectPath("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
         }
     }
 }

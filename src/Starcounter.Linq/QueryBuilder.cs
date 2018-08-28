@@ -12,13 +12,29 @@ namespace Starcounter.Linq
     {
         private static readonly Type QueryType = UnwrapQueryType(typeof(TEntity));
         // ReSharper disable once StaticMemberInGenericType
-        private static readonly string SourceName = QueryType.SourceName();
+        private static readonly string SourceAliasName = QueryType.SourceName();
         // ReSharper disable once StaticMemberInGenericType
         private static readonly string QueryTypeName = SqlHelper.EscapeIdentifiers(QueryType.FullName);
+
         // Precompute the from clause for this <T>
         // ReSharper disable once StaticMemberInGenericType
-        private static readonly string FromAlias = $" FROM {QueryTypeName} {QueryType.SourceName()}";
+        private static readonly string FromAlias = $" FROM {QueryTypeName} {SourceAliasName}";
+        // ReSharper disable once StaticMemberInGenericType
         private static readonly string From = $" FROM {QueryTypeName}";
+
+        public QueryResultMethod ResultMethod { get; set; } = QueryResultMethod.FirstOrDefault;
+
+        public Expression AllMethodExpression { get; set; }
+
+        private StringBuilder Where { get; } = new StringBuilder();
+        private StringBuilder OrderBy { get; } = new StringBuilder();
+        private StringBuilder SelectPath { get; } = new StringBuilder(SourceAliasName);
+        private string SelectAggregation { get; set; }
+
+        private List<object> Variables { get; } = new List<object>();
+
+        public string FetchPart { get; private set; }
+        public string OffsetPart { get; private set; }
 
         private static Type UnwrapQueryType(Type type)
         {
@@ -26,34 +42,13 @@ namespace Starcounter.Linq
             return type.GetGenericArguments().First();
         }
 
-        public QueryResultMethod ResultMethod { get; set; } = QueryResultMethod.FirstOrDefault;
-
-        public Expression AllMethodExpression { get; set; }
-
-        private StringBuilder Select { get; } = new StringBuilder();
-        private StringBuilder Where { get; } = new StringBuilder();
-        private StringBuilder OrderBy { get; } = new StringBuilder();
-
-        private List<object> Variables { get; } = new List<object>();
-
-        public string FetchPart { get; private set; }
-        public string OffsetPart { get; private set; }
-
         public void Fetch(int count) => FetchPart = " FETCH " + count;
         public void Offset(int count) => OffsetPart = " OFFSET " + count;
 
         public void BeginWhereSection()
         {
-            if (Where.Length > 0)
-            {
-                WriteWhere(" AND (");
-            }
-            else
-            {
-                WriteWhere("(");
-            }
+            WriteWhere(Where.Length > 0 ? " AND (" : "(");
         }
-
         public void EndWhereSection()
         {
             WriteWhere(")");
@@ -61,32 +56,34 @@ namespace Starcounter.Linq
 
         public void WriteWhere(string text) => Where.Append(text);
 
-        public void WriteWhereObjectNo() => Where.Append($"{SourceName}.\"ObjectNo\"");
+        public void WriteWhereObjectNo()
+        {
+            Where.Append(SourceAliasName);
+            Where.Append(".\"ObjectNo\"");
+        }
+
+        public void WriteOrderByObjectNo()
+        {
+            OrderBy.Append(SourceAliasName);
+            OrderBy.Append(".\"ObjectNo\"");
+        }
 
         public void WriteOrderBy(string text) => OrderBy.Append(text);
 
-        public void WriteOrderByObjectNo() => OrderBy.Append($"{SourceName}.\"ObjectNo\"");
-
-        public void WriteSelect(string text) => Select.Append(text);
-
-        public void WriteAggregationSelect(string aggregation)
+        public void AppendSelectPath(string text)
         {
-            OrderBy.Clear();
-            Select.Append(aggregation);
+            SelectPath.Append(text);
         }
 
-        public void WriteAggregationSelect(string @operator, Action writeOperand)
+        public void SetAggregation(string @operator)
         {
             OrderBy.Clear();
-            Select.Append(@operator);
-            Select.Append("(");
-            writeOperand();
-            Select.Append(")");
+            SelectAggregation = @operator;
         }
 
-        public string GetSourceName()
+        public string GetSource()
         {
-            return SourceName;
+            return SelectPath.ToString();
         }
 
         public string BuildSqlString()
@@ -106,14 +103,17 @@ namespace Starcounter.Linq
             else
             {
                 stringBuilder.Append("SELECT ");
-
-                if (Select.Length == 0)
+                if (SelectAggregation != null)
                 {
-                    stringBuilder.Append(SourceName); //SELECT TEntity
+                    stringBuilder.Append(SelectAggregation);
+                    stringBuilder.Append("(");
                 }
-                else
+
+                stringBuilder.Append(SelectPath);
+
+                if (SelectAggregation != null)
                 {
-                    stringBuilder.Append(Select); //SELECT AVG(a.b.c)
+                    stringBuilder.Append(")");
                 }
                 stringBuilder.Append(FromAlias);
             }

@@ -20,5 +20,10 @@ namespace Starcounter.Linq
         object IQueryProvider.Execute(Expression expression) => QueryContext.Execute(expression);
 
         T IQueryProvider.Execute<T>(Expression expression) => (T)QueryContext.Execute<T>(expression);
+
+        public string GetQuery(Expression expression)
+        {
+            return QueryContext.GetQuery(expression).SqlStatement;
+        }
     }
 }
