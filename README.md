@@ -8,6 +8,15 @@ It is available for downloading as [Starcounter.Linq](https://www.nuget.org/pack
 
 Requires Starcounter version 2.3.1 or later and .NET Framework 4.5.
 
+
+## Versioning
+
+| Starcounter.Linq versions | Supported Starcounter version |
+|---------------------------|-------------------------------|
+| [1.*](https://github.com/Starcounter/Starcounter.Linq/tree/master)  | 2.3.1, 2.3.2 |
+| [2.*](https://github.com/Starcounter/Starcounter.Linq/tree/develop) | 2.4          |
+| [3.*](https://github.com/Starcounter/Starcounter.Linq/tree/nova)    | Nova         |
+
 ## How to use
 
 First, in your Starcounter app, add a reference to `Starcounter.Linq.dll` through NuGet: `Install-Package Starcounter.Linq`.
@@ -177,9 +186,58 @@ Objects<Person>().Delete(x => x.Age > 40);
 Objects<Person>().DeleteAll();
 ```
 
-## Roadmap
+## Supported features
 
-Look at [Starcounter.Linq#6](https://github.com/Starcounter/Starcounter.Linq/issues/6)
+- `SELECT` clause, also by using `IQueryable.Select` method
+- `WHERE` clause by using methods:
+  - `IQueryable.Where`
+  - `IQueryable.First`
+  - `IQueryable.FirstOrDefault`
+  - `IQueryable.Single`
+  - `IQueryable.SingleOrDefault`
+  - `IQueryable.Count`
+  - `IQueryable.Any`
+- `ORDER BY` clause by using methods:
+  - `IQueryable.OrderBy`
+  - `IQueryable.OrderByDescending`
+  - `IQueryable.ThenBy`
+  - `IQueryable.ThenByDescending`
+- Logical operators `AND`, `OR`, `NOT` by using `&&`, `||`, `!` operators in LINQ queries
+- Comparison by using:
+  - operators `=`, `>`, `>=`, `<`, `<=`, `<>`
+  - method `Object.Equals`
+- `LIKE` operator by using methods:
+  - `String.Contains`
+  - `String.StartsWith`
+  - `String.EndsWith`
+- `IEnumerable.Contains` method in LINQ queries
+- `DbHelper.GetObjectNo` method in LINQ queries
+- `IS` operator by using `is` operator in LINQ queries
+- `OFFSET` clause by using `IQueryable.Skip` method
+- `FETCH` clause by using methods:
+  - `IQueryable.Take`
+  - `IQueryable.FirstOrDefault`
+  - `IQueryable.First`
+  - `IQueryable.Single`
+  - `IQueryable.SingleOrDefault`
+- `COUNT` function by using method `IQueryable.Count`
+- `AVG` function by using method `IQueryable.Average`
+- `MIN` function by using method `IQueryable.Min`
+- `MAX` function by using method `IQueryable.Max`
+- `SUM` function by using method `IQueryable.Sum`
+- Calculating expression values in LINQ queries
+- Support First, FirstOrDefault, Single, SingleOrDefault and Any methods - ~#27~
+- `DELETE FROM` statement by using methods:
+  - `Starcounter.Linq.Queriable.Delete`
+  - `Starcounter.Linq.Queriable.DeleteAll`
+- Using of generic types for a query context
+- Overrided `IQueryable.ToString` for providing of generated SQL queries
+
+## Well-known unsupported features
+
+- `IQueryable.All` method
+- `GROUP BY` clause (with `IQueryable.GroupBy` method)
+- Querying a specific set of data properties (currently supports only single property querying)
 
 -----
 
