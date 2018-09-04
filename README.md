@@ -4,11 +4,6 @@ Starcounter.Linq is a LINQ to SQL Provider for Starcounter. It uses standard LIN
 
 It is available for downloading as [Starcounter.Linq](https://www.nuget.org/packages/Starcounter.Linq/) NuGet package.
 
-## Requirements
-
-Requires Starcounter version 2.3.1 or later and .NET Framework 4.5.
-
-
 ## Versioning
 
 | Starcounter.Linq versions | Supported Starcounter version |
@@ -226,18 +221,17 @@ Objects<Person>().DeleteAll();
 - `MAX` function by using method `IQueryable.Max`
 - `SUM` function by using method `IQueryable.Sum`
 - Calculating expression values in LINQ queries
-- Support First, FirstOrDefault, Single, SingleOrDefault and Any methods - ~#27~
 - `DELETE FROM` statement by using methods:
   - `Starcounter.Linq.Queriable.Delete`
   - `Starcounter.Linq.Queriable.DeleteAll`
 - Using of generic types for a query context
-- Overrided `IQueryable.ToString` for providing of generated SQL queries
+- Overridden `IQueryable.ToString` for providing of generated SQL queries
 
-## Well-known unsupported features
+## Unsupported features
 
-- `IQueryable.All` method
-- `GROUP BY` clause (with `IQueryable.GroupBy` method)
-- Querying a specific set of data properties (currently supports only single property querying)
+- `IQueryable.All` method - [#31](https://github.com/Starcounter/Starcounter.Linq/issues/31)
+- `GROUP BY` clause (with `IQueryable.GroupBy` method) - [#59](https://github.com/Starcounter/Starcounter.Linq/issues/59)
+- Querying a specific set of data properties (currently supports only single property querying) - [#60](https://github.com/Starcounter/Starcounter.Linq/issues/60)
 
 -----
 
