@@ -206,7 +206,7 @@ Objects<Person>().DeleteAll();
   - `String.StartsWith`
   - `String.EndsWith`
 - `IEnumerable.Contains` method in LINQ queries
-- `DbHelper.GetObjectNo` method in LINQ queries
+- `Db.GetOid` method in LINQ queries
 - `IS` operator by using `is` operator in LINQ queries
 - `OFFSET` clause by using `IQueryable.Skip` method
 - `FETCH` clause by using methods:

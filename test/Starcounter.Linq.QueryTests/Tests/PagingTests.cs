@@ -55,22 +55,22 @@ namespace Starcounter.Linq.QueryTests
                     ? CompileQuery(() => Objects<Person>().OrderBy(x => x.Age))().ToList()
                     : Objects<Person>().OrderBy(x => x.Age).ToList();
                 Assert.Equal(2, people.Count);
-                Assert.True(people[0].GetObjectNo() < people[1].GetObjectNo());
+                Assert.True(Db.GetOid(people[0]) < Db.GetOid(people[1]));
             });
         }
 
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
-        public void OrderBy_ObjectNo(Mode mode)
+        public void OrderBy_Oid(Mode mode)
         {
             Db.Transact(() =>
             {
                 List<Person> people = mode == Mode.CompiledQuery
-                    ? CompileQuery(() => Objects<Person>().OrderByDescending(x => x.GetObjectNo()))().ToList()
-                    : Objects<Person>().OrderByDescending(x => x.GetObjectNo()).ToList();
+                    ? CompileQuery(() => Objects<Person>().OrderByDescending(x => Db.GetOid(x)))().ToList()
+                    : Objects<Person>().OrderByDescending(x => Db.GetOid(x)).ToList();
                 Assert.Equal(2, people.Count);
-                Assert.True(people[0].GetObjectNo() > people[1].GetObjectNo());
+                Assert.True(Db.GetOid(people[0]) > Db.GetOid(people[1]));
             });
         }
     }
