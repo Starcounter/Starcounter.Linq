@@ -390,7 +390,7 @@ namespace Starcounter.Linq.QueryTests
                     ? CompileQuery((ulong id) => Objects<Person>().Where(p => p.GetObjectNo() == id))(testPersonId).ToList()
                     : Objects<Person>().Where(p => p.GetObjectNo() == testPersonId).ToList();
 
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Roger", persons.First().Name);
             });
         }
@@ -407,7 +407,7 @@ namespace Starcounter.Linq.QueryTests
                     ? CompileQuery((ulong id, string name) => Objects<Person>().Where(p => p.GetObjectNo() != id && p.Name == name))(testPersonId, "Anton").ToList()
                     : Objects<Person>().Where(p => p.GetObjectNo() != testPersonId && p.Name == "Anton").ToList();
 
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.NotEqual("Roger", persons.First().Name);
             });
         }
@@ -424,7 +424,7 @@ namespace Starcounter.Linq.QueryTests
                     ? CompileQuery((Person prsn) => Objects<Person>().Where(p => p == prsn))(person).ToList()
                     : Objects<Person>().Where(p => p == person).ToList();
 
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Roger", persons.First().Name);
             });
         }
@@ -436,7 +436,7 @@ namespace Starcounter.Linq.QueryTests
             {
                 var persons = Objects<Person>().Where(p => p.Name == Names.Anton.ToString()).ToList();
 
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Anton", persons.First().Name);
             });
         }
@@ -450,7 +450,7 @@ namespace Starcounter.Linq.QueryTests
 
                 var persons = Objects<Person>().Where(p => p.Name == nameInstance.GetName()).ToList();
 
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Anton", persons.First().Name);
             });
         }
@@ -465,7 +465,7 @@ namespace Starcounter.Linq.QueryTests
 
                 var persons = Objects<Person>().Where(p => p.Name == nameInstance.GetName(param1)).ToList();
 
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Anton", persons.First().Name);
             });
         }
@@ -481,7 +481,7 @@ namespace Starcounter.Linq.QueryTests
 
                 var persons = Objects<Person>().Where(p => p.Name == new NameClass(ctorArg).GetName(param1, param2)).ToList();
 
-                Assert.Equal(1, persons.Count);
+                Assert.Single(persons);
                 Assert.Equal("Anton", persons.First().Name);
             });
         }
