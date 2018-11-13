@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="runtime.native.Starcounter.Bluestar" Version="2.4.0-pre-013035" />
+    <PackageReference Include="runtime.native.Starcounter.Bluestar2" Version="2.0.0" />
   </ItemGroup>
 
 </Project>
