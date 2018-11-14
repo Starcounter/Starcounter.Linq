@@ -299,7 +299,7 @@ namespace Starcounter.Linq.Visitors
                 AddConstantOrMemberNodeValue(node, state);
                 state.WriteWhere(" LIKE '%' || ?)");
             }
-            else if (node.Method == KnownMethods.GetObjectNo)
+            else if (node.Method == KnownMethods.GetOid)
             {
                 state.WriteWhereObjectNo();
             }

@@ -18,7 +18,7 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
-            if (node.Method == KnownMethods.GetObjectNo)
+            if (node.Method == KnownMethods.GetOid)
             {
                 state.WriteOrderByObjectNo();
             }
