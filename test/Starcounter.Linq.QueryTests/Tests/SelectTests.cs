@@ -124,7 +124,7 @@ namespace Starcounter.Linq.QueryTests
                 List<Office> offices = mode == Mode.CompiledQuery
                     ? CompileQuery((string c) => Objects<Person>().Select(x => x.Office).Where(x => x.City == c))(city).ToList()
                     : Objects<Person>().Select(x => x.Office).Where(x => x.City == city).ToList();
-                Assert.Equal(1, offices.Count);
+                Assert.Single(offices);
             });
         }
 
@@ -139,7 +139,7 @@ namespace Starcounter.Linq.QueryTests
                 List<Company> companies = mode == Mode.CompiledQuery
                     ? CompileQuery((string n) => Objects<Employee>().Select(x => x.Department).Where(x => x.Name == n).Select(x => x.Company))(deptName).ToList()
                     : Objects<Employee>().Select(x => x.Department).Where(x => x.Name == deptName).Select(x => x.Company).ToList();
-                Assert.Equal(1, companies.Count);
+                Assert.Single(companies);
             });
         }
 
@@ -154,7 +154,7 @@ namespace Starcounter.Linq.QueryTests
                 List<string> names = mode == Mode.CompiledQuery
                     ? CompileQuery((string n) => Objects<Employee>().Select(x => x.Department).Where(x => x.Name == n).Select(x => x.Company).Where(x => x.Global).Select(x => x.Name))(deptName).ToList()
                     : Objects<Employee>().Select(x => x.Department).Where(x => x.Name == deptName).Select(x => x.Company).Where(x => x.Global).Select(x => x.Name).ToList();
-                Assert.Equal(1, names.Count);
+                Assert.Single(names);
             });
         }
     }
