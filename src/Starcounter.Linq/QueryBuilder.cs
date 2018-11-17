@@ -56,10 +56,17 @@ namespace Starcounter.Linq
 
         public void WriteWhere(string text) => Where.Append(text);
 
-        public void WriteWhereObjectNo()
+        public void WriteWhereObjectNo(bool appendAlias = true)
         {
-            Where.Append(SourceAliasName);
-            Where.Append(".\"ObjectNo\"");
+            if (appendAlias)
+            {
+                Where.Append(SourceAliasName);
+                Where.Append(".\"ObjectNo\"");
+            }
+            else
+            {
+                Where.Append("\"ObjectNo\"");
+            }
         }
 
         public void WriteOrderByObjectNo()
