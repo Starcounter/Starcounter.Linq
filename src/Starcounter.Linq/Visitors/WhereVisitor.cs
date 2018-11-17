@@ -301,7 +301,7 @@ namespace Starcounter.Linq.Visitors
             }
             else if (node.Method == KnownMethods.GetObjectNo)
             {
-                state.WriteWhereObjectNo();
+                state.WriteWhereObjectNo(state.ResultMethod != QueryResultMethod.Delete);
             }
             else if (node.Method.IsGenericMethod &&
                 node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains &&
