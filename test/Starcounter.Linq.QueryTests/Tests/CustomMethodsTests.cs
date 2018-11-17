@@ -33,16 +33,16 @@ namespace Starcounter.Linq.QueryTests
         [Fact]
         public void Delete_ByObjectNo()
         {
-            Scheduling.RunTask(() =>
+            Db.Transact(() =>
             {
-                Db.Transact(() =>
-                {
-                    Objects<Person>().Delete(x => x.GetObjectNo() > 0);
-                });
+                Objects<Person>().Delete(x => Db.GetOid(x) > 0);
+            });
+            Db.Transact(() =>
+            {
                 var cnt = Objects<Person>().Count();
                 Assert.Equal(0, cnt);
-                _fixture.RecreateData();
-            }).Wait();
+            });
+            _fixture.RecreateData();
         }
 
         [Fact]
