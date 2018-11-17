@@ -29,6 +29,21 @@ namespace Starcounter.Linq.QueryTests
         }
 
         [Fact]
+        public void Delete_ByObjectNo()
+        {
+            Scheduling.RunTask(() =>
+            {
+                Db.Transact(() =>
+                {
+                    Objects<Person>().Delete(x => x.GetObjectNo() > 0);
+                });
+                var cnt = Objects<Person>().Count();
+                Assert.Equal(0, cnt);
+                _fixture.RecreateData();
+            }).Wait();
+        }
+
+        [Fact]
         public void DeleteAll()
         {
             Scheduling.RunTask(() =>
