@@ -131,7 +131,7 @@ people = query();
 
 ### NULL values
 
-Since comparisons with `null` values are translated to `IS NULL` form in SQL, there is no possibility to pass such values with parameters into compiled queries.
+Since comparisons with `null` values are translated to `IS NULL` form in SQL, there is no possibility to pass such values with parameters into compiled queries. Starcounter.Linq throws an exception in such cases.
 
 Example:
 
@@ -153,7 +153,7 @@ var withOfficeQuery = DbLinq.CompileQuery((notNullOffice) =>
                       DbLinq.Objects<Employee>().FirstOrDefault(p => p.Office == notNullOffice));
 
 // it does not work because the SQL query has been translated and IS NULL cannot be inserted
-employee1 = withOfficeQuery(null);
+employee1 = withOfficeQuery(null);  // ArgumentNullException will be thrown
 
 // that should be written in the following way
 employee1 = office == null ? withoutOfficeQuery() : withOfficeQuery(office);
