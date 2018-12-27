@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Starcounter.Nova;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
@@ -313,12 +314,13 @@ namespace Starcounter.Linq.QueryTests
         {
             Db.Transact(() =>
             {
-                Office office = null;
-                // this is incorrect, Compiled Query is not supported passing null with parameter (only inline, see FirstObjectEqualNull test)
-                // ReSharper disable once ExpressionIsAlwaysNull
-                var employee = CompileQuery((Office o) => Objects<Employee>().FirstOrDefault(p => p.Office != o))(office);
+                Employee employee = null;
 
-                Assert.Null(employee);  // because the built SQL was incorrect
+                // this is incorrect, Compiled Query is not supported passing null with parameter (only inline, see FirstObjectEqualNull test)
+                var query = CompileQuery((Office o) => Objects<Employee>().FirstOrDefault(p => p.Office != o));
+
+                Assert.Throws<ArgumentNullException>(() => employee = query(null));
+                Assert.Null(employee);
             });
         }
 

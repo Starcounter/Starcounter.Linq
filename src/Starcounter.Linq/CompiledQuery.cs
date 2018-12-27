@@ -74,6 +74,10 @@ namespace Starcounter.Linq
 
         protected virtual TResult ExecuteCore<TResult>(CancellationToken cancellationToken, params object[] parameters)
         {
+            if (parameters.Any(x => x == null))
+            {
+                throw new ArgumentNullException(nameof(parameters), "Compiled query does not support null value as a parameter.");
+            }
             return (TResult)QueryExecutor.Execute<TResult>(SqlStatement, parameters, QueryResultMethod);
         }
 
