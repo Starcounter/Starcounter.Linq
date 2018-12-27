@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Starcounter.Linq")]
-[assembly: AssemblyDescription("LINQ to SQL Provider for Starcounter")]
+[assembly: AssemblyDescription("LINQ to SQL Provider for Starcounter 2.3")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Starcounter")]
+[assembly: AssemblyCompany("Starcounter AB")]
 [assembly: AssemblyProduct("Starcounter.Linq")]
-[assembly: AssemblyCopyright("Copyright © 2018")]
+[assembly: AssemblyCopyright("Copyright © 2018 Starcounter AB")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,5 +21,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("df08e065-aaf1-42db-a92e-d288154f5663")]
 
-[assembly: AssemblyVersion("1.0.1")]
-[assembly: AssemblyInformationalVersion("1.0.1")]
+[assembly: AssemblyVersion("1.3.1")]
+[assembly: AssemblyInformationalVersion("1.3.1")]
