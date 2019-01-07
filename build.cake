@@ -12,7 +12,6 @@
     /// Argument parsing
     ///
     string configuration = Argument("configuration", "Debug");
-    string xunitReporter = Argument("xunitReporter", "-verbose");
     string nugetConfigFile = Argument("nugetConfigFile", "");
 
     string starNugetPath = Argument("starNugetPath", "");
@@ -75,9 +74,21 @@
     ///
     /// Task for testing Starcounter.Linq
     ///
-    Task("TestLinqI").Does(() =>
+    Task("TestLinqI").DoesForEach(GetFiles(rootPath + "/**/*Tests.csproj"), (csprojFile) =>
     {
-        // TODO
+        var testDirectory = csprojFile.GetDirectory();
+        var projNameWithoutExtension = csprojFile.GetFilenameWithoutExtension();
+
+        var settings = new DotNetCoreTestSettings
+        {
+            Configuration = configuration,
+            DiagnosticFile = $"{testDirectory}/{projNameWithoutExtension}.log",
+            NoBuild = true,
+            NoRestore = true,
+            ArgumentCustomization = args => args.Append("--verbosity normal")
+        };
+
+         DotNetCoreTest(csprojFile.FullPath, settings);
     });
 
     ///
