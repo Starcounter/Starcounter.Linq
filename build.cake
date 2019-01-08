@@ -85,7 +85,8 @@
             DiagnosticFile = $"{testDirectory}/{projNameWithoutExtension}.log",
             NoBuild = true,
             NoRestore = true,
-            ArgumentCustomization = args => args.Append("--verbosity normal")
+            ArgumentCustomization = args => args.Append("--verbosity normal"),
+            EnvironmentVariables = GetConfiguration()
         };
 
          DotNetCoreTest(csprojFile.FullPath, settings);
@@ -109,6 +110,46 @@
 
         DotNetCorePack(projectFile, settings);
     });
+
+    ///
+    /// Utilities
+    ///
+    Dictionary<string, string> GetConfiguration()
+    {
+        Dictionary<string, string> envVars = new Dictionary<string, string>();
+
+        if (EnvironmentVariable("StarcounterBin") == null)
+        {
+            string level0Binaries = null;
+
+            if (IsRunningOnUnix())
+            {
+                level0Binaries = rootPath + "/../level0/make/x64/" + configuration;
+                envVars.Add("StarcounterBin", level0Binaries);
+                envVars.Add("LD_LIBRARY_PATH", level0Binaries);
+            }
+            else if (IsRunningOnWindows())
+            {
+                level0Binaries = rootPath + "/../level0/msbuild/x64/" + configuration;
+                envVars.Add("StarcounterBin", level0Binaries);
+            }
+            else
+            {
+                throw new Exception("Only Unix and Windows platforms are supported.");
+            }
+
+            envVars.Add("PATH", level0Binaries + System.IO.Path.PathSeparator + Environment.GetEnvironmentVariable("PATH"));
+
+            // Check if Level0 binaries has been built.
+            var di = new DirectoryInfo(level0Binaries);
+            if (!di.Exists)
+            {
+                throw new Exception(string.Format("Exiting Nova execution step since Level0 has not been built. Content for environment variable StarcounterBin={0} does not exist.", di.FullName));
+            }
+        }
+
+        return envVars;
+    }
 
     ///
     /// Run targets if invoked as self-containment script
