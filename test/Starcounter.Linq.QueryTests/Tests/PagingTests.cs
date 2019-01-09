@@ -7,7 +7,7 @@ using static Starcounter.Linq.DbLinq;
 namespace Starcounter.Linq.QueryTests
 {
     [Collection("Data tests")]
-    public class PagingTests : IClassFixture<DataTestFixture>
+    public class PagingTests
     {
         private readonly DataTestFixture _fixture;
 

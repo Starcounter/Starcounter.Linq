@@ -1,11 +1,15 @@
 ﻿using System;
+using Starcounter.Linq.QueryTests.Utilities;
 
 namespace Starcounter.Linq.QueryTests
 {
-    public class DataTestFixture : BaseTestsFixture, IDisposable
+    public class DataTestFixture : IDisposable
     {
-        public DataTestFixture() : base()
+        internal TestAppHost AppHost;
+
+        public DataTestFixture()
         {
+            AppHost = TestAppHost.GetInstance();
             DataHelper.ResetData();
             DataHelper.CreateEmployees();
         }
@@ -19,6 +23,7 @@ namespace Starcounter.Linq.QueryTests
         public void Dispose()
         {
             DataHelper.ResetData();
+            AppHost.Dispose();
         }
     }
 }
