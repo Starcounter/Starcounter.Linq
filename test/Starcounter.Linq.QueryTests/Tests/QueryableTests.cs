@@ -5,11 +5,12 @@ using static Starcounter.Linq.DbLinq;
 
 namespace Starcounter.Linq.QueryTests
 {
-    public class QueryableTests : IClassFixture<BaseTestsFixture>
+    [Collection("Data tests")]
+    public class QueryableTests
     {
-        private readonly BaseTestsFixture _fixture;
+        private readonly DataTestFixture _fixture;
 
-        public QueryableTests(BaseTestsFixture fixture)
+        public QueryableTests(DataTestFixture fixture)
         {
             _fixture = fixture;
         }
