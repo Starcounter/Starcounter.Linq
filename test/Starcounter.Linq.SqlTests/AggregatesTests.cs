@@ -17,7 +17,7 @@ namespace Starcounter.Linq.SqlTests
         [Fact]
         public void CountFiltering()
         {
-            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" = ?))",
+            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE (P.\"Name\" = ?)",
                 Sql(() => Objects<Person>().Count(x => x.Name == "XXX")));
         }
 
@@ -25,7 +25,7 @@ namespace Starcounter.Linq.SqlTests
         public void CountFiltering_CalculatedValue()
         {
             var name = "XXX";
-            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE ((P.\"Name\" = ?))",
+            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE (P.\"Name\" = ?)",
                 Sql(() => Objects<Person>().Count(x => x.Name == name)));
         }
 

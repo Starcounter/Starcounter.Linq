@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Starcounter AB")]
 [assembly: AssemblyProduct("Starcounter.Linq")]
-[assembly: AssemblyCopyright("Copyright © 2018 Starcounter AB")]
+[assembly: AssemblyCopyright("Copyright © 2019 Starcounter AB")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,5 +21,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("df08e065-aaf1-42db-a92e-d288154f5663")]
 
-[assembly: AssemblyVersion("2.3.1")]
-[assembly: AssemblyInformationalVersion("2.3.1")]
+[assembly: AssemblyVersion("2.3.2")]
+[assembly: AssemblyInformationalVersion("2.3.2")]
