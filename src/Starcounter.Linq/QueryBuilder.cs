@@ -47,11 +47,15 @@ namespace Starcounter.Linq
 
         public void BeginWhereSection()
         {
-            WriteWhere(Where.Length > 0 ? " AND (" : "(");
+            if (Where.Length > 0)
+            {
+                WriteWhere(" AND ");
+            }
         }
+
         public void EndWhereSection()
         {
-            WriteWhere(")");
+            // nothing to do
         }
 
         public void WriteWhere(string text) => Where.Append(text);
