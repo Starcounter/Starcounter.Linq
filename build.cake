@@ -13,7 +13,7 @@
     ///
     string configuration = Argument("configuration", "Debug");
     string nugetConfigFile = Argument("nugetConfigFile", "");
-
+    string msbuildPropertyNoWarning = Argument("msbuildPropertyNoWarning", ""); // Semicolon (;) separated for multiple warnings
     string starNugetPath = Argument("starNugetPath", "");
     if (string.IsNullOrEmpty(starNugetPath))
     {
@@ -44,8 +44,16 @@
     ///
     Task("RestoreLinq").Does(() =>
     {
+        var msBuildSettings = new DotNetCoreMSBuildSettings();
+
+        if (!string.IsNullOrEmpty(msbuildPropertyNoWarning))
+        {
+            msBuildSettings.WithProperty("NoWarn", msbuildPropertyNoWarning);
+        }
+
         var settings = new DotNetCoreRestoreSettings
         {
+            MSBuildSettings = msBuildSettings,
             NoCache = true
         };
 
