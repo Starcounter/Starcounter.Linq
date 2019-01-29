@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using Starcounter.Nova.Abstractions;
+using Starcounter.Nova.Binding;
 using Starcounter.Nova.Hosting;
+using Starcounter.Nova.Hosting.BindingExtensions;
 
 namespace Starcounter.Linq.QueryTests.Utilities
 {
@@ -31,9 +33,10 @@ namespace Starcounter.Linq.QueryTests.Utilities
             _tmpDb = new TempDatabase();
             _createTempDatabaseSw.Stop();
             Console.WriteLine($"in \"{_tmpDb.FullPath}\" took {_createTempDatabaseSw.ElapsedMilliseconds} ms");
-
+            
             _apphost = new AppHostBuilder()
                 .UseDatabase(_tmpDb.FullPath)
+                .UseTypes(_ => DefaultTypeSelector.Create(typeof(Person).Assembly.ExportedTypes))
                 .UseSchedulerCount(schedulerCount)
                 .Build();
         }
