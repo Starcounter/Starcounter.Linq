@@ -10,7 +10,7 @@ namespace Starcounter.Linq.SqlTests
         [Fact]
         public void TypeIs()
         {
-            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE (P IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Employee\")",
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE P IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Employee\"",
                 Sql(() => Objects<Person>().Where(p => p is Employee)));
         }
 
@@ -18,21 +18,21 @@ namespace Starcounter.Linq.SqlTests
         [Fact]
         public void TypeIs_Nested()
         {
-            Assert.Equal("SELECT D FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE (D.\"Company\" IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Company\")",
+            Assert.Equal("SELECT D FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE D.\"Company\" IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Company\"",
                 Sql(() => Objects<Department>().Where(d => d.Company is Company)));
         }
 
         [Fact]
         public void TypeIs_NestedTwice()
         {
-            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Employee\" E WHERE (E.\"Department\".\"Company\" IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Company\")",
+            Assert.Equal("SELECT E FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Employee\" E WHERE E.\"Department\".\"Company\" IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Company\"",
                 Sql(() => Objects<Employee>().Where(d => d.Department.Company is Company)));
         }
 
         [Fact]
         public void TypeIs_ReservedWordType()
         {
-            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE (P IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Unknown\")",
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE P IS \"Starcounter\".\"Linq\".\"SqlTests\".\"Unknown\"",
                 Sql(() => Objects<Person>().Where(p => p is Unknown)));
         }
 #pragma warning restore CS0184 // 'is' expression's given expression is never of the provided type

@@ -126,7 +126,6 @@ namespace Starcounter.Linq.Visitors
             }
         }
 
-
         public virtual void VisitLambda(LambdaExpression node, T state)
         {
             foreach (var exp in node.Parameters)
