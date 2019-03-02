@@ -11,7 +11,6 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitBinary(BinaryExpression node, QueryBuilder<TEntity> state)
         {
-            state.WriteWhere("(");
             switch (node.NodeType)
             {
                 case ExpressionType.GreaterThan:
@@ -42,9 +41,9 @@ namespace Starcounter.Linq.Visitors
                     break;
                 case ExpressionType.AndAlso:
                 case ExpressionType.And:
-                    Visit(node.Left, state);
+                    VisitAndOperand(node.Left, state);
                     state.WriteWhere(" AND ");
-                    Visit(node.Right, state);
+                    VisitAndOperand(node.Right, state);
                     break;
 
                 case ExpressionType.OrElse:
@@ -81,8 +80,21 @@ namespace Starcounter.Linq.Visitors
                 default:
                     throw new NotSupportedException();
             }
+        }
 
-            state.WriteWhere(")");
+        private void VisitAndOperand(Expression node, QueryBuilder<TEntity> state)
+        {
+            if (node is BinaryExpression binExpr &&
+                (binExpr.NodeType == ExpressionType.Or || binExpr.NodeType == ExpressionType.OrElse))
+            {
+                state.OpenWhereParentheses();
+                Visit(node, state);
+                state.CloseWhereParentheses();
+            }
+            else
+            {
+                Visit(node, state);
+            }
         }
 
         private void VisitBinaryEquality(BinaryExpression node, QueryBuilder<TEntity> state, bool isEqualsSign)
@@ -178,11 +190,6 @@ namespace Starcounter.Linq.Visitors
         {
             if (isBoolean)
             {
-                if (specifyValueForBoolean)
-                {
-                    state.WriteWhere("(");
-                }
-
                 if (state.ResultMethod == QueryResultMethod.Delete)
                 {
                     state.WriteWhere(SqlHelper.EscapeSingleIdentifier(memberName));
@@ -195,7 +202,7 @@ namespace Starcounter.Linq.Visitors
 
                 if (specifyValueForBoolean)
                 {
-                    state.WriteWhere(" = True)");
+                    state.WriteWhere(" = True");
                 }
             }
             else
@@ -245,17 +252,12 @@ namespace Starcounter.Linq.Visitors
                 }
                 else if (subNode.Expression is ParameterExpression || subNode.Expression is UnaryExpression)
                 {
-                    if (isBoolean && specifyValueForBoolean)
-                    {
-                        state.WriteWhere("(");
-                    }
-
                     Visit(node.Expression, state);
                     state.WriteWhere("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
 
                     if (isBoolean && specifyValueForBoolean)
                     {
-                        state.WriteWhere(" = True)");
+                        state.WriteWhere(" = True");
                     }
                 }
                 else
@@ -274,30 +276,25 @@ namespace Starcounter.Linq.Visitors
         {
             if (node.Method == KnownMethods.ObjectEquals)
             {
-                state.WriteWhere("(");
                 VisitBinaryEquality(node.Object, node.Arguments[0], state, true);
-                state.WriteWhere(")");
             }
             else if (node.Method == KnownMethods.StringContains)
             {
-                state.WriteWhere("(");
                 Visit(node.Object, state);
                 AddConstantOrMemberNodeValue(node, state);
-                state.WriteWhere(" LIKE '%' || ? || '%')");
+                state.WriteWhere(" LIKE '%' || ? || '%'");
             }
             else if (node.Method == KnownMethods.StringStartsWith)
             {
-                state.WriteWhere("(");
                 Visit(node.Object, state);
                 AddConstantOrMemberNodeValue(node, state);
-                state.WriteWhere(" LIKE ? || '%')");
+                state.WriteWhere(" LIKE ? || '%'");
             }
             else if (node.Method == KnownMethods.StringEndsWith)
             {
-                state.WriteWhere("(");
                 Visit(node.Object, state);
                 AddConstantOrMemberNodeValue(node, state);
-                state.WriteWhere(" LIKE '%' || ?)");
+                state.WriteWhere(" LIKE '%' || ?");
             }
             else if (node.Method == KnownMethods.GetOid)
             {
@@ -307,21 +304,29 @@ namespace Starcounter.Linq.Visitors
                 node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains &&
                 node.Arguments[0] is MemberExpression memberExpression)
             {
-                state.WriteWhere("(");
                 var items = (IEnumerable)memberExpression.RetrieveMemberValue();
                 int i = 0;
+                bool parenthesesOpened = false;
 
                 foreach (var item in items)
                 {
-                    if (i++ > 0)
+                    if (i <= 0)
+                    {
+                        parenthesesOpened = state.OpenWhereParenthesesIfFirst();
+                    }
+                    if (i > 0)
                     {
                         state.WriteWhere(" OR ");
                     }
-                    state.WriteWhere("(");
+                    i++;
+
                     Visit(node.Arguments[1], state);
                     state.WriteWhere(" = ?");
                     state.AddVariable(item);
-                    state.WriteWhere(")");
+                }
+                if (parenthesesOpened)
+                {
+                    state.CloseWhereParentheses();
                 }
                 if (i <= 0) // empty collection
                 {
@@ -329,7 +334,6 @@ namespace Starcounter.Linq.Visitors
                     state.WriteWhere(" <> ");
                     VisitPartOfBinaryExpression(node.Arguments[1], state);
                 }
-                state.WriteWhere(")");
             }
             else if (node.Object != null)
             {
@@ -385,8 +389,7 @@ namespace Starcounter.Linq.Visitors
         {
             if (node.NodeType == ExpressionType.Not)
             {
-                state.WriteWhere("NOT ");
-                Visit(node.Operand, state);
+                VisitNot(node.Operand, state);
             }
             else if (node.Operand is LambdaExpression lambda)
             {
@@ -400,7 +403,6 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitTypeBinary(TypeBinaryExpression node, QueryBuilder<TEntity> state)
         {
-            state.WriteWhere("(");
             if (node.Expression is ParameterExpression)
             {
                 state.WriteWhere(state.GetSource());
@@ -409,7 +411,15 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(node.Expression, state);
             }
-            state.WriteWhere($" IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)})");
+            state.WriteWhere($" IS {SqlHelper.EscapeIdentifiers(node.TypeOperand.FullName)}");
+        }
+
+        private void VisitNot(Expression operand, QueryBuilder<TEntity> state)
+        {
+            state.WriteWhere("NOT ");
+            state.OpenWhereParentheses();
+            Visit(operand, state);
+            state.CloseWhereParentheses();
         }
 
         private void VisitPartOfBinaryExpression(Expression expr, QueryBuilder<TEntity> state)

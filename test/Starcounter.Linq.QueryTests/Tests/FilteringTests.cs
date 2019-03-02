@@ -433,6 +433,62 @@ namespace Starcounter.Linq.QueryTests
             });
         }
 
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_MultipleWhere_OneOr(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                var name = "Anton";
+                var age = 1;
+                var gender = Gender.Male;
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery((string n, int a, Gender g) => Objects<Person>().Where(p => p.Name == n).Where(p => p.Age == a || p.Gender == g))(name, age, gender).ToList()
+                    : Objects<Person>().Where(p => p.Name == name).Where(p => p.Age == age || p.Gender == gender).ToList();
+
+                Assert.Single(persons);
+                Assert.Equal("Anton", persons.First().Name);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_ParenthesesOr_And(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                var name = "Anton";
+                var age = 1;
+                var gender = Gender.Male;
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery((int a, Gender g, string n) => Objects<Person>().Where(p => (p.Age == a || p.Gender == g) && p.Name == n))(age, gender, name).ToList()
+                    : Objects<Person>().Where(p => (p.Age == age || p.Gender == gender) && p.Name == name).ToList();
+
+                Assert.Single(persons);
+                Assert.Equal("Anton", persons.First().Name);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_OrAnd(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                var name = "Anton";
+                var age = 41;
+                var gender = Gender.Male;
+                var persons = mode == Mode.CompiledQuery
+                    ? CompileQuery((int a, Gender g, string n) => Objects<Person>().Where(p => p.Age == a || p.Gender == g && p.Name == n))(age, gender, name).ToList()
+                    : Objects<Person>().Where(p => p.Age == age || p.Gender == gender && p.Name == name).ToList();
+
+                Assert.Equal(2, persons.Count);
+            });
+        }
+
         [Fact]
         public void WhereEnumToString()
         {
