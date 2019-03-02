@@ -36,6 +36,9 @@ namespace Starcounter.Linq
         public string FetchPart { get; private set; }
         public string OffsetPart { get; private set; }
 
+        private int OpenedParentheses { get; set; }
+        private int WhereSections { get; set; }
+
         private static Type UnwrapQueryType(Type type)
         {
             if (!type.IsConstructedGenericType) return type;
@@ -47,18 +50,45 @@ namespace Starcounter.Linq
 
         public void BeginWhereSection()
         {
-            if (Where.Length > 0)
+            if (WhereSections > 0)
             {
-                WriteWhere(" AND ");
+                Where.Insert(0, '(');
+                Where.Append(") AND (");
             }
+            WhereSections++;
         }
 
         public void EndWhereSection()
         {
-            // nothing to do
+            if (WhereSections > 1)
+            {
+                Where.Append(")");
+            }
         }
 
         public void WriteWhere(string text) => Where.Append(text);
+
+        public void OpenWhereParentheses()
+        {
+            Where.Append("(");
+            OpenedParentheses++;
+        }
+
+        public bool OpenWhereParenthesesIfFirst()
+        {
+            if (OpenedParentheses <= 0)
+            {
+                OpenWhereParentheses();
+                return true;
+            }
+            return false;
+        }
+
+        public void CloseWhereParentheses()
+        {
+            Where.Append(")");
+            OpenedParentheses--;
+        }
 
         public void WriteWhereObjectNo(bool appendAlias = true)
         {

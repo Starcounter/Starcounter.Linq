@@ -38,14 +38,14 @@ namespace Starcounter.Linq.SqlTests
         [Fact]
         public void SelectObjectDirectly_Where()
         {
-            Assert.Equal("SELECT D FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE (D.\"Global\" = True)",
+            Assert.Equal("SELECT D FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE D.\"Global\" = True",
                 Sql(() => Objects<Department>().Select(x => x).Where(x => x.Global)));
         }
 
         [Fact]
         public void SelectObjectProperty_Where()
         {
-            Assert.Equal("SELECT D.\"Company\" FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE (D.\"Company\".\"Index\" >= ?)",
+            Assert.Equal("SELECT D.\"Company\" FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE D.\"Company\".\"Index\" >= ?",
                 Sql(() => Objects<Department>().Select(x => x.Company).Where(x => x.Index >= 0)));
         }
     }
