@@ -4,9 +4,9 @@
     <Description>It is a LINQ to SQL Provider for Starcounter. This Starcounter.Linq v3 supports only Starcounter.Nova. If you want to use this library for earlier versions, please use Starcounter.Linq v1 or v2.</Description>
     <AssemblyName>Starcounter.Linq</AssemblyName>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyVersion>3.3.2</AssemblyVersion>
-    <FileVersion>3.3.2</FileVersion>
-    <Version>3.3.2</Version>
+    <AssemblyVersion>3.3.3</AssemblyVersion>
+    <FileVersion>3.3.3</FileVersion>
+    <Version>3.3.3</Version>
     <Authors>Starcounter</Authors>
     <Copyright>Copyright © 2018 Starcounter AB</Copyright>
     <PackageTags>Starcounter LINQ</PackageTags>
