@@ -15,38 +15,16 @@ namespace Starcounter.Linq
     //we explicitly want to be able from one generic class get hold of the generic methods of the same type w/o lookups
     internal static class KnownMethods<TEntity>
     {
-        private static readonly IQueryable<TEntity> IQueryable = null;
         private static readonly Queryable<TEntity> Queryable = null;
 
         public static readonly MethodInfo QueryableDeletePred = MethodFromExample(() => Queryable.Delete(i => true));
         public static readonly MethodInfo QueryableDeleteAll = MethodFromExample(() => Queryable.DeleteAll());
 
-        public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
-        public static readonly MethodInfo IQueryableSkip = MethodFromExample(() => IQueryable.Skip(0));
-
         public static readonly MethodInfo QueryableFirstOrDefaultPred = MethodFromExample(() => Queryable.FirstOrDefault(i => true));
-        public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
         public static readonly MethodInfo QueryableFirstOrDefault = MethodFromExample(() => Queryable.FirstOrDefault());
-        public static readonly MethodInfo IQueryableFirstOrDefault = MethodFromExample(() => IQueryable.FirstOrDefault());
-
-        public static readonly MethodInfo IQueryableFirstPred = MethodFromExample(() => IQueryable.First(i => true));
-        public static readonly MethodInfo IQueryableFirst = MethodFromExample(() => IQueryable.First());
-
-        public static readonly MethodInfo IQueryableSingleOrDefaultPred = MethodFromExample(() => IQueryable.SingleOrDefault(i => true));
-        public static readonly MethodInfo IQueryableSingleOrDefault = MethodFromExample(() => IQueryable.SingleOrDefault());
-
-        public static readonly MethodInfo IQueryableSinglePred = MethodFromExample(() => IQueryable.Single(i => true));
-        public static readonly MethodInfo IQueryableSingle = MethodFromExample(() => IQueryable.Single());
-
-        public static readonly MethodInfo IQueryableAllPred = MethodFromExample(() => IQueryable.All(i => true));
 
         public static readonly MethodInfo QueryableAnyPred = MethodFromExample(() => Queryable.Any(i => true));
-        public static readonly MethodInfo IQueryableAnyPred = MethodFromExample(() => IQueryable.Any(i => true));
         public static readonly MethodInfo QueryableAny = MethodFromExample(() => Queryable.Any());
-        public static readonly MethodInfo IQueryableAny = MethodFromExample(() => IQueryable.Any());
-
-        public static readonly MethodInfo IQueryableWhere = MethodFromExample(() => IQueryable.Where(i => true));
-        public static readonly MethodInfo IQueryableCountPredicate = MethodFromExample(() => IQueryable.Count(i => true));
 
         //This takes an expression lambda and extracts the contained method.
         //This way, we can by example specify exactly what overload we want, instead of looking up by name and args
@@ -95,6 +73,24 @@ namespace Starcounter.Linq
         public static readonly MethodInfo IQueryableMin = MethodFromExample(() => IQueryable.Min(i => i));
         public static readonly MethodInfo IQueryableMax = MethodFromExample(() => IQueryable.Max(i => i));
         public static readonly MethodInfo IQueryableCount = MethodFromExample(() => IQueryable.Count());
+
+        public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
+        public static readonly MethodInfo IQueryableSkip = MethodFromExample(() => IQueryable.Skip(0));
+
+        public static readonly MethodInfo IQueryableFirstOrDefaultPred = MethodFromExample(() => IQueryable.FirstOrDefault(i => true));
+        public static readonly MethodInfo IQueryableFirstOrDefault = MethodFromExample(() => IQueryable.FirstOrDefault());
+        public static readonly MethodInfo IQueryableFirstPred = MethodFromExample(() => IQueryable.First(i => true));
+        public static readonly MethodInfo IQueryableFirst = MethodFromExample(() => IQueryable.First());
+        public static readonly MethodInfo IQueryableSingleOrDefaultPred = MethodFromExample(() => IQueryable.SingleOrDefault(i => true));
+        public static readonly MethodInfo IQueryableSingleOrDefault = MethodFromExample(() => IQueryable.SingleOrDefault());
+        public static readonly MethodInfo IQueryableSinglePred = MethodFromExample(() => IQueryable.Single(i => true));
+        public static readonly MethodInfo IQueryableSingle = MethodFromExample(() => IQueryable.Single());
+
+        public static readonly MethodInfo IQueryableAllPred = MethodFromExample(() => IQueryable.All(i => true));
+        public static readonly MethodInfo IQueryableAnyPred = MethodFromExample(() => IQueryable.Any(i => true));
+        public static readonly MethodInfo IQueryableAny = MethodFromExample(() => IQueryable.Any());
+
+        public static readonly MethodInfo IQueryableCountPredicate = MethodFromExample(() => IQueryable.Count(i => true));
 
         private static MethodInfo MethodFromExample<TIgnore>(Expression<Func<TIgnore>> fun)
         {

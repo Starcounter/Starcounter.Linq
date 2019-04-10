@@ -10,7 +10,7 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
-            var method = node.Method;
+            var method = node.Method.IsGenericMethod ? node.Method.GetGenericMethodDefinition() : node.Method;
             if (method == KnownMethods<TEntity>.QueryableDeletePred)
             {
                 state.ResultMethod = QueryResultMethod.Delete;
@@ -35,17 +35,17 @@ namespace Starcounter.Linq.Visitors
                     ? QueryResultMethod.FirstOrDefault
                     : QueryResultMethod.Any;
             }
-            else if (method == KnownMethods<TEntity>.IQueryableFirstOrDefaultPred || method == KnownMethods<TEntity>.IQueryableFirstPred ||
-                     method == KnownMethods<TEntity>.IQueryableSingleOrDefaultPred || method == KnownMethods<TEntity>.IQueryableSinglePred ||
-                     method == KnownMethods<TEntity>.IQueryableAnyPred || method == KnownMethods<TEntity>.IQueryableAllPred)
+            else if (method == KnownMethods.IQueryableFirstOrDefaultPred || method == KnownMethods.IQueryableFirstPred ||
+                     method == KnownMethods.IQueryableSingleOrDefaultPred || method == KnownMethods.IQueryableSinglePred ||
+                     method == KnownMethods.IQueryableAnyPred || method == KnownMethods.IQueryableAllPred)
             {
                 var left = node.Arguments[0];
                 Visit(left, state);
-                state.ResultMethod = method == KnownMethods<TEntity>.IQueryableFirstOrDefaultPred ? QueryResultMethod.FirstOrDefault
-                    : method == KnownMethods<TEntity>.IQueryableFirstPred ? QueryResultMethod.First
-                        : method == KnownMethods<TEntity>.IQueryableSingleOrDefaultPred ? QueryResultMethod.SingleOrDefault
-                            : method == KnownMethods<TEntity>.IQueryableSinglePred ? QueryResultMethod.Single
-                                : method == KnownMethods<TEntity>.IQueryableAnyPred ? QueryResultMethod.Any
+                state.ResultMethod = method == KnownMethods.IQueryableFirstOrDefaultPred ? QueryResultMethod.FirstOrDefault
+                    : method == KnownMethods.IQueryableFirstPred ? QueryResultMethod.First
+                        : method == KnownMethods.IQueryableSingleOrDefaultPred ? QueryResultMethod.SingleOrDefault
+                            : method == KnownMethods.IQueryableSinglePred ? QueryResultMethod.Single
+                                : method == KnownMethods.IQueryableAnyPred ? QueryResultMethod.Any
                                     : QueryResultMethod.All;
                 var expression = node.Arguments[1];
                 if (state.ResultMethod == QueryResultMethod.All)
@@ -57,26 +57,26 @@ namespace Starcounter.Linq.Visitors
                     VisitWhere(expression, state);
                 }
             }
-            else if (method == KnownMethods<TEntity>.IQueryableFirstOrDefault || method == KnownMethods<TEntity>.IQueryableFirst ||
-                     method == KnownMethods<TEntity>.IQueryableSingleOrDefault || method == KnownMethods<TEntity>.IQueryableSingle ||
-                     method == KnownMethods<TEntity>.IQueryableAny)
+            else if (method == KnownMethods.IQueryableFirstOrDefault || method == KnownMethods.IQueryableFirst ||
+                     method == KnownMethods.IQueryableSingleOrDefault || method == KnownMethods.IQueryableSingle ||
+                     method == KnownMethods.IQueryableAny)
             {
                 var left = node.Arguments[0];
                 Visit(left, state);
-                state.ResultMethod = method == KnownMethods<TEntity>.IQueryableFirstOrDefault ? QueryResultMethod.FirstOrDefault
-                    : method == KnownMethods<TEntity>.IQueryableFirst ? QueryResultMethod.First
-                        : method == KnownMethods<TEntity>.IQueryableSingleOrDefault ? QueryResultMethod.SingleOrDefault
-                            : method == KnownMethods<TEntity>.IQueryableSingle ? QueryResultMethod.Single
+                state.ResultMethod = method == KnownMethods.IQueryableFirstOrDefault ? QueryResultMethod.FirstOrDefault
+                    : method == KnownMethods.IQueryableFirst ? QueryResultMethod.First
+                        : method == KnownMethods.IQueryableSingleOrDefault ? QueryResultMethod.SingleOrDefault
+                            : method == KnownMethods.IQueryableSingle ? QueryResultMethod.Single
                                 : QueryResultMethod.Any;
             }
-            else if (method == KnownMethods<TEntity>.IQueryableWhere)
+            else if (method == KnownMethods.IQueryableWhere)
             {
                 var left = node.Arguments[0];
                 Visit(left, state);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
             }
-            else if (method == KnownMethods<TEntity>.IQueryableCountPredicate)
+            else if (method == KnownMethods.IQueryableCountPredicate)
             {
                 var left = node.Arguments[0];
                 Visit(left, state);
@@ -84,7 +84,7 @@ namespace Starcounter.Linq.Visitors
                 VisitWhere(expression, state);
                 state.SetAggregation("COUNT");
             }
-            else if (method == KnownMethods<TEntity>.IQueryableTake)
+            else if (method == KnownMethods.IQueryableTake)
             {
                 if (node.Arguments[1] is ConstantExpression takeConstExpression)
                 {
@@ -103,7 +103,7 @@ namespace Starcounter.Linq.Visitors
                     throw new NotSupportedException();
                 }
             }
-            else if (method == KnownMethods<TEntity>.IQueryableSkip)
+            else if (method == KnownMethods.IQueryableSkip)
             {
                 if (node.Arguments[1] is ConstantExpression skipConstExpression)
                 {

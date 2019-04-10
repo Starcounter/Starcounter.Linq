@@ -9,6 +9,7 @@
                 Db.SlowSQL($"DELETE FROM {typeof(Person).FullName}");
                 Db.SlowSQL($"DELETE FROM {typeof(Department).FullName}");
                 Db.SlowSQL($"DELETE FROM {typeof(Company).FullName}");
+                Db.SlowSQL($"DELETE FROM {typeof(Office).FullName}");
             });
         }
 
