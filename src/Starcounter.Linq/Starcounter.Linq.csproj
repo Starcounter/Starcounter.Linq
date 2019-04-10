@@ -33,6 +33,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Starcounter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf, processorArchitecture=AMD64">
       <Private>False</Private>
     </Reference>
@@ -43,6 +44,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregationOperation.cs" />
     <Compile Include="CompiledQuery.cs" />
     <Compile Include="DbLinq.cs" />
     <Compile Include="DummyLinq.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="KnownMethods.cs" />
     <Compile Include="QueryResultMethod.cs" />
     <Compile Include="TranslatedQuery.cs" />
+    <Compile Include="Visitors\GroupByVisitor.cs" />
     <Compile Include="Visitors\OrderByVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilder.cs" />

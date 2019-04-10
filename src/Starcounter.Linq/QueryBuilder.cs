@@ -28,6 +28,7 @@ namespace Starcounter.Linq
 
         private StringBuilder Where { get; } = new StringBuilder();
         private StringBuilder OrderBy { get; } = new StringBuilder();
+        private StringBuilder GroupBy { get; } = new StringBuilder();
         private StringBuilder SelectPath { get; } = new StringBuilder(SourceAliasName);
         private string SelectAggregation { get; set; }
 
@@ -109,17 +110,48 @@ namespace Starcounter.Linq
             OrderBy.Append(".\"ObjectNo\"");
         }
 
+        public void WriteGroupByObjectNo()
+        {
+            GroupBy.Append(SourceAliasName);
+            GroupBy.Append(".\"ObjectNo\"");
+        }
+
         public void WriteOrderBy(string text) => OrderBy.Append(text);
+
+        public void WriteGroupBy(string text) => GroupBy.Append(text);
 
         public void AppendSelectPath(string text)
         {
             SelectPath.Append(text);
         }
 
-        public void SetAggregation(string @operator)
+        private AggregationOperation AggregationOperation { get; set; }
+        public AggregationOperation? GetAggregation() => SelectAggregation != null ? AggregationOperation : (AggregationOperation?)null;
+
+        public void SetAggregation(AggregationOperation op)
         {
             OrderBy.Clear();
-            SelectAggregation = @operator;
+            switch (op)
+            {
+                case AggregationOperation.Count:
+                    SelectAggregation = "COUNT";
+                    break;
+                case AggregationOperation.Max:
+                    SelectAggregation = "MAX";
+                    break;
+                case AggregationOperation.Min:
+                    SelectAggregation = "MIN";
+                    break;
+                case AggregationOperation.Sum:
+                    SelectAggregation = "SUM";
+                    break;
+                case AggregationOperation.Average:
+                    SelectAggregation = "AVG";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(op), op, null);
+            }
+            AggregationOperation = op;
         }
 
         public string GetSource()
@@ -169,6 +201,12 @@ namespace Starcounter.Linq
             {
                 stringBuilder.Append(" ORDER BY ");
                 stringBuilder.Append(OrderBy);
+            }
+
+            if (GroupBy.Length > 0)
+            {
+                stringBuilder.Append(" GROUP BY ");
+                stringBuilder.Append(GroupBy);
             }
 
             if (FetchPart != null)

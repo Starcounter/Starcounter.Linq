@@ -12,8 +12,7 @@ namespace Starcounter.Linq
     {
         public IQueryExecutor QueryExecutor { get; }
 
-        public string SqlStatement { get; }
-        public QueryResultMethod QueryResultMethod { get; }
+        public TranslatedQuery TranslatedQuery { get; private set; }
 
         /// <summary>
         /// This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -41,11 +40,10 @@ namespace Starcounter.Linq
                 throw new NotSupportedException();
             }
 
-            TranslatedQuery translatedQuery;
             if (contextType == null)
             {
                 var q = new DummyQueryContext<T>();
-                translatedQuery = q.GetQuery(queryExpression.Body);
+                TranslatedQuery = q.GetQuery(queryExpression.Body);
             }
             else
             {
@@ -56,10 +54,8 @@ namespace Starcounter.Linq
                 {
                     throw new MissingMethodException();
                 }
-                translatedQuery = (TranslatedQuery)methodInfo.Invoke(q, new object[] { queryExpression.Body });
+                TranslatedQuery = (TranslatedQuery)methodInfo.Invoke(q, new object[] { queryExpression.Body });
             }
-            SqlStatement = translatedQuery.SqlStatement;
-            QueryResultMethod = translatedQuery.ResultMethod;
         }
 
         private MethodCallExpression GetRootMethodCall(MethodCallExpression methodCall)
@@ -78,7 +74,8 @@ namespace Starcounter.Linq
             {
                 throw new ArgumentNullException(nameof(parameters), "Compiled query does not support null value as a parameter.");
             }
-            return (TResult)QueryExecutor.Execute<TResult>(SqlStatement, parameters, QueryResultMethod);
+            return (TResult)QueryExecutor.Execute<TResult>(TranslatedQuery.SqlStatement, parameters,
+                TranslatedQuery.ResultMethod, TranslatedQuery.AggregationOperation);
         }
 
         protected virtual TResult ExecuteCore<TResult>(params object[] parameters)

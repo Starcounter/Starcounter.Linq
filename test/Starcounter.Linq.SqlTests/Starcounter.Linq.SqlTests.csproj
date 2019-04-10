@@ -54,6 +54,7 @@
     <Compile Include="Domain\Department.cs" />
     <Compile Include="Domain\Employee.cs" />
     <Compile Include="Domain\Unknown.cs" />
+    <Compile Include="GroupByTests.cs" />
     <Compile Include="MiscellaneousTests.cs" />
     <Compile Include="Domain\Gender.cs" />
     <Compile Include="OrderByTests.cs" />

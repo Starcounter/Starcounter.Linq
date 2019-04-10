@@ -125,5 +125,81 @@ namespace Starcounter.Linq.QueryTests
                 Assert.Equal(72, sum);
             }).Wait();
         }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void GroupBy_Count(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                int[] cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().GroupBy(x => x.Age).Select(x => x.Count()))().ToArray()
+                    : Objects<Person>().GroupBy(x => x.Age).Select(x => x.Count()).ToArray();
+                Assert.Equal(2, cnt.Length);
+                Assert.Equal(1, cnt[0]);
+                Assert.Equal(1, cnt[1]);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void GroupBy_Max(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                int[] cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Max(p => p.Age)))().ToArray()
+                    : Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Max(p => p.Age)).ToArray();
+                Assert.Equal(1, cnt.Length);
+                Assert.Equal(41, cnt[0]);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void GroupBy_Min(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                int[] cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Min(p => p.Age)))().ToArray()
+                    : Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Min(p => p.Age)).ToArray();
+                Assert.Equal(1, cnt.Length);
+                Assert.Equal(31, cnt[0]);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void GroupBy_Sum(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                int[] cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Sum(p => p.Limit)))().ToArray()
+                    : Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Sum(p => p.Limit)).ToArray();
+                Assert.Equal(1, cnt.Length);
+                Assert.Equal(3, cnt[0]);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void GroupBy_Avg(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                double[] cnt = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Average(p => p.Limit)))().ToArray()
+                    : Objects<Person>().GroupBy(x => x.Gender).Select(x => x.Average(p => p.Limit)).ToArray();
+                Assert.Equal(1, cnt.Length);
+                Assert.Equal(3D/2, cnt[0]);
+            }).Wait();
+        }
     }
 }

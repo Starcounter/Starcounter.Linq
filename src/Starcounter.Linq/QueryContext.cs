@@ -20,10 +20,11 @@ namespace Starcounter.Linq
             var query = new QueryBuilder<T>();
 
             RootVisitor<T>.Instance.Visit(expression, query);
-            var sql = query.BuildSqlString();
-            var variables = query.GetVariables();
+            string sql = query.BuildSqlString();
+            object[] variables = query.GetVariables();
+            AggregationOperation? aggregation = query.GetAggregation();
 
-            return QueryExecutor.Execute<TResult>(sql, variables, query.ResultMethod);
+            return QueryExecutor.Execute<TResult>(sql, variables, query.ResultMethod, aggregation);
         }
 
         public TranslatedQuery GetQuery(Expression expression)
@@ -35,7 +36,8 @@ namespace Starcounter.Linq
             return new TranslatedQuery
             {
                 SqlStatement = sql,
-                ResultMethod = query.ResultMethod
+                ResultMethod = query.ResultMethod,
+                AggregationOperation = query.GetAggregation()
             };
         }
     }

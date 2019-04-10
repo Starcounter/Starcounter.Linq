@@ -10,7 +10,7 @@ namespace Starcounter.Linq
     {
         private readonly Type contextType = typeof(T);
 
-        public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod)
+        public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod, AggregationOperation? aggregation)
         {
             if (queryResultMethod == QueryResultMethod.Delete)
             {
@@ -23,10 +23,39 @@ namespace Starcounter.Linq
             if (typeof(IEnumerable).IsAssignableFrom(resultType))
             {
                 Type resultItemType = resultType.GetGenericArguments().FirstOrDefault();
-                if (resultItemType != null && resultItemType != contextType)
+                if (resultItemType != null)
                 {
-                    MethodInfo dbSqlMethod = ReflectionHelper.DbSlowSqlMethodBase.MakeGenericMethod(resultItemType);
-                    return (TResult)dbSqlMethod.Invoke(null, new object[] { sql, variables });
+                    Type qpExpectedType;
+                    switch (aggregation)
+                    {
+                        case AggregationOperation.Count:
+                            qpExpectedType = typeof(long);
+                            break;
+                        case AggregationOperation.Max:
+                        case AggregationOperation.Min:
+                        case AggregationOperation.Sum:
+                            if (resultItemType == typeof(sbyte) || resultItemType == typeof(short) || resultItemType == typeof(int))
+                                qpExpectedType = typeof(long);
+                            else if (resultItemType == typeof(float))
+                                qpExpectedType = typeof(double);
+                            else if (resultItemType == typeof(byte) || resultItemType == typeof(ushort) || resultItemType == typeof(uint))
+                                qpExpectedType = typeof(ulong);
+                            else
+                                qpExpectedType = resultItemType;
+                            break;
+                        case AggregationOperation.Average:
+                            qpExpectedType = typeof(decimal);
+                            break;
+                        case null:
+                            qpExpectedType = resultItemType;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(aggregation), aggregation, null);
+                    }
+                    MethodInfo dbSqlMethod = ReflectionHelper.DbSlowSqlMethodBase.MakeGenericMethod(qpExpectedType);
+                    object queryResult = dbSqlMethod.Invoke(null, new object[] { sql, variables });
+                    MethodInfo castItemsMethod = ReflectionHelper.GetEnumerableCastMethod(resultItemType);
+                    return (TResult)castItemsMethod.Invoke(null, new[] { queryResult });
                 }
                 return Db.SlowSQL<T>(sql, variables);
             }

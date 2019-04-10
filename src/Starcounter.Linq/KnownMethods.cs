@@ -16,6 +16,16 @@ namespace Starcounter.Linq
     internal static class KnownMethods<TEntity>
     {
         private static readonly Queryable<TEntity> Queryable = null;
+        private static readonly TEntity[] Enumerable = null;
+
+        public static readonly MethodInfo EnumerableCount = MethodFromExample(() => Enumerable.Count());
+        public static readonly MethodInfo EnumerableMax = MethodFromExample(() => Enumerable.Max());
+        public static readonly MethodInfo EnumerableMin = MethodFromExample(() => Enumerable.Min());
+        public static readonly MethodInfo EnumerableCountPred = MethodFromExample(() => Enumerable.Count(i => true));
+        public static readonly MethodInfo EnumerableMaxTarget = MethodFromExample(() => Enumerable.Max(i => 1));
+        public static readonly MethodInfo EnumerableMinTarget = MethodFromExample(() => Enumerable.Min(i => 1));
+        public static readonly MethodInfo EnumerableSum = MethodFromExample(() => Enumerable.Sum(i => 1));
+        public static readonly MethodInfo EnumerableAverage = MethodFromExample(() => Enumerable.Average(i => 1));
 
         public static readonly MethodInfo QueryableDeletePred = MethodFromExample(() => Queryable.Delete(i => true));
         public static readonly MethodInfo QueryableDeleteAll = MethodFromExample(() => Queryable.DeleteAll());
@@ -73,6 +83,7 @@ namespace Starcounter.Linq
         public static readonly MethodInfo IQueryableMin = MethodFromExample(() => IQueryable.Min(i => i));
         public static readonly MethodInfo IQueryableMax = MethodFromExample(() => IQueryable.Max(i => i));
         public static readonly MethodInfo IQueryableCount = MethodFromExample(() => IQueryable.Count());
+        public static readonly MethodInfo IQueryableGroupBy = MethodFromExample(() => IQueryable.GroupBy(i => i));
 
         public static readonly MethodInfo IQueryableTake = MethodFromExample(() => IQueryable.Take(0));
         public static readonly MethodInfo IQueryableSkip = MethodFromExample(() => IQueryable.Skip(0));

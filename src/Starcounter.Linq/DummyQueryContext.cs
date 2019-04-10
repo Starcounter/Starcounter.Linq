@@ -26,7 +26,8 @@ namespace Starcounter.Linq
             return new TranslatedQuery
             {
                 SqlStatement = sql,
-                ResultMethod = query.ResultMethod
+                ResultMethod = query.ResultMethod,
+                AggregationOperation = query.GetAggregation()
             };
         }
     }

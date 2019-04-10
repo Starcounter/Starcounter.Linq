@@ -82,7 +82,7 @@ namespace Starcounter.Linq.Visitors
                 Visit(left, state);
                 var expression = node.Arguments[1];
                 VisitWhere(expression, state);
-                state.SetAggregation("COUNT");
+                state.SetAggregation(AggregationOperation.Count);
             }
             else if (method == KnownMethods.IQueryableTake)
             {
@@ -159,18 +159,22 @@ namespace Starcounter.Linq.Visitors
                     Visit(left, state);
                     VisitWhere(expression, state);
                 }
+                else if (gen == KnownMethods.IQueryableGroupBy)
+                {
+                    VisitGroupBy(node, state);
+                }
                 else if (gen == KnownMethods.IQueryableCount)
                 {
                     var left = node.Arguments[0];
                     Visit(left, state);
-                    state.SetAggregation("COUNT");
+                    state.SetAggregation(AggregationOperation.Count);
                 }
                 else if (gen == KnownMethods.IQueryableAverage)
                 {
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.SetAggregation("AVG");
+                    state.SetAggregation(AggregationOperation.Average);
                     SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
                 else if (gen == KnownMethods.IQueryableMin)
@@ -178,7 +182,7 @@ namespace Starcounter.Linq.Visitors
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.SetAggregation("MIN");
+                    state.SetAggregation(AggregationOperation.Min);
                     SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
                 else if (gen == KnownMethods.IQueryableMax)
@@ -186,7 +190,7 @@ namespace Starcounter.Linq.Visitors
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.SetAggregation("MAX");
+                    state.SetAggregation(AggregationOperation.Max);
                     SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
                 else if (gen == KnownMethods.IQueryableSum)
@@ -194,7 +198,7 @@ namespace Starcounter.Linq.Visitors
                     var left = node.Arguments[0];
                     var right = node.Arguments[1];
                     Visit(left, state);
-                    state.SetAggregation("SUM");
+                    state.SetAggregation(AggregationOperation.Sum);
                     SelectVisitor<TEntity>.Instance.Visit(right, state);
                 }
             }
@@ -208,6 +212,14 @@ namespace Starcounter.Linq.Visitors
             var arg = node.Arguments[1];
             OrderByVisitor<TEntity>.Instance.Visit(arg, state);
             state.EndOrderBySection(asc);
+        }
+
+        private void VisitGroupBy(MethodCallExpression node, QueryBuilder<TEntity> state)
+        {
+            var left = node.Arguments[0];
+            Visit(left, state);
+            var arg = node.Arguments[1];
+            GroupByVisitor<TEntity>.Instance.Visit(arg, state);
         }
 
         private static void VisitWhere(Expression expression, QueryBuilder<TEntity> state)
