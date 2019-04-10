@@ -23,7 +23,7 @@ namespace Starcounter.Linq.QueryTests
         {
             Db.Transact(() =>
             {
-                var any = mode == Mode.CompiledQuery
+                bool any = mode == Mode.CompiledQuery
                     ? CompileQuery((int age) => Objects<Person>().Any(x => x.Age > age))(0)
                     : Objects<Person>().Any(x => x.Age > 0);
                 Assert.True(any);
@@ -37,9 +37,65 @@ namespace Starcounter.Linq.QueryTests
         {
             Db.Transact(() =>
             {
-                var any = mode == Mode.CompiledQuery
+                bool any = mode == Mode.CompiledQuery
                     ? CompileQuery(() => Objects<Person>().Any())()
                     : Objects<Person>().Any();
+                Assert.True(any);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_Any_Predicate(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                bool any = mode == Mode.CompiledQuery
+                    ? CompileQuery((Gender g, int age) => Objects<Person>().Where(x => x.Gender == g).Any(x => x.Age > age))(Gender.Male, 0)
+                    : Objects<Person>().Where(x => x.Gender == Gender.Male).Any(x => x.Age > 0);
+                Assert.True(any);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Where_Any(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                bool any = mode == Mode.CompiledQuery
+                    ? CompileQuery((Gender g) => Objects<Person>().Where(x => x.Gender == g).Any())(Gender.Male)
+                    : Objects<Person>().Where(x => x.Gender == Gender.Male).Any();
+                Assert.True(any);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Select_Any_Predicate(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                bool any = mode == Mode.CompiledQuery
+                    ? CompileQuery((string city) => Objects<Person>().Select(x => x.Office).Any(x => x.City == city))("Stockholm")
+                    : Objects<Person>().Select(x => x.Office).Any(x => x.City == "Stockholm");
+                Assert.True(any);
+            });
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void Select_Any(Mode mode)
+        {
+            Db.Transact(() =>
+            {
+                bool any = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Select(x => x.Office).Any())()
+                    : Objects<Person>().Select(x => x.Office).Any();
                 Assert.True(any);
             });
         }
