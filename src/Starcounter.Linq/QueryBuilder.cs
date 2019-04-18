@@ -126,7 +126,6 @@ namespace Starcounter.Linq
         }
 
         private AggregationOperation AggregationOperation { get; set; }
-        public AggregationOperation? GetAggregation() => SelectAggregation != null ? AggregationOperation : (AggregationOperation?)null;
 
         public void SetAggregation(AggregationOperation op)
         {

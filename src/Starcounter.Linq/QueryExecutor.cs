@@ -9,7 +9,7 @@ namespace Starcounter.Linq
 {
     public class QueryExecutor<T> : IQueryExecutor
     {
-        public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod, AggregationOperation? aggregation)
+        public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod)
         {
             if (queryResultMethod == QueryResultMethod.Delete)
             {

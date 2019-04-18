@@ -74,8 +74,7 @@ namespace Starcounter.Linq
             {
                 throw new ArgumentNullException(nameof(parameters), "Compiled query does not support null value as a parameter.");
             }
-            return (TResult)QueryExecutor.Execute<TResult>(TranslatedQuery.SqlStatement, parameters,
-                TranslatedQuery.ResultMethod, TranslatedQuery.AggregationOperation);
+            return (TResult)QueryExecutor.Execute<TResult>(TranslatedQuery.SqlStatement, parameters, TranslatedQuery.ResultMethod);
         }
 
         protected virtual TResult ExecuteCore<TResult>(params object[] parameters)

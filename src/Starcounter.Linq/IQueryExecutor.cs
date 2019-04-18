@@ -2,6 +2,6 @@
 {
     public interface IQueryExecutor
     {
-        object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod, AggregationOperation? aggregation);
+        object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod);
     }
 }
