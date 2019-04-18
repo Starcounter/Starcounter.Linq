@@ -197,14 +197,21 @@ Objects<Person>().DeleteAll();
   - `IQueryable.OrderByDescending`
   - `IQueryable.ThenBy`
   - `IQueryable.ThenByDescending`
+- `GROUP BY` clause by using `IQueryable.GroupBy` method. Aggregation is required by using one of the following methods inside of `IQueryable.Select` one:
+  - `IEnumerable.Count`
+  - `IEnumerable.LongCount`
+  - `IEnumerable.Average`
+  - `IEnumerable.Min`
+  - `IEnumerable.Max`
+  - `IEnumerable.Sum`
 - Logical operators `AND`, `OR`, `NOT` by using `&&`, `||`, `!` operators in LINQ queries
 - Comparison by using:
   - operators `=`, `>`, `>=`, `<`, `<=`, `<>`
   - method `Object.Equals`
 - `LIKE` operator by using methods:
   - `String.Contains`
-  - `String.StartsWith`
   - `String.EndsWith`
+- `STARTS WITH` operator by using `String.StartsWith` method
 - `IEnumerable.Contains` method in LINQ queries
 - `DbHelper.GetObjectNo` method in LINQ queries
 - `IS` operator by using `is` operator in LINQ queries
@@ -215,7 +222,7 @@ Objects<Person>().DeleteAll();
   - `IQueryable.First`
   - `IQueryable.Single`
   - `IQueryable.SingleOrDefault`
-- `COUNT` function by using method `IQueryable.Count`
+- `COUNT` function by using methods `IQueryable.Count` and `IQueryable.LongCount`
 - `AVG` function by using method `IQueryable.Average`
 - `MIN` function by using method `IQueryable.Min`
 - `MAX` function by using method `IQueryable.Max`
@@ -230,7 +237,6 @@ Objects<Person>().DeleteAll();
 ## Unsupported features
 
 - `IQueryable.All` method - [#31](https://github.com/Starcounter/Starcounter.Linq/issues/31)
-- `GROUP BY` clause (with `IQueryable.GroupBy` method) - [#59](https://github.com/Starcounter/Starcounter.Linq/issues/59)
 - Querying a specific set of data properties (currently supports only single property querying) - [#60](https://github.com/Starcounter/Starcounter.Linq/issues/60)
 
 -----
