@@ -39,9 +39,9 @@ namespace Starcounter.Linq.QueryTests
             Db.Transact(() =>
             {
                 var persons = mode == Mode.CompiledQuery
-                    ? CompileQuery((int limit) => Objects<Person>().Where(p => p.Limit == limit))(2).ToList()
-                    : Objects<Person>().Where(p => p.Limit == 2).ToList();
-                Assert.Single(persons);
+                    ? CompileQuery((int limit) => Objects<Person>().Where(p => p.LimitInt32 == limit))(4).ToList()
+                    : Objects<Person>().Where(p => p.LimitInt32 == 4).ToList();
+                Assert.Equal(1, persons.Count);
                 Assert.Equal("Roger", persons.First().Name);
             });
         }

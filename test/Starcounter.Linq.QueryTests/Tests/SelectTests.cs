@@ -93,7 +93,7 @@ namespace Starcounter.Linq.QueryTests
             Db.Transact(() =>
             {
                 List<Department> departments = SelectByCompanyName<Department>(mode, "Starcounter");
-                Assert.Equal(2, departments.Count);
+                Assert.Equal(3, departments.Count);
             });
         }
 

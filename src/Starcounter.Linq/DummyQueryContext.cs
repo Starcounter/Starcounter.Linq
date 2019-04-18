@@ -11,7 +11,7 @@ namespace Starcounter.Linq
         {
             var query = new QueryBuilder<T>();
 
-            RootVisitor<T>.Instance.Visit(expression,query);
+            RootVisitor<T>.Instance.Visit(expression, query);
             query.BuildSqlString();
             query.GetVariables();
             return null;

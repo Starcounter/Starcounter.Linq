@@ -15,10 +15,24 @@ namespace Starcounter.Linq.SqlTests
         }
 
         [Fact]
+        public void LongCount()
+        {
+            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P",
+                Sql(() => Objects<Person>().LongCount()));
+        }
+
+        [Fact]
         public void CountFiltering()
         {
             Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE P.\"Name\" = ?",
                 Sql(() => Objects<Person>().Count(x => x.Name == "XXX")));
+        }
+
+        [Fact]
+        public void LongCountFiltering()
+        {
+            Assert.Equal("SELECT COUNT(P) FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE P.\"Name\" = ?",
+                Sql(() => Objects<Person>().LongCount(x => x.Name == "XXX")));
         }
 
         [Fact]
