@@ -288,7 +288,7 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(node.Object, state);
                 AddConstantOrMemberNodeValue(node, state);
-                state.WriteWhere(" LIKE ? || '%'");
+                state.WriteWhere(" STARTS WITH ?");
             }
             else if (node.Method == KnownMethods.StringEndsWith)
             {
