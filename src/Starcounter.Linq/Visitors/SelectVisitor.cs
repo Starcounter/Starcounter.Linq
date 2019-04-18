@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using Starcounter.Linq.Helpers;
 
 namespace Starcounter.Linq.Visitors
@@ -18,19 +19,20 @@ namespace Starcounter.Linq.Visitors
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
         {
-            if (node.Method == KnownMethods<TEntity>.EnumerableCount)
+            MethodInfo method = node.Method.IsGenericMethod ? node.Method.GetGenericMethodDefinition() : node.Method;
+            if (method == KnownMethods.EnumerableCount || method == KnownMethods.EnumerableLongCount)
             {
                 state.SetAggregation(AggregationOperation.Count);
             }
-            else if (node.Method == KnownMethods<TEntity>.EnumerableMax)
+            else if (method == KnownMethods.EnumerableMaxDirect)
             {
                 state.SetAggregation(AggregationOperation.Max);
             }
-            else if (node.Method == KnownMethods<TEntity>.EnumerableMin)
+            else if (method == KnownMethods.EnumerableMinDirect)
             {
                 state.SetAggregation(AggregationOperation.Min);
             }
-            else if (node.Method == KnownMethods<TEntity>.EnumerableCountPred)
+            else if (method == KnownMethods.EnumerableCountPredicate || method == KnownMethods.EnumerableLongCountPredicate)
             {
                 var right = node.Arguments[1];
                 state.SetAggregation(AggregationOperation.Count);
@@ -41,25 +43,25 @@ namespace Starcounter.Linq.Visitors
                     state.EndWhereSection();
                 }
             }
-            else if (node.Method == KnownMethods<TEntity>.EnumerableMaxTarget)
+            else if (KnownMethods.IsEnumerableMax(method))
             {
                 var right = node.Arguments[1];
                 state.SetAggregation(AggregationOperation.Max);
                 Visit(right, state);
             }
-            else if (node.Method == KnownMethods<TEntity>.EnumerableMinTarget)
+            else if (KnownMethods.IsEnumerableMin(method))
             {
                 var right = node.Arguments[1];
                 state.SetAggregation(AggregationOperation.Min);
                 Visit(right, state);
             }
-            else if (node.Method == KnownMethods<TEntity>.EnumerableSum)
+            else if (KnownMethods.IsEnumerableSum(method))
             {
                 var right = node.Arguments[1];
                 state.SetAggregation(AggregationOperation.Sum);
                 Visit(right, state);
             }
-            else if (node.Method == KnownMethods<TEntity>.EnumerableAverage)
+            else if (KnownMethods.IsEnumerableAverage(method))
             {
                 var right = node.Arguments[1];
                 state.SetAggregation(AggregationOperation.Average);

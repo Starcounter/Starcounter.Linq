@@ -37,8 +37,8 @@ namespace Starcounter.Linq.QueryTests
             Scheduling.RunTask(() =>
             {
                 var persons = mode == Mode.CompiledQuery
-                    ? CompileQuery((int limit) => Objects<Person>().Where(p => p.Limit == limit))(2).ToList()
-                    : Objects<Person>().Where(p => p.Limit == 2).ToList();
+                    ? CompileQuery((int limit) => Objects<Person>().Where(p => p.LimitInt32 == limit))(4).ToList()
+                    : Objects<Person>().Where(p => p.LimitInt32 == 4).ToList();
                 Assert.Equal(1, persons.Count);
                 Assert.Equal("Roger", persons.First().Name);
             }).Wait();

@@ -8,14 +8,6 @@ namespace Starcounter.Linq.Helpers
 {
     internal static class ReflectionHelper
     {
-        private static MethodInfo _dbSlowSqlMethodBase;
-
-        public static MethodInfo DbSlowSqlMethodBase =>
-            _dbSlowSqlMethodBase ??
-            (_dbSlowSqlMethodBase = typeof(Db).GetMethods(BindingFlags.Public | BindingFlags.Static)
-                                              .Where(x => x.Name == nameof(Db.SlowSQL))
-                                              .Single(x => x.IsGenericMethod));
-
         public static MethodInfo GetEnumerableCastMethod(Type itemsType)
         {
             return typeof(ReflectionHelper).GetMethods(BindingFlags.Public | BindingFlags.Static)
@@ -25,10 +17,10 @@ namespace Starcounter.Linq.Helpers
 
         public static IEnumerable<T> CastEnumerableItems<T>(IEnumerable source)
         {
-            foreach(object current in source)
+            var type = typeof(T);
+            foreach (object item in source)
             {
-                var tt = (dynamic) current;
-                yield return (T)tt;
+                yield return (T)CastHelper.Convert(item, type);
             }
         }
     }
