@@ -25,7 +25,7 @@ namespace Starcounter.Linq.SqlTests
         [Fact]
         public void StringStartsWith()
         {
-            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE P.\"Name\" LIKE ? || '%'",
+            Assert.Equal("SELECT P FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Person\" P WHERE P.\"Name\" STARTS WITH ?",
                 Sql(() => Objects<Person>().Where(p => p.Name.StartsWith("XXX"))));
         }
 
