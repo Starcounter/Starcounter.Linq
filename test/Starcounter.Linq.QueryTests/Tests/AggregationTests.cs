@@ -586,6 +586,7 @@ namespace Starcounter.Linq.QueryTests
             }).Wait();
         }
 
+#if False
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
@@ -630,6 +631,7 @@ namespace Starcounter.Linq.QueryTests
                 Assert.Equal(7D, sum);
             }).Wait();
         }
+#endif
 
         [Theory]
         [InlineData(Mode.AdHoc)]
@@ -1329,6 +1331,7 @@ namespace Starcounter.Linq.QueryTests
             }).Wait();
         }
 
+#if False
         [Theory]
         [InlineData(Mode.AdHoc)]
         [InlineData(Mode.CompiledQuery)]
@@ -1376,6 +1379,7 @@ namespace Starcounter.Linq.QueryTests
                 Assert.Equal(7, sum[0]);
             }).Wait();
         }
+#endif
 
         [Theory]
         [InlineData(Mode.AdHoc)]
