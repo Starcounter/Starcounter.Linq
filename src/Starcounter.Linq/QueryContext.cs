@@ -20,8 +20,8 @@ namespace Starcounter.Linq
             var query = new QueryBuilder<T>();
 
             RootVisitor<T>.Instance.Visit(expression, query);
-            var sql = query.BuildSqlString();
-            var variables = query.GetVariables();
+            string sql = query.BuildSqlString();
+            object[] variables = query.GetVariables();
 
             return QueryExecutor.Execute<TResult>(sql, variables, query.ResultMethod);
         }

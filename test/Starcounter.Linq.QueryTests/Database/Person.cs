@@ -24,7 +24,17 @@ namespace Starcounter.Linq.QueryTests
         public Gender Gender { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
-        public int Limit { get; set; }
+        public sbyte LimitInt8 { get; set; }
+        public short LimitInt16 { get; set; }
+        public int LimitInt32 { get; set; }
+        public long LimitInt64 { get; set; }
+        public byte LimitUInt8 { get; set; }
+        public ushort LimitUInt16 { get; set; }
+        public uint LimitUInt32 { get; set; }
+        public ulong LimitUInt64 { get; set; }
+        public decimal LimitDecimal { get; set; }
+        public float LimitSingle { get; set; }
+        public double LimitDouble { get; set; }
         public Office Office { get; set; }
     }
 }

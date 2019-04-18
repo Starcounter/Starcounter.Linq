@@ -91,7 +91,7 @@ namespace Starcounter.Linq.QueryTests
             Scheduling.RunTask(() =>
             {
                 List<Department> departments = SelectByCompanyName<Department>(mode, "Starcounter");
-                Assert.Equal(2, departments.Count);
+                Assert.Equal(3, departments.Count);
             }).Wait();
         }
 
