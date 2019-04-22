@@ -17,6 +17,11 @@ namespace Starcounter.Linq
     internal static class KnownMethods<TEntity>
     {
         private static readonly Queryable<TEntity> Queryable = null;
+        private static readonly List<TEntity> EnumerableList = null;
+
+        private static readonly Type collectionType = typeof(ICollection<>);
+
+        private static readonly MethodInfo ListContains = MethodFromExample(() => EnumerableList.Contains(default(TEntity)));
 
         public static readonly MethodInfo QueryableDeletePred = MethodFromExample(() => Queryable.Delete(i => true));
         public static readonly MethodInfo QueryableDeleteAll = MethodFromExample(() => Queryable.DeleteAll());
@@ -26,6 +31,15 @@ namespace Starcounter.Linq
 
         public static readonly MethodInfo QueryableAnyPred = MethodFromExample(() => Queryable.Any(i => true));
         public static readonly MethodInfo QueryableAny = MethodFromExample(() => Queryable.Any());
+
+        public static bool IsCollectionContains(MethodInfo method)
+        {
+            return method == ListContains ||
+                   method.Name == nameof(ICollection<object>.Contains) &&
+                   method.GetParameters().Length == 1 &&
+                   method.DeclaringType != null &&
+                   method.DeclaringType.GetGenericTypeDefinition().GetInterfaces().Any(x => x.GUID == collectionType.GUID);
+        }
 
         //This takes an expression lambda and extracts the contained method.
         //This way, we can by example specify exactly what overload we want, instead of looking up by name and args
