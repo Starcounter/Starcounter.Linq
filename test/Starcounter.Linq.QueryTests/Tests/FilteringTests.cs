@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Starcounter.Nova;
 using Xunit;
@@ -355,6 +356,50 @@ namespace Starcounter.Linq.QueryTests
                 var people = new Person[0];
                 var person = Objects<Person>().FirstOrDefault(p => people.Contains(p));
                 Assert.Null(person);
+            });
+        }
+
+        [Fact]
+        public void FirstOrDefault_ObjectInEnumerable__AdHoc()
+        {
+            Db.Transact(() =>
+            {
+                IEnumerable<Person> allPeople = Db.SQL<Person>($"select p from {typeof(Person)} p").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => allPeople.Contains(p)).ToList();
+                Assert.Equal(allPeople.Count(), resultPeople.Count);
+            });
+        }
+
+        [Fact]
+        public void FirstOrDefault_NestedObjectInEnumerable__AdHoc()
+        {
+            Db.Transact(() =>
+            {
+                IEnumerable<Office> offices = Db.SQL<Office>($"select o from {typeof(Office)} o where o.{nameof(Office.City)} = ?", "Stockholm").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => offices.Contains(p.Office)).ToList();
+                Assert.Single(resultPeople);
+            });
+        }
+
+        [Fact]
+        public void FirstOrDefault_ObjectInList__AdHoc()
+        {
+            Db.Transact(() =>
+            {
+                List<Person> allPeople = Db.SQL<Person>($"select p from {typeof(Person)} p").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => allPeople.Contains(p)).ToList();
+                Assert.Equal(allPeople.Count(), resultPeople.Count);
+            });
+        }
+
+        [Fact]
+        public void FirstOrDefault_NestedObjectInList__AdHoc()
+        {
+            Db.Transact(() =>
+            {
+                List<Office> offices = Db.SQL<Office>($"select o from {typeof(Office)} o where o.{nameof(Office.City)} = ?", "Stockholm").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => offices.Contains(p.Office)).ToList();
+                Assert.Single(resultPeople);
             });
         }
 

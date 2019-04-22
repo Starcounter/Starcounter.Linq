@@ -125,7 +125,7 @@ namespace Starcounter.Linq.Visitors
             }
             else
             {
-                VisitPartOfBinaryExpression(left, state);
+                VisitItemOrPath(left, state);
             }
 
             if (right is ConstantExpression constantExpression && constantExpression.Value == null ||
@@ -300,40 +300,15 @@ namespace Starcounter.Linq.Visitors
             {
                 state.WriteWhereObjectNo(state.ResultMethod != QueryResultMethod.Delete);
             }
-            else if (node.Method.IsGenericMethod &&
-                node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains &&
-                node.Arguments[0] is MemberExpression memberExpression)
+            else if (node.Method.IsGenericMethod && node.Method.GetGenericMethodDefinition() == KnownMethods.EnumerableContains &&
+                     node.Arguments[0] is MemberExpression memberExpression1)
             {
-                var items = (IEnumerable)memberExpression.RetrieveMemberValue();
-                int i = 0;
-                bool parenthesesOpened = false;
-
-                foreach (var item in items)
-                {
-                    if (i <= 0)
-                    {
-                        parenthesesOpened = state.OpenWhereParenthesesIfFirst();
-                    }
-                    if (i > 0)
-                    {
-                        state.WriteWhere(" OR ");
-                    }
-                    i++;
-
-                    Visit(node.Arguments[1], state);
-                    state.WriteWhere(" = ?");
-                    state.AddVariable(item);
-                }
-                if (parenthesesOpened)
-                {
-                    state.CloseWhereParentheses();
-                }
-                if (i <= 0) // empty collection
-                {
-                    VisitPartOfBinaryExpression(node.Arguments[1], state);
-                    state.WriteWhere(" <> ");
-                    VisitPartOfBinaryExpression(node.Arguments[1], state);
-                }
+                HandleContains(node.Arguments[1], memberExpression1, state);
+            }
+            else if (KnownMethods<TEntity>.IsCollectionContains(node.Method) &&
+                     node.Object is MemberExpression memberExpression2)
+            {
+                HandleContains(node.Arguments[0], memberExpression2, state);
             }
             else if (node.Object != null)
             {
@@ -344,6 +319,40 @@ namespace Starcounter.Linq.Visitors
             else
             {
                 throw new NotSupportedException("Method call is not supported");
+            }
+        }
+
+        private void HandleContains(Expression itemExpression, MemberExpression collectionExpression, QueryBuilder<TEntity> state)
+        {
+            var items = (IEnumerable)collectionExpression.RetrieveMemberValue();
+            int i = 0;
+            bool parenthesesOpened = false;
+
+            foreach (var item in items)
+            {
+                if (i <= 0)
+                {
+                    parenthesesOpened = state.OpenWhereParenthesesIfFirst();
+                }
+                if (i > 0)
+                {
+                    state.WriteWhere(" OR ");
+                }
+                i++;
+
+                VisitItemOrPath(itemExpression, state);
+                state.WriteWhere(" = ?");
+                state.AddVariable(item);
+            }
+            if (parenthesesOpened)
+            {
+                state.CloseWhereParentheses();
+            }
+            if (i <= 0) // empty collection
+            {
+                VisitItemOrPath(itemExpression, state);
+                state.WriteWhere(" <> ");
+                VisitItemOrPath(itemExpression, state);
             }
         }
 
@@ -422,7 +431,7 @@ namespace Starcounter.Linq.Visitors
             state.CloseWhereParentheses();
         }
 
-        private void VisitPartOfBinaryExpression(Expression expr, QueryBuilder<TEntity> state)
+        private void VisitItemOrPath(Expression expr, QueryBuilder<TEntity> state)
         {
             if (expr is ParameterExpression)
             {
