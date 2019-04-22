@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
@@ -353,6 +354,50 @@ namespace Starcounter.Linq.QueryTests
                 var people = new Person[0];
                 var person = Objects<Person>().FirstOrDefault(p => people.Contains(p));
                 Assert.Null(person);
+            }).Wait();
+        }
+
+        [Fact]
+        public void FirstOrDefault_ObjectInEnumerable__AdHoc()
+        {
+            Scheduling.RunTask(() =>
+            {
+                IEnumerable<Person> allPeople = Db.SQL<Person>($"select p from {typeof(Person)} p").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => allPeople.Contains(p)).ToList();
+                Assert.Equal(allPeople.Count(), resultPeople.Count);
+            }).Wait();
+        }
+
+        [Fact]
+        public void FirstOrDefault_NestedObjectInEnumerable__AdHoc()
+        {
+            Scheduling.RunTask(() =>
+            {
+                IEnumerable<Office> offices = Db.SQL<Office>($"select o from {typeof(Office)} o where o.{nameof(Office.City)} = ?", "Stockholm").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => offices.Contains(p.Office)).ToList();
+                Assert.Equal(1, resultPeople.Count);
+            }).Wait();
+        }
+
+        [Fact]
+        public void FirstOrDefault_ObjectInList__AdHoc()
+        {
+            Scheduling.RunTask(() =>
+            {
+                List<Person> allPeople = Db.SQL<Person>($"select p from {typeof(Person)} p").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => allPeople.Contains(p)).ToList();
+                Assert.Equal(allPeople.Count(), resultPeople.Count);
+            }).Wait();
+        }
+
+        [Fact]
+        public void FirstOrDefault_NestedObjectInList__AdHoc()
+        {
+            Scheduling.RunTask(() =>
+            {
+                List<Office> offices = Db.SQL<Office>($"select o from {typeof(Office)} o where o.{nameof(Office.City)} = ?", "Stockholm").ToList();
+                List<Person> resultPeople = Objects<Person>().Where(p => offices.Contains(p.Office)).ToList();
+                Assert.Equal(1, resultPeople.Count);
             }).Wait();
         }
 
