@@ -48,5 +48,12 @@ namespace Starcounter.Linq.SqlTests
             Assert.Equal("SELECT D.\"Company\" FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D WHERE D.\"Company\".\"Index\" >= ?",
                 Sql(() => Objects<Department>().Select(x => x.Company).Where(x => x.Index >= 0)));
         }
+
+        [Fact]
+        public void SelectMultipleTarget()
+        {
+            Assert.Equal("SELECT D.\"Name\", D.\"Global\" FROM \"Starcounter\".\"Linq\".\"SqlTests\".\"Department\" D",
+                Sql(() => Objects<Department>().Select(x => new { Name2 = x.Name, Global2 = x.Global })));
+        }
     }
 }

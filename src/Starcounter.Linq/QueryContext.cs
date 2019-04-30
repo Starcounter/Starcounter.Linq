@@ -23,7 +23,7 @@ namespace Starcounter.Linq
             string sql = query.BuildSqlString();
             object[] variables = query.GetVariables();
 
-            return QueryExecutor.Execute<TResult>(sql, variables, query.ResultMethod);
+            return QueryExecutor.Execute<TResult>(sql, variables, query.ResultMethod, query.SelectComposerConstructor);
         }
 
         public TranslatedQuery GetQuery(Expression expression)
@@ -35,7 +35,8 @@ namespace Starcounter.Linq
             return new TranslatedQuery
             {
                 SqlStatement = sql,
-                ResultMethod = query.ResultMethod
+                ResultMethod = query.ResultMethod,
+                MultiTargetsConstructor = query.SelectComposerConstructor
             };
         }
     }

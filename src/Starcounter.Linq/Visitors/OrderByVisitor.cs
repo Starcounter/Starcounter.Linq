@@ -13,6 +13,7 @@ namespace Starcounter.Linq.Visitors
                 state.WriteOrderBy(state.GetSource());
             else
                 Visit(node.Expression, state);
+            // TODO : check this for deep nested properties
             state.WriteOrderBy("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
         }
 

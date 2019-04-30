@@ -14,7 +14,7 @@ namespace Starcounter.Linq.Visitors
             {
                 Visit(node.Expression, state);
             }
-            state.AppendSelectPath("." + SqlHelper.EscapeSingleIdentifier(node.Member.Name));
+            state.AppendSelectTarget(node.Member.Name);
         }
 
         public override void VisitMethodCall(MethodCallExpression node, QueryBuilder<TEntity> state)
@@ -71,6 +71,13 @@ namespace Starcounter.Linq.Visitors
             {
                 base.VisitMethodCall(node, state);
             }
+        }
+
+        public override void VisitNew(NewExpression node, QueryBuilder<TEntity> state)
+        {
+            state.BeginSelectSection(node.Constructor);
+            base.VisitNew(node, state);
+            state.EndSelectSection();
         }
     }
 }

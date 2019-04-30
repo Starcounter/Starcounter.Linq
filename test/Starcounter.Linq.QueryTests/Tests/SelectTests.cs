@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Xunit;
 using static Starcounter.Linq.DbLinq;
@@ -53,6 +55,51 @@ namespace Starcounter.Linq.QueryTests
                     ? CompileQuery(() => Objects<Person>().Select(x => x.Name))().ToList()
                     : Objects<Person>().Select(x => x.Name).ToList();
                 Assert.Equal(2, names.Count);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SelectMultiTarget(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Debugger.Launch();
+                var people = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Select(x => new { Name2 = x.Name, Age2 = x.Age }))().ToList()
+                    : Objects<Person>().Select(x => new { Name2 = x.Name, Age2 = x.Age }).ToList();
+                Assert.Equal(2, people.Count);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SelectMultiTargetTuple(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Debugger.Launch();
+                var people = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Select(x => new Tuple<string, int>(x.Name, x.Age)))().ToList()
+                    : Objects<Person>().Select(x => new Tuple<string, int>(x.Name, x.Age)).ToList();
+                Assert.Equal(2, people.Count);
+            }).Wait();
+        }
+
+        [Theory]
+        [InlineData(Mode.AdHoc)]
+        [InlineData(Mode.CompiledQuery)]
+        public void SelectMultiTargetTupleCreateMethod(Mode mode)
+        {
+            Scheduling.RunTask(() =>
+            {
+                Debugger.Launch();
+                var people = mode == Mode.CompiledQuery
+                    ? CompileQuery(() => Objects<Person>().Select(x => Tuple.Create(x.Name, x.Age)))().ToList()
+                    : Objects<Person>().Select(x => Tuple.Create(x.Name, x.Age)).ToList();
+                Assert.Equal(2, people.Count);
             }).Wait();
         }
 

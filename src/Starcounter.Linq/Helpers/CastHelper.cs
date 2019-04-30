@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Starcounter.Linq.Helpers
 {
@@ -38,6 +39,28 @@ namespace Starcounter.Linq.Helpers
                 return convert(value);
             }
             return value;
+        }
+
+        public static bool IsTupleType(Type type)
+        {
+            TypeInfo typeInfo = type.GetTypeInfo();
+            if (typeInfo.IsGenericType)
+            {
+                var genType = typeInfo.GetGenericTypeDefinition();
+                if (genType == typeof(Tuple<>)
+                    || genType == typeof(Tuple<,>)
+                    || genType == typeof(Tuple<,,>)
+                    || genType == typeof(Tuple<,,,>)
+                    || genType == typeof(Tuple<,,,,>)
+                    || genType == typeof(Tuple<,,,,,>)
+                    || genType == typeof(Tuple<,,,,,,>)
+                    || genType == typeof(Tuple<,,,,,,,>)
+                    || genType == typeof(Tuple<,,,,,,,>))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

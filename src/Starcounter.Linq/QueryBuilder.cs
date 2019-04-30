@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using Starcounter.Linq.Helpers;
 
@@ -120,9 +121,39 @@ namespace Starcounter.Linq
 
         public void WriteGroupBy(string text) => GroupBy.Append(text);
 
-        public void AppendSelectPath(string text)
+        private bool multiTargetsSelect = false;
+
+        public ConstructorInfo SelectComposerConstructor { get; set; }
+
+        public void BeginSelectSection(ConstructorInfo nodeConstructor)
         {
-            SelectPath.Append(text);
+            SelectComposerConstructor = nodeConstructor;
+            SelectPath.Clear();
+            multiTargetsSelect = true;
+        }
+
+        public void EndSelectSection()
+        {
+            multiTargetsSelect = false;
+        }
+
+        public void AppendSelectTarget(string targetName)
+        {
+            if (multiTargetsSelect)
+            {
+                if (SelectPath.Length > 0)
+                {
+                    SelectPath.Append(", ");
+                }
+                SelectPath.Append(SourceAliasName);
+                SelectPath.Append(".");
+                SelectPath.Append(SqlHelper.EscapeSingleIdentifier(targetName));
+            }
+            else
+            {
+                SelectPath.Append(".");
+                SelectPath.Append(SqlHelper.EscapeSingleIdentifier(targetName));
+            }
         }
 
         private AggregationOperation AggregationOperation { get; set; }
@@ -155,7 +186,7 @@ namespace Starcounter.Linq
 
         public string GetSource()
         {
-            return SelectPath.ToString();
+            return multiTargetsSelect ? SourceAliasName : SelectPath.ToString();
         }
 
         public string BuildSqlString()

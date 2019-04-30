@@ -9,13 +9,14 @@ namespace Starcounter.Linq
 {
     public class QueryExecutor<T> : IQueryExecutor
     {
-        public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod)
+        public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod, ConstructorInfo itemCtor)
         {
             if (queryResultMethod == QueryResultMethod.Delete)
             {
                 Db.SlowSQL(sql, variables);
                 return null;
             }
+
             Type resultType = typeof(TResult);
 
             if (resultType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(resultType))
@@ -23,7 +24,20 @@ namespace Starcounter.Linq
                 Type resultItemType = resultType.GetGenericArguments().FirstOrDefault();
                 if (resultItemType != null)
                 {
-                    IEnumerable<object> queryResult = Db.SlowSQL(sql, variables);
+                    IEnumerable<object> queryResult;
+                    if (CastHelper.IsTupleType(resultItemType))
+                    {
+                        MethodInfo dbSqlMethod = ReflectionHelper.DbSlowSqlMethodBase.MakeGenericMethod(resultItemType);
+                        return dbSqlMethod.Invoke(null, new object[] { sql, variables });
+                    }
+                    if (itemCtor != null)
+                    {
+                        queryResult = Db.SlowSQL(sql, variables);
+                        MethodInfo castMultiTargetsMethod = ReflectionHelper.GetEnumerableMultiTargetsCastMethod(resultItemType);
+                        return (TResult)castMultiTargetsMethod.Invoke(null, new object[] { queryResult, itemCtor });
+                    }
+
+                    queryResult = Db.SlowSQL(sql, variables);
                     MethodInfo castItemsMethod = ReflectionHelper.GetEnumerableCastMethod(resultItemType);
                     return (TResult)castItemsMethod.Invoke(null, new object[] { queryResult });
                 }
