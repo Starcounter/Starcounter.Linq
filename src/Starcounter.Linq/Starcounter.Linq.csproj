@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>It is a LINQ to SQL Provider for Starcounter. This Starcounter.Linq v3 supports only Starcounter.Nova. If you want to use this library for earlier versions, please use Starcounter.Linq v1 or v2.</Description>
     <AssemblyName>Starcounter.Linq</AssemblyName>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyVersion>3.4.1</AssemblyVersion>
     <FileVersion>3.4.1</FileVersion>
     <Version>3.4.1</Version>
