@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>It is a LINQ to SQL Provider for Starcounter. This Starcounter.Linq v3 supports only Starcounter.Nova. If you want to use this library for earlier versions, please use Starcounter.Linq v1 or v2.</Description>
+    <Description>It is a LINQ to SQL Provider for Starcounter. This Starcounter.Linq supports Starcounter Database version 3 and up. If you want to use this library for earlier versions, please use Starcounter.Linq v1 or v2.</Description>
     <AssemblyName>Starcounter.Linq</AssemblyName>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyVersion>3.4.1</AssemblyVersion>
@@ -10,19 +10,19 @@
     <Authors>Starcounter</Authors>
     <Copyright>Copyright © 2019 Starcounter AB</Copyright>
     <PackageTags>Starcounter LINQ</PackageTags>
-    <PackageReleaseNotes>Starcounter.Linq v3 for Starcounter Nova</PackageReleaseNotes>
+    <PackageReleaseNotes>Starcounter.Linq v3 for Starcounter Database</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Starcounter/Starcounter.Linq/tree/nova</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Starcounter/Starcounter.Linq</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Product>Starcounter.Linq for Starcounter Nova</Product>
+    <Product>Starcounter.Linq for Starcounter Database</Product>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Starcounter.Nova" Version="0.14.1-*" />
+    <ProjectReference Include="..\..\..\Starcounter.Nova\src\Starcounter.Database\Starcounter.Database.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath=""/>
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
