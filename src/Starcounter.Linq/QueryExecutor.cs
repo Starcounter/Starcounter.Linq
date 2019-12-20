@@ -4,17 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Starcounter.Linq.Helpers;
-using Starcounter.Nova;
+using Starcounter.Database;
 
 namespace Starcounter.Linq
 {
     public class QueryExecutor<T> : IQueryExecutor
     {
+        readonly IDatabaseContext db;
+
+        public QueryExecutor(IDatabaseContext databaseContext) 
+            => db = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
+
         public object Execute<TResult>(string sql, object[] variables, QueryResultMethod queryResultMethod)
         {
             if (queryResultMethod == QueryResultMethod.Delete)
             {
-                Db.SlowSQL(sql, variables);
+                db.Sql<object>(sql, variables);
                 return null;
             }
             Type resultType = typeof(TResult);
@@ -24,12 +29,12 @@ namespace Starcounter.Linq
                 Type resultItemType = resultType.GetGenericArguments().FirstOrDefault();
                 if (resultItemType != null)
                 {
-                    IEnumerable<object> queryResult = Db.SlowSQL(sql, variables);
+                    IEnumerable<object> queryResult = db.Sql<object>(sql, variables);
                     MethodInfo castItemsMethod = ReflectionHelper.GetEnumerableCastMethod(resultItemType);
                     return (TResult)castItemsMethod.Invoke(null, new object[] { queryResult });
                 }
 
-                return Db.SlowSQL<T>(sql, variables);
+                return db.Sql<object>(sql, variables);
             }
 
             var result = Query(sql, variables, queryResultMethod);
@@ -43,7 +48,7 @@ namespace Starcounter.Linq
 
         public object Query(string sql, object[] variables, QueryResultMethod queryResultMethod)
         {
-            var queryResult = Db.SlowSQL(sql, variables);
+            var queryResult = db.Sql<object>(sql, variables);
             switch (queryResultMethod)
             {
                 case QueryResultMethod.FirstOrDefault:

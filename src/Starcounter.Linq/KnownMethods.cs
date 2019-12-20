@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Starcounter.Nova;
+using Starcounter.Database;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable InconsistentNaming
@@ -69,7 +69,9 @@ namespace Starcounter.Linq
         private static readonly IQueryable<object> Queryable = null;
         private static readonly object obj = new object();
 
-        public static readonly MethodInfo GetOid = MethodFromExample(() => Db.GetOid(obj));
+        private static readonly IDatabaseContext database = null;
+
+        public static readonly MethodInfo GetOid = MethodFromExample(() => database.GetOid(obj));
         public static readonly MethodInfo ObjectEquals = MethodFromExample(() => obj.Equals(null));
         public static readonly MethodInfo EnumerableContains = MethodFromExample(() => Enumerable.Contains(0));
         public static readonly MethodInfo StringContains = MethodFromExample(() => "".Contains(""));

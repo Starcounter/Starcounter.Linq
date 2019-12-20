@@ -8,24 +8,6 @@ namespace Starcounter.Linq
     // ReSharper disable once InconsistentNaming
     public static class DbLinq
     {
-        private static class Cache<T>
-        {
-            public static Queryable<T> Objects { get; } = new Queryable<T>(new QueryProvider(new QueryContext<T>(new QueryExecutor<T>())));
-        }
-
-        /// <summary>
-        /// Can be used for building LINQ expressions.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        ///<remarks>
-        /// The LINQ expression is translated to SQL every time it's called.
-        /// This is an expensive operation. Thus, don't use it in places where it's executed many times.
-        /// Instead, use compiled query.
-        /// <br/>Restrictions:
-        /// <br/> - Starcounter.Linq only supports database properties. It is not possible to get access to fields.
-        /// </remarks>
-        public static Queryable<T> Objects<T>() => Cache<T>.Objects;
-
         /// <summary>
         /// Creates a compiled query delegate that when invoked will execute the specified LINQ query.
         /// It lets you build a LINQ expression with translated SQL once and use it many times.
@@ -333,7 +315,7 @@ namespace Starcounter.Linq
 
         private static CompiledQuery<T> CreateCompiledQuery<T>(LambdaExpression expression)
         {
-            return new CompiledQuery<T>(expression, new QueryExecutor<T>());
+            return new CompiledQuery<T>(expression, new QueryExecutor<T>(null));
         }
     }
 }
